@@ -1,0 +1,46 @@
+{
+  "name": "node-red-contrib-resi-dali-ascii-gateway",
+  "version": "0.0.1",
+  "description": "Node for RESI DALI ETH Modbus + ASCII",
+  "keywords": [
+    "node-red",
+    "resi",
+    "dali",
+    "modbus",
+    "ascii"
+  ],
+  "main": "resi-dali-ascii-gateway.js",
+  "files": [
+    "dist"
+  ],
+  "author": {
+    "name": "Renato Rossi",
+    "email": "",
+    "url": "https://github.com/r-renato/node-red-contrib-resi-dali-ascii-gateway.git"
+  },
+  "readmeFilename": "README.md",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.0",
+    "@types/node": "^16.11.12",
+    "@types/node-red": "^1.2.0",
+    "@types/node-red-node-test-helper": "^0.2.2",
+    "modbus-serial": "^8.0.5",
+    "mutex": "^1.0.2",
+    "queue": "^6.0.2",
+    "telnet-engine": "^1.2.5"
+  },
+  "dependencies": {
+    "telnet-engine": "^1.2.5"
+  },
+  "node-red": {
+    "nodes": {
+      "resi-dali": "dist/resi-dali-modbus-gateway.js",
+      "dali-lamp-command-10": "dist/dali-lamp-command-10.js"
+    }
+  },
+  "scripts": {
+    "buil": "rm -f dist/*.* && tsc -p tsconfig.json && cp src/*.html dist",
+    "copys": "scp -pr package.json dist drp@192.168.7.111:~/node-red/node_modules/node-red-contrib-resi-dali-modbus-gateway"
+  }
+}
