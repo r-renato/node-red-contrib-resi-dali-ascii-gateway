@@ -1,0 +1,30 @@
+<!--
+ Copyright (c) 2022 Renato Rossi
+ All rights reserved.
+ node-red-contrib-modbus - MIT License
+
+ @author <a href="mailto:klaus.landsdorf@bianco-royal.de">Klaus Landsdorf</a> (Bianco Royal)
+-->
+<script type="text/javascript">
+    RED.nodes.registerType('dali-lamp-commad-10', {
+      category: 'RESI DALI ASCII Gateway',
+      color: '#E9967A',
+      defaults: {
+        name: {value: ''},
+        showStatusActivities: {value: false},
+        showErrors: {value: false},
+        server: {type: 'modbus-client', required: true},
+        emptyMsgOnFail: {value: false},
+        keepMsgProperties: {value: false}
+      },
+      inputs: 1,
+      outputs: 2,
+      align: "right",
+      icon: 'modbus.png',
+      align: 'right',
+      paletteLabel: 'dali-lamp-commad-10',
+      label: function () {
+        return this.name || 'DALI Lamp Commad 1.0'
+      }
+    })
+  </script>

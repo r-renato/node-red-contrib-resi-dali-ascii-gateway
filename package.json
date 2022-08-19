@@ -35,12 +35,11 @@
   },
   "node-red": {
     "nodes": {
-      "resi-dali": "dist/resi-dali-modbus-gateway.js",
-      "dali-lamp-command-10": "dist/dali-lamp-command-10.js"
+      "resi-dali": "dist/resi-dali-ascii-gateway.js"
     }
   },
   "scripts": {
-    "buil": "rm -f dist/*.* && tsc -p tsconfig.json && cp src/*.html dist",
+    "build": "rm -f dist/*.* && tsc -p tsconfig.json && cp src/*.html dist",
     "copys": "scp -pr package.json dist drp@192.168.7.111:~/node-red/node_modules/node-red-contrib-resi-dali-modbus-gateway"
   }
 }
