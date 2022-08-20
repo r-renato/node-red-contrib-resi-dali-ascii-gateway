@@ -1,13 +1,109 @@
 import * as nodered from "node-red" ;
 
+const telnetEngineLib = require( 'telnet-engine' ) ;
+const openpromiseLib = require( 'openpromise' ) ;
+
 interface NodeE extends nodered.Node {
     engine: any,
     getStatusBroadcaster : any
 }
 
+interface TelnetEngineInterface {
+    engine: any ;
+    timeOut: number ;
+    clearOut: number ;
+    inDelimiter: string ;
+    outDelimiter: string ;
+    modeStrict: boolean ;
+    autoFlush: number ;
+    statusBroadcaster: any ;
+}
+
+class TelnetEnginePool {
+    private static instance: TelnetEnginePool;
+    private engines: {[key: string]: TelnetEngineInterface } = {} ;
+
+    /**
+     * The Singleton's constructor should always be private to prevent direct
+     * construction calls with the `new` operator.
+     */
+    private constructor() { }
+
+    /**
+     * The static method that controls the access to the singleton instance.
+     *
+     * This implementation let you subclass the Singleton class while keeping
+     * just one instance of each subclass around.
+     */
+    public static getInstance(): TelnetEnginePool {
+        if (!TelnetEnginePool.instance) {
+            TelnetEnginePool.instance = new TelnetEnginePool();
+        }
+
+        return TelnetEnginePool.instance;
+    }
+
+    public getEngine( name: string, node?: nodered.Node, config?: any ) : TelnetEngineInterface {
+        let result: TelnetEngineInterface = this.engines[ name ] ;
+        
+        if( typeof config !== 'undefined' && typeof node !== 'undefined' && typeof result === 'undefined' ) {
+            result = {} as TelnetEngineInterface ;
+
+            const host = config.address ;
+            const port = config.port ? config.port : 502 ;
+
+            result.engine = new telnetEngineLib.Engine(host, port) ;
+            result.engine.timeOut = config.timeOut ? config.timeOut : 1000 ;
+            result.engine.clearOut = config.clearOut ? config.clearOut : 0 ;
+            result.engine.inDelimiter = config.inDelimiter ? RegExp(config.inDelimiter) : /\r\n|\r|\n/ ;
+            result.engine.outDelimiter = config.outDelimiter ? config.outDelimiter.replace(/\\n/, '\n').replace(/\\r/, '\r').replace(/\\l/, '\l') : "\n" ;
+            result.engine.modeStrict = false ;
+            result.engine.autoFlush = 100 ;
+            result.engine.autoFlush = config.openTries ? config.openTries : 1 ;
+
+            result.statusBroadcaster = new openpromiseLib.Cycle() ;
+
+            const onConnecting = result.engine.onConnecting(() => {
+                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "yellow", text: "connecting" } ) ;
+            })
+            const onSuccess = result.engine.onConnectionSuccess(() => {
+                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
+                node.log( "Connected to " + host + ":" + port ) ;
+            })
+    
+            const onError = result.engine.onConnectionError(() => {
+                node.error( 'Connection error during communication' ) ;
+                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "error" } ) ;
+            })
+    
+            const onEnd = result.engine.onConnectionEnd(() => {
+                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "closed" } ) ;
+                node.log( 'Requested an end to the  connection' ) ;
+            })
+    
+            const onConnectionTimeOut = result.engine.onConnectionTimeOut(() => {
+                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "timeout" } ) ;
+                node.error( 'Connection wait exceeded timeout' ) ;
+            })
+    
+            const onResponseTimeOut = result.engine.onResponseTimeOut(() => {
+                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "timeout" } ) ;
+                node.error( 'Response wait exceeded timeout value (request ${node.engine.timeOut})' ) ;
+            })
+    
+            const onReceive = result.engine.onReceive(() => {
+                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
+            })
+    
+    
+        } 
+
+        console.log( "getEngine" + name ) ;
+        return( result ) ;
+    }
+}
+
 module.exports = function (RED: nodered.NodeAPI) {
-    const telnetEngineLib = require( 'telnet-engine' ) ;
-    const openpromiseLib = require( 'openpromise' ) ;
 
     RED.nodes.registerType( "resi-dali-ascii-client",
     function (this: nodered.Node, config: any): void {
@@ -15,56 +111,59 @@ module.exports = function (RED: nodered.NodeAPI) {
 
         var node = <NodeE> this ;
 
-        const host = config.address ;
-        const port = config.port ? config.port : 502 ;
+        node.engine = TelnetEnginePool.getInstance().getEngine( config.name, node, config ) ;
 
-        node.engine = new telnetEngineLib.Engine(host, port) ;
-        var statusBroadcaster = new openpromiseLib.Cycle() ;
 
-        node.engine.timeOut = config.timeOut ? config.timeOut : 1000 ;
-        node.engine.clearOut = config.clearOut ? config.clearOut : 0 ;
-        node.engine.inDelimiter = config.inDelimiter ? RegExp(config.inDelimiter) : /\r\n|\r|\n/ ;
-        node.engine.outDelimiter = config.outDelimiter ? config.outDelimiter.replace(/\\n/, '\n').replace(/\\r/, '\r').replace(/\\l/, '\l') : "\n" ;
-        node.engine.modeStrict = false ;
-        node.engine.autoFlush = 100 ;
-        node.engine.autoFlush = config.openTries ? config.openTries : 1 ;
+        // const host = config.address ;
+        // const port = config.port ? config.port : 502 ;
 
-        statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", shape: "ring", text: "idle" } ) ;
+        // node.engine = new telnetEngineLib.Engine(host, port) ;
+        // var statusBroadcaster = new openpromiseLib.Cycle() ;
 
-        const onConnecting = node.engine.onConnecting(() => {
-            statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "yellow", text: "connecting" } ) ;
-        })
+        // node.engine.timeOut = config.timeOut ? config.timeOut : 1000 ;
+        // node.engine.clearOut = config.clearOut ? config.clearOut : 0 ;
+        // node.engine.inDelimiter = config.inDelimiter ? RegExp(config.inDelimiter) : /\r\n|\r|\n/ ;
+        // node.engine.outDelimiter = config.outDelimiter ? config.outDelimiter.replace(/\\n/, '\n').replace(/\\r/, '\r').replace(/\\l/, '\l') : "\n" ;
+        // node.engine.modeStrict = false ;
+        // node.engine.autoFlush = 100 ;
+        // node.engine.autoFlush = config.openTries ? config.openTries : 1 ;
 
-        const onSuccess = node.engine.onConnectionSuccess(() => {
-            statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
-            node.log( "Connected to " + host + ":" + port ) ;
-        })
+        // statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", shape: "ring", text: "idle" } ) ;
 
-        const onError = node.engine.onConnectionError(() => {
-            node.error( 'Connection error during communication' ) ;
-            statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "error" } ) ;
-        })
+        // const onConnecting = node.engine.onConnecting(() => {
+        //     statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "yellow", text: "connecting" } ) ;
+        // })
 
-        const onEnd = node.engine.onConnectionEnd(() => {
-            statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "closed" } ) ;
-            node.log( 'Requested an end to the  connection' ) ;
-        })
+        // const onSuccess = node.engine.onConnectionSuccess(() => {
+        //     statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
+        //     node.log( "Connected to " + host + ":" + port ) ;
+        // })
 
-        const onConnectionTimeOut = node.engine.onConnectionTimeOut(() => {
-            statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "timeout" } ) ;
-            node.error( 'Connection wait exceeded timeout' ) ;
-        })
+        // const onError = node.engine.onConnectionError(() => {
+        //     node.error( 'Connection error during communication' ) ;
+        //     statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "error" } ) ;
+        // })
 
-        const onResponseTimeOut = node.engine.onResponseTimeOut(() => {
-            statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "timeout" } ) ;
-            node.error( 'Response wait exceeded timeout value (request ${node.engine.timeOut})' ) ;
-        })
+        // const onEnd = node.engine.onConnectionEnd(() => {
+        //     statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "closed" } ) ;
+        //     node.log( 'Requested an end to the  connection' ) ;
+        // })
 
-        const onReceive = node.engine.onReceive(() => {
-            statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
-        })
+        // const onConnectionTimeOut = node.engine.onConnectionTimeOut(() => {
+        //     statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "timeout" } ) ;
+        //     node.error( 'Connection wait exceeded timeout' ) ;
+        // })
 
-        node.getStatusBroadcaster = () => { return statusBroadcaster } ;
+        // const onResponseTimeOut = node.engine.onResponseTimeOut(() => {
+        //     statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "timeout" } ) ;
+        //     node.error( 'Response wait exceeded timeout value (request ${node.engine.timeOut})' ) ;
+        // })
+
+        // const onReceive = node.engine.onReceive(() => {
+        //     statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
+        // })
+
+        node.getStatusBroadcaster = () => { return node.engine.statusBroadcaster } ;
 
         this.on("input", async (msg: any, send, done) => {
             done();
@@ -73,7 +172,7 @@ module.exports = function (RED: nodered.NodeAPI) {
         this.on("close", async (msg: any) => {
             () => {
                 node.engine.destroy() ;
-                statusBroadcaster.terminate() ;
+                node.engine.statusBroadcaster.terminate() ;
             }
         }) ;
     }) ;
