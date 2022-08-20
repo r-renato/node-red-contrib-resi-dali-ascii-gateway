@@ -45,7 +45,7 @@ module.exports = function (RED) {
                 this.log("T2 => " + (telnetEngine ? true : false) + " msg: " + msg.payload.toString());
                 setStatus(true);
                 telnetEngine.engine.requestString(msg.payload.toString(), telnetEngingLib.untilMilli(100))
-                    .then(() => { console.log("3=== found the prompt"); })
+                    .then((s) => { console.log("3=== found the prompt: " + s); })
                     .catch(() => { console.log("4=== couldn't find the prompt"); })
                     .finally(() => {
                     console.log("5=== finished");
