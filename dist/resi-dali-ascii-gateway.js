@@ -45,13 +45,12 @@ module.exports = function (RED) {
                 this.log("T2 => " + (telnetEngine ? true : false) + " msg: " + msg.payload.toString());
                 setStatus(true);
                 telnetEngine.engine.listenString(console.log);
-                telnetEngine.engine.requestString(msg.payload.toString() + "\n\r", telnetEngingLib.untilMilli(100))
-                    .then((s) => { console.log("3=== found the prompt: " + s); })
-                    .catch(() => { console.log("4=== couldn't find the prompt"); })
-                    .finally(() => {
-                    console.log("5=== finished");
-                    telnetEngine.engine.terminate();
-                });
+                telnetEngine.engine.requestString(msg.payload.toString() + "\n\r");
+                // telnetEngine.engine.requestString( msg.payload.toString() + "\n\r", telnetEngingLib.untilMilli( 100 ) )
+                //     .then(( s:any )=>{ console.log("3=== found the prompt: " + s ) })
+                //     .catch(()=>{console.log("4=== couldn't find the prompt")})
+                //     .finally(()=>{console.log("5=== finished"); telnetEngine.engine.terminate()
+                // }) ;
                 telnetEngine.engine.terminate();
             }
             // this.status({
