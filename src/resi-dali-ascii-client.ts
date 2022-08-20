@@ -1,23 +1,8 @@
 import * as nodered from "node-red" ;
+import { NodeExtendedInterface, TelnetEngineInterface } from './shared-interfaces' ;
 
 const telnetEngineLib = require( 'telnet-engine' ) ;
 const openpromiseLib = require( 'openpromise' ) ;
-
-interface NodeE extends nodered.Node {
-    engine: any,
-    getStatusBroadcaster : any
-}
-
-interface TelnetEngineInterface {
-    engine: any ;
-    timeOut: number ;
-    clearOut: number ;
-    inDelimiter: string ;
-    outDelimiter: string ;
-    modeStrict: boolean ;
-    autoFlush: number ;
-    statusBroadcaster: any ;
-}
 
 class TelnetEnginePool {
     private static instance: TelnetEnginePool;
@@ -95,10 +80,11 @@ class TelnetEnginePool {
                 result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
             })
     
-    
-        } 
+            node.log( "RESI-DALI-ETH - create new connection: " + name ) ;
+        } else {
+            console.log( "RESI-DALI-ETH - reuse connection: " + name ) ;
+        }
 
-        console.log( "getEngine" + name ) ;
         return( result ) ;
     }
 }
@@ -109,9 +95,9 @@ module.exports = function (RED: nodered.NodeAPI) {
     function (this: nodered.Node, config: any): void {
         RED.nodes.createNode(this, config) ;
 
-        var node = <NodeE> this ;
+        var node = <NodeExtendedInterface> this ;
 
-        node.engine = TelnetEnginePool.getInstance().getEngine( config.name, node, config ) ;
+        node.connection = TelnetEnginePool.getInstance().getEngine( config.name, node, config ) ;
 
 
         // const host = config.address ;
@@ -163,7 +149,7 @@ module.exports = function (RED: nodered.NodeAPI) {
         //     statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
         // })
 
-        node.getStatusBroadcaster = () => { return node.engine.statusBroadcaster } ;
+        node.getStatusBroadcaster = () => { return node.connection.statusBroadcaster } ;
 
         this.on("input", async (msg: any, send, done) => {
             done();
@@ -171,8 +157,8 @@ module.exports = function (RED: nodered.NodeAPI) {
         
         this.on("close", async (msg: any) => {
             () => {
-                node.engine.destroy() ;
-                node.engine.statusBroadcaster.terminate() ;
+                node.connection.destroy() ;
+                node.connection.statusBroadcaster.terminate() ;
             }
         }) ;
     }) ;

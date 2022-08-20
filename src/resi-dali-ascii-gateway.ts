@@ -1,66 +1,85 @@
 import * as nodered from "node-red" ;
+import { NodeExtendedInterface, TelnetEngineInterface } from './shared-interfaces' ;
 
 var telnetEngingLib = require( "telnet-engine" ) ;
 
-class TelnetEnginePool {
-    private static instance: TelnetEnginePool;
-    private engines: {[key: string]: any } = {} ;
-
-    /**
-     * The Singleton's constructor should always be private to prevent direct
-     * construction calls with the `new` operator.
-     */
-    private constructor() { }
-
-    /**
-     * The static method that controls the access to the singleton instance.
-     *
-     * This implementation let you subclass the Singleton class while keeping
-     * just one instance of each subclass around.
-     */
-    public static getInstance(): TelnetEnginePool {
-        if (!TelnetEnginePool.instance) {
-            TelnetEnginePool.instance = new TelnetEnginePool();
-        }
-
-        return TelnetEnginePool.instance;
-    }
-
-    public getEngine() {
-        // ...
-    }
+interface NodeExtended extends nodered.Node {
+    connection: any,
+    getStatusBroadcaster : any
 }
-
-var telnetEngine = TelnetEnginePool.getInstance ;
 
 module.exports = function (RED: nodered.NodeAPI) {
 
     RED.nodes.registerType("dali-command",
     function (this: nodered.Node, config: any): void {
         RED.nodes.createNode(this, config);
-        
-        this.on("input", async (msg: any, send, done) => {
 
-            this.status({
-                fill:"green",
-                shape:"dot",
-                text: "{address:"
-                    + msg.payload.address
-                    + ", value:" + msg.payload.value 
-                    + (typeof msg.payload.secondPaylod == "undefined" 
-                        ? "" 
-                        : ", {0x" 
-                            + msg.payload.secondPaylod[0].toString(16)
-                            + ", 0x" 
-                            + msg.payload.secondPaylod[1].toString(16)
-                            + "}" 
-                        )
-                    + "}"
-            });
+        var node = this;
+        var telnetEngine: TelnetEngineInterface ;
+        var nodeServer = <NodeExtended> RED.nodes.getNode( config.server ) ;
+        var statusBroadcasting:any = null ;
+        var statusVal:nodered.NodeStatus = { fill: "grey", shape: "ring", text: "idle" } ;
+        var statusResetter: any = null;
+
+        if( nodeServer ) {
+            telnetEngine = <TelnetEngineInterface> nodeServer.connection ;
+            var statusSender = nodeServer.getStatusBroadcaster();
+            statusBroadcasting = statusSender.thenAgain(
+                (st: any) => {
+                    statusVal = Object.assign( statusVal, st ) ;
+                    this.status( statusVal ) ;
+                })
+        }
+        
+        const setStatus = ( state: boolean ) => {
+            clearTimeout(statusResetter);
+            if (state) {
+                statusVal['shape'] = "dot"    
+                statusResetter = setTimeout(() => { setStatus(false) }, 500)
+            }
+            else {
+                statusVal['shape'] = "ring"
+            }
+            this.status(statusVal);
+        }
+
+        setStatus(false);
+
+        this.on("input", async (msg: any, send, done) => {
+            if( telnetEngine ) {
+                setStatus(true);
+                telnetEngine.engine.requestString( msg.payload.toString(), telnetEngingLib.untilMilli( 1000 ) )
+                    .then(()=>{console.log("3=== found the prompt")})
+                    .catch(()=>{console.log("4=== couldn't find the prompt")})
+                    .finally(()=>{console.log("5=== finished"); telnetEngine.engine.terminate()})
+                telnetEngine.engine.terminate()
+            }
+
+            // this.status({
+            //     fill:"green",
+            //     shape:"dot",
+            //     text: "{address:"
+            //         + msg.payload.address
+            //         + ", value:" + msg.payload.value 
+            //         + (typeof msg.payload.secondPaylod == "undefined" 
+            //             ? "" 
+            //             : ", {0x" 
+            //                 + msg.payload.secondPaylod[0].toString(16)
+            //                 + ", 0x" 
+            //                 + msg.payload.secondPaylod[1].toString(16)
+            //                 + "}" 
+            //             )
+            //         + "}"
+            // });
 
             send(msg);
             done();
         });
+
+        this.on("close", async () => {
+            if (statusBroadcasting) { statusBroadcasting.resolve(); }
+        });
+        
     });
     
 } 

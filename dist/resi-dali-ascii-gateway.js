@@ -10,52 +10,67 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var telnetEngingLib = require("telnet-engine");
-class TelnetEnginePool {
-    /**
-     * The Singleton's constructor should always be private to prevent direct
-     * construction calls with the `new` operator.
-     */
-    constructor() {
-        this.engines = {};
-    }
-    /**
-     * The static method that controls the access to the singleton instance.
-     *
-     * This implementation let you subclass the Singleton class while keeping
-     * just one instance of each subclass around.
-     */
-    static getInstance() {
-        if (!TelnetEnginePool.instance) {
-            TelnetEnginePool.instance = new TelnetEnginePool();
-        }
-        return TelnetEnginePool.instance;
-    }
-    getEngine() {
-        // ...
-    }
-}
-var telnetEngine = TelnetEnginePool.getInstance;
 module.exports = function (RED) {
     RED.nodes.registerType("dali-command", function (config) {
         RED.nodes.createNode(this, config);
-        this.on("input", (msg, send, done) => __awaiter(this, void 0, void 0, function* () {
-            this.status({
-                fill: "green",
-                shape: "dot",
-                text: "{address:"
-                    + msg.payload.address
-                    + ", value:" + msg.payload.value
-                    + (typeof msg.payload.secondPaylod == "undefined"
-                        ? ""
-                        : ", {0x"
-                            + msg.payload.secondPaylod[0].toString(16)
-                            + ", 0x"
-                            + msg.payload.secondPaylod[1].toString(16)
-                            + "}")
-                    + "}"
+        var node = this;
+        var telnetEngine;
+        var nodeServer = RED.nodes.getNode(config.server);
+        var statusBroadcasting = null;
+        var statusVal = { fill: "grey", shape: "ring", text: "idle" };
+        var statusResetter = null;
+        if (nodeServer) {
+            telnetEngine = nodeServer.connection;
+            var statusSender = nodeServer.getStatusBroadcaster();
+            statusBroadcasting = statusSender.thenAgain((st) => {
+                statusVal = Object.assign(statusVal, st);
+                this.status(statusVal);
             });
+        }
+        const setStatus = (state) => {
+            clearTimeout(statusResetter);
+            if (state) {
+                statusVal['shape'] = "dot";
+                statusResetter = setTimeout(() => { setStatus(false); }, 500);
+            }
+            else {
+                statusVal['shape'] = "ring";
+            }
+            this.status(statusVal);
+        };
+        setStatus(false);
+        this.on("input", (msg, send, done) => __awaiter(this, void 0, void 0, function* () {
+            if (telnetEngine) {
+                setStatus(true);
+                telnetEngine.engine.requestString(msg.payload.toString(), telnetEngingLib.untilMilli(1000))
+                    .then(() => { console.log("3=== found the prompt"); })
+                    .catch(() => { console.log("4=== couldn't find the prompt"); })
+                    .finally(() => { console.log("5=== finished"); telnetEngine.engine.terminate(); });
+                telnetEngine.engine.terminate();
+            }
+            // this.status({
+            //     fill:"green",
+            //     shape:"dot",
+            //     text: "{address:"
+            //         + msg.payload.address
+            //         + ", value:" + msg.payload.value 
+            //         + (typeof msg.payload.secondPaylod == "undefined" 
+            //             ? "" 
+            //             : ", {0x" 
+            //                 + msg.payload.secondPaylod[0].toString(16)
+            //                 + ", 0x" 
+            //                 + msg.payload.secondPaylod[1].toString(16)
+            //                 + "}" 
+            //             )
+            //         + "}"
+            // });
             send(msg);
             done();
+        }));
+        this.on("close", () => __awaiter(this, void 0, void 0, function* () {
+            if (statusBroadcasting) {
+                statusBroadcasting.resolve();
+            }
         }));
     });
 };

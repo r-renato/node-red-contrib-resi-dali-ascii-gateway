@@ -72,8 +72,11 @@ class TelnetEnginePool {
             const onReceive = result.engine.onReceive(() => {
                 result.statusBroadcaster.repeat({ fill: "green", text: "OK" });
             });
+            node.log("RESI-DALI-ETH - create new connection: " + name);
         }
-        console.log("getEngine" + name);
+        else {
+            console.log("RESI-DALI-ETH - reuse connection: " + name);
+        }
         return (result);
     }
 }
@@ -81,7 +84,7 @@ module.exports = function (RED) {
     RED.nodes.registerType("resi-dali-ascii-client", function (config) {
         RED.nodes.createNode(this, config);
         var node = this;
-        node.engine = TelnetEnginePool.getInstance().getEngine(config.name, node, config);
+        node.connection = TelnetEnginePool.getInstance().getEngine(config.name, node, config);
         // const host = config.address ;
         // const port = config.port ? config.port : 502 ;
         // node.engine = new telnetEngineLib.Engine(host, port) ;
@@ -120,14 +123,14 @@ module.exports = function (RED) {
         // const onReceive = node.engine.onReceive(() => {
         //     statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
         // })
-        node.getStatusBroadcaster = () => { return node.engine.statusBroadcaster; };
+        node.getStatusBroadcaster = () => { return node.connection.statusBroadcaster; };
         this.on("input", (msg, send, done) => __awaiter(this, void 0, void 0, function* () {
             done();
         }));
         this.on("close", (msg) => __awaiter(this, void 0, void 0, function* () {
             () => {
-                node.engine.destroy();
-                node.engine.statusBroadcaster.terminate();
+                node.connection.destroy();
+                node.connection.statusBroadcaster.terminate();
             };
         }));
     });
