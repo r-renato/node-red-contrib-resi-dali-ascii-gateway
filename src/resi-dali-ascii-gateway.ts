@@ -46,6 +46,7 @@ module.exports = function (RED: nodered.NodeAPI) {
         setStatus(false);
 
         this.on("input", async (msg: any, send, done) => {
+            this.log( "T1 => " + (telnetEngine) )
             if( telnetEngine ) {
                 setStatus(true);
                 telnetEngine.engine.requestString( msg.payload.toString(), telnetEngingLib.untilMilli( 1000 ) )

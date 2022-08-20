@@ -40,6 +40,7 @@ module.exports = function (RED) {
         };
         setStatus(false);
         this.on("input", (msg, send, done) => __awaiter(this, void 0, void 0, function* () {
+            this.log("T1 => " + (telnetEngine));
             if (telnetEngine) {
                 setStatus(true);
                 telnetEngine.engine.requestString(msg.payload.toString(), telnetEngingLib.untilMilli(1000))
