@@ -35,7 +35,7 @@
   },
   "node-red": {
     "nodes": {
-      "resi-dali-client": "dist/resi-dali-ascii-client.js",
+      "resi-dali-ascii-client": "dist/resi-dali-ascii-client.js",
       "resi-dali": "dist/resi-dali-ascii-gateway.js"
     }
   },
