@@ -40,13 +40,17 @@ module.exports = function (RED) {
         };
         setStatus(false);
         this.on("input", (msg, send, done) => __awaiter(this, void 0, void 0, function* () {
-            this.log("T1 => " + (telnetEngine));
+            this.log("T1 => " + (telnetEngine ? true : false) + " msg: " + msg.payload.toString());
             if (telnetEngine) {
+                this.log("T2 => " + (telnetEngine ? true : false) + " msg: " + msg.payload.toString());
                 setStatus(true);
-                telnetEngine.engine.requestString(msg.payload.toString(), telnetEngingLib.untilMilli(1000))
+                telnetEngine.engine.requestString(msg.payload.toString(), telnetEngingLib.untilMilli(100))
                     .then(() => { console.log("3=== found the prompt"); })
                     .catch(() => { console.log("4=== couldn't find the prompt"); })
-                    .finally(() => { console.log("5=== finished"); telnetEngine.engine.terminate(); });
+                    .finally(() => {
+                    console.log("5=== finished");
+                    telnetEngine.engine.terminate();
+                });
                 telnetEngine.engine.terminate();
             }
             // this.status({
