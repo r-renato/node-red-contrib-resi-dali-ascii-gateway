@@ -73,7 +73,7 @@ class TelnetEnginePool {
     
             const onResponseTimeOut = result.engine.onResponseTimeOut(() => {
                 result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "timeout" } ) ;
-                node.error( 'Response wait exceeded timeout value (request ${node.engine.timeOut})' ) ;
+                node.error( 'Response wait exceeded timeout value (request ${node.engine.timeOut}) ' + result.engine.timeOut ) ;
             })
     
             const onReceive = result.engine.onReceive(() => {
