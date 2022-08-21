@@ -8,6 +8,7 @@ export interface NodeExtendedInterface extends nodered.Node {
 
 export interface TelnetEngineInterface {
     engine: any ;
+    proxy: any ;
     timeOut: number ;
     clearOut: number ;
     inDelimiter: string ;

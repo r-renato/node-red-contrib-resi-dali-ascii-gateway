@@ -45,7 +45,7 @@ module.exports = function (RED) {
                 this.log("T2 => " + (telnetEngine ? true : false) + " msg: " + msg.payload.toString());
                 setStatus(true);
                 telnetEngine.engine.listenString(console.log);
-                telnetEngine.engine.request({ request: msg.payload.toString(), test: telnetEngingLib.untilMilli(1000),
+                telnetEngine.proxy.request({ request: msg.payload.toString(), test: telnetEngingLib.untilMilli(1000),
                     foo: (obj) => {
                         console.log(">" + obj.response + "<");
                         var msg1 = Object.assign({}, msg);

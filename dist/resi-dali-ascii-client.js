@@ -41,6 +41,7 @@ class TelnetEnginePool {
             result.engine.timeOut = config.timeOut ? config.timeOut : 1000;
             result.engine.outDelimiter = "\r";
             result.engine.modeStrict = false;
+            result.proxy = result.engine.proxy();
             // result.engine.clearOut = config.clearOut ? config.clearOut : 0 ;
             // result.engine.inDelimiter = config.inDelimiter ? RegExp(config.inDelimiter) : /\r\n|\r|\n/ ;
             // result.engine.outDelimiter = config.outDelimiter ? config.outDelimiter.replace(/\\n/, '\n').replace(/\\r/, '\r').replace(/\\l/, '\l') : "\n" ;
