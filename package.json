@@ -31,6 +31,7 @@
     "telnet-engine": "^1.2.5"
   },
   "dependencies": {
+    "telnet-client": "^2.0.4",
     "telnet-engine": "^1.2.5"
   },
   "node-red": {

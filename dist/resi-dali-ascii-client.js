@@ -39,12 +39,14 @@ class TelnetEnginePool {
             const port = config.port ? config.port : 502;
             result.engine = new telnetEngineLib.Engine(host, port);
             result.engine.timeOut = config.timeOut ? config.timeOut : 1000;
-            result.engine.clearOut = config.clearOut ? config.clearOut : 0;
-            result.engine.inDelimiter = config.inDelimiter ? RegExp(config.inDelimiter) : /\r\n|\r|\n/;
-            result.engine.outDelimiter = config.outDelimiter ? config.outDelimiter.replace(/\\n/, '\n').replace(/\\r/, '\r').replace(/\\l/, '\l') : "\n";
+            result.engine.outDelimiter = "\r";
             result.engine.modeStrict = false;
-            result.engine.autoFlush = 100;
-            result.engine.autoFlush = config.openTries ? config.openTries : 1;
+            // result.engine.clearOut = config.clearOut ? config.clearOut : 0 ;
+            // result.engine.inDelimiter = config.inDelimiter ? RegExp(config.inDelimiter) : /\r\n|\r|\n/ ;
+            // result.engine.outDelimiter = config.outDelimiter ? config.outDelimiter.replace(/\\n/, '\n').replace(/\\r/, '\r').replace(/\\l/, '\l') : "\n" ;
+            // result.engine.modeStrict = false ;
+            // result.engine.autoFlush = 100 ;
+            // result.engine.autoFlush = config.openTries ? config.openTries : 1 ;
             result.statusBroadcaster = new openpromiseLib.Cycle();
             const onConnecting = result.engine.onConnecting(() => {
                 result.statusBroadcaster.repeat({ fill: "yellow", text: "connecting" });
