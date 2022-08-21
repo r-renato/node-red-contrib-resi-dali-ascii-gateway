@@ -84,7 +84,7 @@ class TelnetEnginePool {
     }
 }
 module.exports = function (RED) {
-    RED.nodes.registerType("resi-dali-ascii-client", function (config) {
+    RED.nodes.registerType("resi-dali-eth-ascii-client", function (config) {
         RED.nodes.createNode(this, config);
         var node = this;
         node.connection = TelnetEnginePool.getInstance().getEngine(config.name, node, config);
