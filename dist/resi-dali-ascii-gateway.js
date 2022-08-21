@@ -47,8 +47,8 @@ module.exports = function (RED) {
                 telnetEngine.engine.listenString(console.log);
                 telnetEngine.engine.request({ request: msg.payload.toString(), test: telnetEngingLib.untilMilli(1000),
                     foo: (obj) => {
-                        console.log(">" + msg.payload + "<");
-                        msg.payload = msg.payload;
+                        console.log(">" + obj.response + "<");
+                        msg.payload = obj.response;
                         return obj.response.length;
                     }, UID: "REQ123" })
                     .then(console.log)

@@ -53,9 +53,9 @@ module.exports = function (RED: nodered.NodeAPI) {
                 telnetEngine.engine.listenString(console.log) ;
                 telnetEngine.engine.request({request: msg.payload.toString(), test: telnetEngingLib.untilMilli(1000), 
                     foo: (obj: any) => {
-                        console.log( ">" + msg.payload + "<") ;
-                        msg.payload = msg.payload ;
-                        return obj.response.length
+                        console.log( ">" + obj.response + "<") ;
+                        msg.payload = obj.response ;
+                        return obj.response.length ;
                     }, UID: "REQ123" })
                 .then(console.log)
                 .catch(()=>{console.log("error:","REQ123")}) ;
