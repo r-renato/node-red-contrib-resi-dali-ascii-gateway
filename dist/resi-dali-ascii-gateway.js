@@ -49,10 +49,15 @@ module.exports = function (RED) {
                     foo: (obj) => {
                         console.log(">" + obj.response + "<");
                         msg.payload = obj.response;
+                        send(msg);
                         return obj.response.length;
                     }, UID: "REQ123" })
-                    .then(console.log)
-                    .catch(() => { console.log("error:", "REQ123"); });
+                    .then(() => {
+                    done();
+                })
+                    .catch(() => {
+                    console.log("error:", "REQ123");
+                });
                 // telnetEngine.engine.requestString( msg.payload.toString() + "\n\r", telnetEngingLib.untilMilli( 100 ) )
                 //     .then(( s:any )=>{ console.log("3=== found the prompt: " + s ) })
                 //     .catch(()=>{console.log("4=== couldn't find the prompt")})
@@ -76,8 +81,8 @@ module.exports = function (RED) {
             //             )
             //         + "}"
             // });
-            send(msg);
-            done();
+            // send(msg);
+            // done();
         }));
         this.on("close", () => __awaiter(this, void 0, void 0, function* () {
             if (statusBroadcasting) {

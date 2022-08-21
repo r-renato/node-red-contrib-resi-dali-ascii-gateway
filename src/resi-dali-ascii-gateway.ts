@@ -55,10 +55,15 @@ module.exports = function (RED: nodered.NodeAPI) {
                     foo: (obj: any) => {
                         console.log( ">" + obj.response + "<") ;
                         msg.payload = obj.response ;
+                        send( msg ) ;
                         return obj.response.length ;
                     }, UID: "REQ123" })
-                .then(console.log)
-                .catch(()=>{console.log("error:","REQ123")}) ;
+                .then( () => {
+                    done();
+                })
+                .catch( () => {
+                    console.log("error:","REQ123")
+                } ) ;
 
 
 
@@ -87,8 +92,8 @@ module.exports = function (RED: nodered.NodeAPI) {
             //         + "}"
             // });
 
-            send(msg);
-            done();
+            // send(msg);
+            // done();
         });
 
         this.on("close", async () => {
