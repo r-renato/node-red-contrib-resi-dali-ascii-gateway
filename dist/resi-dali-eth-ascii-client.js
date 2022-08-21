@@ -84,6 +84,7 @@ class TelnetEnginePool {
     }
 }
 module.exports = function (RED) {
+    console.log(">>>" + RED._("dali-contrib.label.logEnabled"));
     RED.nodes.registerType("resi-dali-eth-ascii-client", function (config) {
         RED.nodes.createNode(this, config);
         var node = this;
