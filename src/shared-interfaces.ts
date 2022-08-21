@@ -16,4 +16,7 @@ export interface TelnetEngineInterface {
     modeStrict: boolean ;
     autoFlush: number ;
     statusBroadcaster: any ;
+
+    systemConsole: boolean ;
+    logEnabled: boolean ;
 }

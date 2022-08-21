@@ -1,7 +1,8 @@
 {
     "dali-contrib" : {
         "label": {
-            "logEnabled": "Logging"
+            "logEnabled": "Logging",
+            "systemConsole" : "system console"
         }
     }
 }

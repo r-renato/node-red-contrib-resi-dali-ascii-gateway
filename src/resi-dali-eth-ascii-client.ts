@@ -42,6 +42,9 @@ class TelnetEnginePool {
             result.engine.outDelimiter = "\r" ;
             result.engine.modeStrict = false ;
 
+            result.engine.systemConsole = config.systemConsole ;
+            result.engine.logEnabled = config.logEnabled ;
+
             result.proxy = result.engine.proxy() ;
             // result.engine.clearOut = config.clearOut ? config.clearOut : 0 ;
             // result.engine.inDelimiter = config.inDelimiter ? RegExp(config.inDelimiter) : /\r\n|\r|\n/ ;
