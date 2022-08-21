@@ -41,7 +41,7 @@
     }
   },
   "scripts": {
-    "build": "rm -f dist/*.* && tsc -p tsconfig.json && cp src/*.html dist",
+    "build": "rm -f dist/*.* && tsc -p tsconfig.json && cp src/*.html dist && cp -r src/locales dist",
     "copys": "scp -pr package.json dist drp@192.168.7.111:~/node-red/node_modules/node-red-contrib-resi-dali-modbus-gateway"
   }
 }
