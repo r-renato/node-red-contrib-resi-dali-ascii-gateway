@@ -51,7 +51,17 @@ module.exports = function (RED: nodered.NodeAPI) {
                 this.log( "T2 => " + (telnetEngine ? true : false) + " msg: " + msg.payload.toString()) ;
                 setStatus(true);
                 telnetEngine.engine.listenString(console.log) ;
-                telnetEngine.engine.requestString( msg.payload.toString() + "\n\r" ) ;
+                telnetEngine.engine.request({request: msg.payload.toString(), test: telnetEngingLib.untilMilli(1000), 
+                    foo: (obj: any) => {
+                        console.log( ">" + msg.payload + "<") ;
+                        msg.payload = msg.payload ;
+                        return obj.response.length
+                    }, UID: "REQ123" })
+                .then(console.log)
+                .catch(()=>{console.log("error:","REQ123")}) ;
+
+
+
                 // telnetEngine.engine.requestString( msg.payload.toString() + "\n\r", telnetEngingLib.untilMilli( 100 ) )
                 //     .then(( s:any )=>{ console.log("3=== found the prompt: " + s ) })
                 //     .catch(()=>{console.log("4=== couldn't find the prompt")})
