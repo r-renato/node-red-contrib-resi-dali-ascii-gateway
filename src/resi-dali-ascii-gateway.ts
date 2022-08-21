@@ -54,12 +54,13 @@ module.exports = function (RED: nodered.NodeAPI) {
                 telnetEngine.engine.request({request: msg.payload.toString(), test: telnetEngingLib.untilMilli(1000), 
                     foo: (obj: any) => {
                         console.log( ">" + obj.response + "<") ;
-                        msg.payload = obj.response ;
-                        send( msg ) ;
+                        var msg1 = Object.assign({}, msg)
+                        msg1.payload = obj.response
+                        send([msg1, ,])
                         return obj.response.length ;
                     }, UID: "REQ123" })
                 .then( () => {
-                    done();
+                    console.log( "done.")
                 })
                 .catch( () => {
                     console.log("error:","REQ123")
@@ -93,7 +94,7 @@ module.exports = function (RED: nodered.NodeAPI) {
             // });
 
             // send(msg);
-            // done();
+            done();
         });
 
         this.on("close", async () => {

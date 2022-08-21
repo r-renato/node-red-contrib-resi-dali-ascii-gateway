@@ -48,12 +48,13 @@ module.exports = function (RED) {
                 telnetEngine.engine.request({ request: msg.payload.toString(), test: telnetEngingLib.untilMilli(1000),
                     foo: (obj) => {
                         console.log(">" + obj.response + "<");
-                        msg.payload = obj.response;
-                        send(msg);
+                        var msg1 = Object.assign({}, msg);
+                        msg1.payload = obj.response;
+                        send([msg1, ,]);
                         return obj.response.length;
                     }, UID: "REQ123" })
                     .then(() => {
-                    done();
+                    console.log("done.");
                 })
                     .catch(() => {
                     console.log("error:", "REQ123");
@@ -82,7 +83,7 @@ module.exports = function (RED) {
             //         + "}"
             // });
             // send(msg);
-            // done();
+            done();
         }));
         this.on("close", () => __awaiter(this, void 0, void 0, function* () {
             if (statusBroadcasting) {
