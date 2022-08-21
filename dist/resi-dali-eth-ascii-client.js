@@ -138,4 +138,4 @@ module.exports = function (RED) {
         }));
     });
 };
-//# sourceMappingURL=resi-dali-ascii-client.js.map
+//# sourceMappingURL=resi-dali-eth-ascii-client.js.map
