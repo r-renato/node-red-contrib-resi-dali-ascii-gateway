@@ -50,7 +50,7 @@ module.exports = function (RED) {
                         console.log(">" + obj.response + "<");
                         var msg1 = Object.assign({}, msg);
                         msg1.payload = obj.response;
-                        send([msg1, ,]);
+                        send([msg, msg1, ,]);
                         return obj.response.length;
                     }, UID: "REQ123" })
                     .then(() => {
