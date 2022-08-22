@@ -43,7 +43,7 @@ module.exports = function (RED) {
                 }
                 (0, shared_functions_1.requestTimeout)(2000, telnetEngine.proxy.request({
                     request: textCommand.toString(),
-                    test: telnetEngingLib.untilMilli(1500),
+                    test: telnetEngingLib.untilMilli(500),
                     foo: (obj) => {
                         return obj;
                     },

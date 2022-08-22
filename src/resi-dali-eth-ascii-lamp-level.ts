@@ -45,7 +45,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                 requestTimeout(2000, 
                     telnetEngine.proxy.request({
                         request: textCommand.toString(), 
-                        test: telnetEngingLib.untilMilli( 1500 ), 
+                        test: telnetEngingLib.untilMilli( 500 ), 
                         foo: (obj: any) => {
                             return obj ;
                         }
