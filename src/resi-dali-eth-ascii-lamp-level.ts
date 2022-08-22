@@ -1,7 +1,7 @@
 import * as nodered from "node-red" ;
 import { NodeExtendedInterface, TelnetEngineInterface } from './shared-interfaces' ;
 import { Status, StatusInterface } from './shared-classes' ;
-import { objectRename, requestTimeout } from './shared-functions' ;
+import { objectRename } from './shared-functions' ;
 
 const daliLampLevelNodeName:string = "dali-lamp-level" ;
 const telnetEngingLib = require( "telnet-engine" ) ;
@@ -24,48 +24,6 @@ module.exports = function (RED: nodered.NodeAPI) {
             status.setStatus( false ) ;
         }
 
-        // (obj: any) => {
-        //     var result : any = Object.assign({}, msg)
-        //     result = objectRename( result, 'payload', 'daliRequest' ) ;
-            
-        //     if( telnetEngine.systemConsole ) {
-        //         console.log( textCommand + " ==> " + obj.response ) ;
-        //     }
-
-        //     if( obj.response == "#OK" ) {
-        //         result.payload = "#OK" ;
-        //     } else {
-        //         // Error
-        //     }
-
-        //     console.log( ">" + obj.response + "<") ;
-        //     var msg1 = Object.assign({}, msg)
-        //     msg1.payload = obj.response
-        //     send([result, ,])
-        //     return obj.response.length ;
-        // }
-
-        // let action: (obj: any) => any = function {
-        //     var result : any = Object.assign({}, msg)
-        //     result = objectRename( result, 'payload', 'daliRequest' ) ;
-            
-        //     if( telnetEngine.systemConsole ) {
-        //         console.log( textCommand + " ==> " + obj.response ) ;
-        //     }
-
-        //     if( obj.response == "#OK" ) {
-        //         result.payload = "#OK" ;
-        //     } else {
-        //         // Error
-        //     }
-
-        //     console.log( ">" + obj.response + "<") ;
-        //     var msg1 = Object.assign({}, msg)
-        //     msg1.payload = obj.response
-        //     send([result, ,])
-        //     return obj.response.length ;
-        // }
-
         /**
          * 
          */
@@ -86,18 +44,29 @@ module.exports = function (RED: nodered.NodeAPI) {
                 telnetEngine.proxy.request({
                     request: textCommand.toString(), 
                     test: telnetEngingLib.untilMilli( 1500 ), 
-                    //test: telnetEngingLib.noResponse(),
                     foo: (obj: any) => {
-                        return obj ;
+                        var result : any = Object.assign({}, msg)
+                        result = objectRename( result, 'payload', 'daliRequest' ) ;
+                        
+                        if( telnetEngine.systemConsole ) {
+                            console.log( textCommand + " ==> " + obj.response ) ;
+                        }
+
+                        if( obj.response == "#OK" ) {
+                            result.payload = "#OK" ;
+                        } else {
+                            // Error
+                        }
+
+                        console.log( ">" + obj.response + "<") ;
+                        var msg1 = Object.assign({}, msg)
+                        msg1.payload = obj.response
+                        send([result, ,])
+                        return obj.response.length ;
                     }
                     //, UID: "REQ123" 
                 })
-                .then( ( obj: any ) => {
-                    var result : any = Object.assign({}, msg)
-                    result = objectRename( result, 'payload', 'daliRequest' ) ;
-                    
-                    result.payload = obj.response
-                    send([result, ,])
+                .then( () => {
                     console.log( "done.")
                 })
                 .catch( (a:any, b:any, c:any) => {
