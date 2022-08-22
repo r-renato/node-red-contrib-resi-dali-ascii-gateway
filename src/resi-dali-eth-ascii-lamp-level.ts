@@ -57,7 +57,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                         console.log( ">" + obj.response + "<") ;
                         var msg1 = Object.assign({}, msg)
                         msg1.payload = obj.response
-                        send([msg, result, ,])
+                        send([result, ,])
                         return obj.response.length ;
                     }, UID: "REQ123" })
                 .then( () => {
