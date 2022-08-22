@@ -1,6 +1,7 @@
 import * as nodered from "node-red" ;
 import { NodeExtendedInterface, TelnetEngineInterface } from './shared-interfaces' ;
 import { Status, StatusInterface } from './shared-classes' ;
+import { objectRename } from './shared-functions' ;
 
 const daliLampLevelNodeName:string = "dali-lamp-level" ;
 const telnetEngingLib = require( "telnet-engine" ) ;
@@ -30,17 +31,35 @@ module.exports = function (RED: nodered.NodeAPI) {
             if( telnetEngine ) {
                 status.setStatus( true ) ;
 
+                console.log( "log: " + telnetEngine.systemConsole ) ;
                 if( telnetEngine.systemConsole ) {
                     telnetEngine.engine.listenString( node.log ) ;
                 }
 
-                var textCommand: string = "#LAMP LEVEL:" + msg.payload.lamp + "=" + msg.payload.level ;
-                telnetEngine.proxy.request({request: textCommand.toString(), test: telnetEngingLib.untilMilli( 1500 ), 
+                var textCommand: string = "#LAMP LEVEL:" 
+                    + (msg.payload.lamp | config.lamp)
+                    + "=" 
+                    + (msg.payload.level | config.level) ;
+                telnetEngine.proxy.request({
+                    request: textCommand.toString(), 
+                    test: telnetEngingLib.untilMilli( 1500 ), 
                     foo: (obj: any) => {
+                        var result = Object.assign({}, msg)
+                        result = objectRename( result, 'payload', 'daliRequest' ) ;
+                        
+
+                        if( obj.response == "#OK" ) {
+                            var result = {
+
+                            }
+                        } else {
+                            // Error
+                        }
+
                         console.log( ">" + obj.response + "<") ;
                         var msg1 = Object.assign({}, msg)
                         msg1.payload = obj.response
-                        send([msg, msg1, ,])
+                        send([msg, result, ,])
                         return obj.response.length ;
                     }, UID: "REQ123" })
                 .then( () => {

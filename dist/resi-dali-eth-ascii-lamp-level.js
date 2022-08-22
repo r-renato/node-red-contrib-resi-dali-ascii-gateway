@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_classes_1 = require("./shared-classes");
+const shared_functions_1 = require("./shared-functions");
 const daliLampLevelNodeName = "dali-lamp-level";
 const telnetEngingLib = require("telnet-engine");
 module.exports = function (RED) {
@@ -30,18 +31,33 @@ module.exports = function (RED) {
         this.on("input", (msg, send, done) => __awaiter(this, void 0, void 0, function* () {
             if (telnetEngine) {
                 status.setStatus(true);
+                console.log("log: " + telnetEngine.systemConsole);
                 if (telnetEngine.systemConsole) {
                     telnetEngine.engine.listenString(node.log);
                 }
-                var textCommand = "#LAMP LEVEL:" + msg.payload.lamp + "=" + msg.payload.level;
-                telnetEngine.proxy.request({ request: textCommand.toString(), test: telnetEngingLib.untilMilli(1500),
+                var textCommand = "#LAMP LEVEL:"
+                    + (msg.payload.lamp | config.lamp)
+                    + "="
+                    + (msg.payload.level | config.level);
+                telnetEngine.proxy.request({
+                    request: textCommand.toString(),
+                    test: telnetEngingLib.untilMilli(1500),
                     foo: (obj) => {
+                        var result = Object.assign({}, msg);
+                        result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
+                        if (obj.response == "#OK") {
+                            var result = {};
+                        }
+                        else {
+                            // Error
+                        }
                         console.log(">" + obj.response + "<");
                         var msg1 = Object.assign({}, msg);
                         msg1.payload = obj.response;
-                        send([msg, msg1, ,]);
+                        send([msg, result, ,]);
                         return obj.response.length;
-                    }, UID: "REQ123" })
+                    }, UID: "REQ123"
+                })
                     .then(() => {
                     console.log("done.");
                 })
