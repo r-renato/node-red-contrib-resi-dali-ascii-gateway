@@ -57,13 +57,13 @@ module.exports = function (RED) {
                     result.payload = obj[0].response;
                     send([result, ,]);
                     telnetEngine.engine.terminate();
-                }).catch((err) => {
+                }).catch((e) => {
                     if (telnetEngine.systemConsole) {
-                        console.info("ERROR! " + err);
+                        console.log("ERROR! " + e);
                     }
                     var result = Object.assign({}, msg);
                     result.error = {
-                        message: err.toString(),
+                        message: e.toString(),
                         source: {
                             id: nodeServer.id,
                             type: nodeServer.type,

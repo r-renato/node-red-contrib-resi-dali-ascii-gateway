@@ -63,14 +63,14 @@ module.exports = function (RED: nodered.NodeAPI) {
 
                         send([result, ,])
                         telnetEngine.engine.terminate() ;
-                    }).catch((err) => {
+                    }).catch((e) => {
                         if( telnetEngine.systemConsole ) {
-                            console.info( "ERROR! " + err ) ;
+                            console.log( "ERROR! " + e ) ;
                         }
                         
                         var result : any = Object.assign({}, msg) ;
                         result.error = {
-                            message : err.toString(),
+                            message : e.toString(),
                             source : {
                                 id : nodeServer.id,
                                 type : nodeServer.type,
