@@ -44,6 +44,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                 telnetEngine.proxy.request({
                     request: textCommand.toString(), 
                     //test: telnetEngingLib.untilMilli( 1500 ), 
+                    test: telnetEngingLib.noResponse(),
                     foo: (obj: any) => {
                         var result : any = Object.assign({}, msg)
                         result = objectRename( result, 'payload', 'daliRequest' ) ;
