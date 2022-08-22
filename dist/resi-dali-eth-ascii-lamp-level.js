@@ -25,6 +25,40 @@ module.exports = function (RED) {
             telnetEngine = nodeServer.connection;
             status.setStatus(false);
         }
+        // (obj: any) => {
+        //     var result : any = Object.assign({}, msg)
+        //     result = objectRename( result, 'payload', 'daliRequest' ) ;
+        //     if( telnetEngine.systemConsole ) {
+        //         console.log( textCommand + " ==> " + obj.response ) ;
+        //     }
+        //     if( obj.response == "#OK" ) {
+        //         result.payload = "#OK" ;
+        //     } else {
+        //         // Error
+        //     }
+        //     console.log( ">" + obj.response + "<") ;
+        //     var msg1 = Object.assign({}, msg)
+        //     msg1.payload = obj.response
+        //     send([result, ,])
+        //     return obj.response.length ;
+        // }
+        // let action: (obj: any) => any = function {
+        //     var result : any = Object.assign({}, msg)
+        //     result = objectRename( result, 'payload', 'daliRequest' ) ;
+        //     if( telnetEngine.systemConsole ) {
+        //         console.log( textCommand + " ==> " + obj.response ) ;
+        //     }
+        //     if( obj.response == "#OK" ) {
+        //         result.payload = "#OK" ;
+        //     } else {
+        //         // Error
+        //     }
+        //     console.log( ">" + obj.response + "<") ;
+        //     var msg1 = Object.assign({}, msg)
+        //     msg1.payload = obj.response
+        //     send([result, ,])
+        //     return obj.response.length ;
+        // }
         /**
          *
          */
@@ -37,43 +71,23 @@ module.exports = function (RED) {
                     + (msg.payload.level | config.level);
                 console.log("log: " + telnetEngine.systemConsole);
                 if (telnetEngine.systemConsole) {
-                    //telnetEngine.engine.listenString( node.log ) ;
+                    telnetEngine.engine.listenString(node.log);
                     node.log("Sending command: " + textCommand);
-                }
-                function untilMilli(endingT) {
-                    var test = (s, f, obj) => {
-                        clearTimeout(obj.timer);
-                        obj.timer = setTimeout(f, endingT);
-                    };
-                    //test.delayed = true
-                    return test;
                 }
                 telnetEngine.proxy.request({
                     request: textCommand.toString(),
-                    //test: telnetEngingLib.untilMilli( 1500 ), 
-                    test: untilMilli(1500),
+                    test: telnetEngingLib.untilMilli(1500),
                     //test: telnetEngingLib.noResponse(),
                     foo: (obj) => {
-                        var result = Object.assign({}, msg);
-                        result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
-                        if (telnetEngine.systemConsole) {
-                            console.log(textCommand + " ==> " + obj.response);
-                        }
-                        if (obj.response == "#OK") {
-                            result.payload = "#OK";
-                        }
-                        else {
-                            // Error
-                        }
-                        console.log(">" + obj.response + "<");
-                        var msg1 = Object.assign({}, msg);
-                        msg1.payload = obj.response;
-                        send([result, ,]);
-                        return obj.response.length;
+                        return obj;
                     }
                     //, UID: "REQ123" 
                 })
-                    .then(() => {
+                    .then((obj) => {
+                    var result = Object.assign({}, msg);
+                    result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
+                    result.payload = obj.response;
+                    send([result, ,]);
                     console.log("done.");
                 })
                     .catch((a, b, c) => {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.objectRename = void 0;
+exports.requestTimeout = exports.objectRename = void 0;
 /**
  *
  * @param obj
@@ -19,4 +19,16 @@ function objectRename(obj, currentKey, newKey) {
 }
 exports.objectRename = objectRename;
 ;
+function requestTimeout(ms, promise) {
+    // Create a promise that rejects in <ms> milliseconds
+    let interrupt = new Promise((resolve, reject) => {
+        let id = setTimeout(() => {
+            clearTimeout(id);
+            reject(`Request timed out after + ${ms} ms.`);
+        }, ms);
+    });
+    // Returns a race between our timeout and the passed in promise
+    return Promise.race([promise, interrupt]);
+}
+exports.requestTimeout = requestTimeout;
 //# sourceMappingURL=shared-functions.js.map
