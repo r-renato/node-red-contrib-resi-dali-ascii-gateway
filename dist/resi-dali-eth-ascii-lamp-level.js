@@ -53,14 +53,11 @@ module.exports = function (RED) {
                     var result = Object.assign({}, msg);
                     result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
                     if (telnetEngine.systemConsole) {
-                        console.log(obj[0].request + " ==> " + obj[0].response);
+                        node.log(obj[0].request + " ==> " + obj[0].response);
                     }
                     result.payload = obj[0].response;
-                    //console.log( ">" + obj.response + "<") ;
-                    //var msg1 = Object.assign({}, msg)
-                    //msg1.payload = obj.response
                     send([result, ,]);
-                    console.log(">done.");
+                    telnetEngine.engine.terminate();
                 })
                     .catch((a, b, c) => {
                     console.log("error:", "REQ123" + (typeof a) + "-" + b + c);

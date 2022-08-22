@@ -50,21 +50,18 @@ module.exports = function (RED: nodered.NodeAPI) {
                     //, UID: "REQ123" 
                 })
                 .then( ( obj: [any] ) => {
-                        //console.log( obj + JSON.stringify( obj ) ) ;
-                        var result : any = Object.assign({}, msg)
-                        result = objectRename( result, 'payload', 'daliRequest' ) ;
-                        
-                        if( telnetEngine.systemConsole ) {
-                            console.log( obj[0].request + " ==> " + obj[0].response ) ;
-                        }
+                    //console.log( obj + JSON.stringify( obj ) ) ;
+                    var result : any = Object.assign({}, msg)
+                    result = objectRename( result, 'payload', 'daliRequest' ) ;
+                    
+                    if( telnetEngine.systemConsole ) {
+                        node.log( obj[0].request + " ==> " + obj[0].response ) ;
+                    }
 
-                        result.payload = obj[0].response ;
+                    result.payload = obj[0].response ;
 
-                        //console.log( ">" + obj.response + "<") ;
-                        //var msg1 = Object.assign({}, msg)
-                        //msg1.payload = obj.response
-                        send([result, ,])
-                    console.log( ">done.")
+                    send([result, ,])
+                    telnetEngine.engine.terminate() ;
                 })
                 .catch( (a:any, b:any, c:any) => {
                     console.log("error:","REQ123" +(typeof a) + "-" + b + c )
