@@ -53,6 +53,8 @@ class TelnetEnginePool {
             result.statusBroadcaster = new openpromiseLib.Cycle();
             const onConnecting = result.engine.onConnecting(() => {
                 result.statusBroadcaster.repeat({ fill: "yellow", text: "connecting" });
+                node.log("Connecting to " + host + ":" + port);
+                console.log("Connecting to " + host + ":" + port);
             });
             const onSuccess = result.engine.onConnectionSuccess(() => {
                 result.statusBroadcaster.repeat({ fill: "green", text: "OK" });

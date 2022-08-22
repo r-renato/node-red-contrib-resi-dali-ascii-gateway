@@ -57,6 +57,8 @@ class TelnetEnginePool {
 
             const onConnecting = result.engine.onConnecting(() => {
                 result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "yellow", text: "connecting" } ) ;
+                node.log( "Connecting to " + host + ":" + port ) ;
+                console.log( "Connecting to " + host + ":" + port ) ;
             })
             const onSuccess = result.engine.onConnectionSuccess(() => {
                 result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
