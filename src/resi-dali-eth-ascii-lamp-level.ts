@@ -45,34 +45,31 @@ module.exports = function (RED: nodered.NodeAPI) {
                     request: textCommand.toString(), 
                     test: telnetEngingLib.untilMilli( 1500 ), 
                     foo: (obj: any) => {
-                        var result : any = Object.assign({}, msg)
-                        result = objectRename( result, 'payload', 'daliRequest' ) ;
+                        // var result : any = Object.assign({}, msg)
+                        // result = objectRename( result, 'payload', 'daliRequest' ) ;
                         
-                        if( telnetEngine.systemConsole ) {
-                            console.log( textCommand + " ==> " + obj.response ) ;
-                        }
+                        // if( telnetEngine.systemConsole ) {
+                        //     console.log( textCommand + " ==> " + obj.response ) ;
+                        // }
 
-                        if( obj.response == "#OK" ) {
-                            result.payload = "#OK" ;
-                        } else {
-                            // Error
-                        }
+                        // if( obj.response == "#OK" ) {
+                        //     result.payload = "#OK" ;
+                        // } else {
+                        //     // Error
+                        // }
 
-                        console.log( ">" + obj.response + "<") ;
-                        var msg1 = Object.assign({}, msg)
-                        msg1.payload = obj.response
+                        // console.log( ">" + obj.response + "<") ;
+                        // var msg1 = Object.assign({}, msg)
+                        // msg1.payload = obj.response
                         send([msg, msg, ,])
                         return obj.response.length ;
                     }
                     //, UID: "REQ123" 
                 })
                 .then( () => {
-                    console.log( "done.")
+                    console.log( ">done.")
                 })
                 .catch( (a:any, b:any, c:any) => {
-                    for (const [key, val] of Object.entries(a)) {
-                        console.log(key, val)
-                      }
                     console.log("error:","REQ123" +(typeof a) + "-" + b + c )
                 } ) ;
             }

@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_classes_1 = require("./shared-classes");
-const shared_functions_1 = require("./shared-functions");
 const daliLampLevelNodeName = "dali-lamp-level";
 const telnetEngingLib = require("telnet-engine");
 module.exports = function (RED) {
@@ -44,32 +43,28 @@ module.exports = function (RED) {
                     request: textCommand.toString(),
                     test: telnetEngingLib.untilMilli(1500),
                     foo: (obj) => {
-                        var result = Object.assign({}, msg);
-                        result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
-                        if (telnetEngine.systemConsole) {
-                            console.log(textCommand + " ==> " + obj.response);
-                        }
-                        if (obj.response == "#OK") {
-                            result.payload = "#OK";
-                        }
-                        else {
-                            // Error
-                        }
-                        console.log(">" + obj.response + "<");
-                        var msg1 = Object.assign({}, msg);
-                        msg1.payload = obj.response;
+                        // var result : any = Object.assign({}, msg)
+                        // result = objectRename( result, 'payload', 'daliRequest' ) ;
+                        // if( telnetEngine.systemConsole ) {
+                        //     console.log( textCommand + " ==> " + obj.response ) ;
+                        // }
+                        // if( obj.response == "#OK" ) {
+                        //     result.payload = "#OK" ;
+                        // } else {
+                        //     // Error
+                        // }
+                        // console.log( ">" + obj.response + "<") ;
+                        // var msg1 = Object.assign({}, msg)
+                        // msg1.payload = obj.response
                         send([msg, msg, ,]);
                         return obj.response.length;
                     }
                     //, UID: "REQ123" 
                 })
                     .then(() => {
-                    console.log("done.");
+                    console.log(">done.");
                 })
                     .catch((a, b, c) => {
-                    for (const [key, val] of Object.entries(a)) {
-                        console.log(key, val);
-                    }
                     console.log("error:", "REQ123" + (typeof a) + "-" + b + c);
                 });
             }
