@@ -77,7 +77,7 @@ module.exports = function (RED) {
                     console.log("done.");
                 })
                     .catch((a, b, c) => {
-                    console.log("error:", "REQ123" + a + b + c);
+                    console.log("error:", "REQ123" + JSON.stringify(a) + "-" + b + c);
                 });
             }
             done();
