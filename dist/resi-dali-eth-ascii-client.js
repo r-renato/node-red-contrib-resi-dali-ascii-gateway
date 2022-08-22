@@ -39,6 +39,8 @@ class TelnetEnginePool {
             const port = config.port ? config.port : 502;
             result.engine = new telnetEngineLib.Engine(host, port);
             result.engine.timeOut = config.timeOut ? config.timeOut : 1500;
+            result.engine.openTimeout = 1500;
+            result.engine.requestTimeout = 2000;
             result.engine.outDelimiter = "\r";
             result.engine.modeStrict = false;
             result.systemConsole = config.systemConsole;
@@ -54,7 +56,6 @@ class TelnetEnginePool {
             const onConnecting = result.engine.onConnecting(() => {
                 result.statusBroadcaster.repeat({ fill: "yellow", text: "connecting" });
                 node.log("Connecting to " + host + ":" + port);
-                console.log("Connecting to " + host + ":" + port);
             });
             const onSuccess = result.engine.onConnectionSuccess(() => {
                 result.statusBroadcaster.repeat({ fill: "green", text: "OK" });
@@ -74,7 +75,7 @@ class TelnetEnginePool {
             });
             const onResponseTimeOut = result.engine.onResponseTimeOut(() => {
                 result.statusBroadcaster.repeat({ fill: "red", text: "timeout" });
-                node.error('Response wait exceeded timeout value (request ${node.engine.timeOut}) ' + result.engine.timeOut);
+                node.error('Response wait exceeded timeout value (request ${node.engine.timeOut}) ' + result.engine.requestTimeout);
             });
             const onReceive = result.engine.onReceive(() => {
                 result.statusBroadcaster.repeat({ fill: "green", text: "OK" });
