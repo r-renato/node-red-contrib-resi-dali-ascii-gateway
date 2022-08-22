@@ -48,7 +48,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                         result = objectRename( result, 'payload', 'daliRequest' ) ;
                         
                         if( telnetEngine.systemConsole ) {
-                            node.log( textCommand + " ==> " + obj.response ) ;
+                            console.log( textCommand + " ==> " + obj.response ) ;
                         }
 
                         if( obj.response == "#OK" ) {

@@ -46,7 +46,7 @@ module.exports = function (RED) {
                         var result = Object.assign({}, msg);
                         result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
                         if (telnetEngine.systemConsole) {
-                            node.log(textCommand + " ==> " + obj.response);
+                            console.log(textCommand + " ==> " + obj.response);
                         }
                         if (obj.response == "#OK") {
                             result.payload = "#OK";
