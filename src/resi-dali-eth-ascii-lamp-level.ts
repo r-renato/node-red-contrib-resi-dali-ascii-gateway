@@ -30,7 +30,7 @@ module.exports = function (RED: nodered.NodeAPI) {
         this.on("input", async (msg: any, send, done) => {
             if( telnetEngine ) {
                 status.setStatus( true ) ;
-                var textCommand: string = "#LAMP LEVEL:" 
+                var textCommand: string = "#LAMPI LEVEL:" 
                     + (msg.payload.lamp | config.lamp)
                     + "=" 
                     + (msg.payload.level | config.level) ;
@@ -50,9 +50,9 @@ module.exports = function (RED: nodered.NodeAPI) {
                         }
                         //, UID: "REQ123" 
                     })
-                    ).then( (r) => console.log("then: " + r)
-                    
-                    ).catch((e)=>console.log( "catch:" + e))
+                    ).then( (r) => {
+                        console.log("then: " + r)
+                    }).catch((e)=>console.log( "catch:" + e))
 
 
 
