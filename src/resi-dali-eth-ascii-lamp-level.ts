@@ -77,8 +77,8 @@ module.exports = function (RED: nodered.NodeAPI) {
                 .then( () => {
                     console.log( "done.")
                 })
-                .catch( () => {
-                    console.log("error:","REQ123")
+                .catch( (a:any, b:any, c:any) => {
+                    console.log("error:","REQ123" + a + b + c )
                 } ) ;
             }
 
