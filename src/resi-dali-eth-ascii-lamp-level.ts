@@ -49,16 +49,16 @@ module.exports = function (RED: nodered.NodeAPI) {
                     }
                     //, UID: "REQ123" 
                 })
-                .then( ( obj: any ) => {
-                        console.log( obj + JSON.stringify( obj ) ) ;
+                .then( ( obj: [any] ) => {
+                        //console.log( obj + JSON.stringify( obj ) ) ;
                         var result : any = Object.assign({}, msg)
                         result = objectRename( result, 'payload', 'daliRequest' ) ;
                         
                         if( telnetEngine.systemConsole ) {
-                            console.log( textCommand + " ==> " + obj.response ) ;
+                            console.log( obj[0].request + " ==> " + obj[0].response ) ;
                         }
 
-                        result.payload = "#OK" ;
+                        result.payload = obj[0].response ;
 
                         //console.log( ">" + obj.response + "<") ;
                         //var msg1 = Object.assign({}, msg)
