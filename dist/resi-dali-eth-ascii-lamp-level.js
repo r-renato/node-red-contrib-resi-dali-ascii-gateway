@@ -31,7 +31,7 @@ module.exports = function (RED) {
         this.on("input", (msg, send, done) => __awaiter(this, void 0, void 0, function* () {
             if (telnetEngine) {
                 status.setStatus(true);
-                var textCommand = "#LAMPI LEVEL:"
+                var textCommand = "#LAMP LEVEL:"
                     + (msg.payload.lamp | config.lamp)
                     + "="
                     + (msg.payload.level | config.level);
@@ -45,11 +45,21 @@ module.exports = function (RED) {
                     test: telnetEngingLib.untilMilli(1500),
                     foo: (obj) => {
                         return obj;
+                    },
+                    UID: node.id
+                })).then((obj) => {
+                    //console.log( obj + JSON.stringify( obj ) ) ;
+                    var result = Object.assign({}, msg);
+                    result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
+                    if (telnetEngine.systemConsole) {
+                        node.log(obj[0].request + " ==> " + obj[0].response);
                     }
-                    //, UID: "REQ123" 
-                })).then((r) => {
-                    console.log("then: " + r);
-                }).catch((e) => console.log("catch:" + e));
+                    result.payload = obj[0].response;
+                    send([result, ,]);
+                    telnetEngine.engine.terminate();
+                }).catch((err) => {
+                    console.log("catch:" + err);
+                });
                 // telnetEngine.proxy.request({
                 //     request: textCommand.toString(), 
                 //     test: telnetEngingLib.untilMilli( 1500 ), 

@@ -11,7 +11,7 @@ module.exports = function (RED: nodered.NodeAPI) {
     RED.nodes.registerType( daliLampLevelNodeName,
     function (this: nodered.Node, config: any): void {
         RED.nodes.createNode(this, config);
-        var node = this;
+        var node: nodered.Node = this;
 
         var nodeServer = <NodeExtendedInterface> RED.nodes.getNode( config.server ) ;
         var telnetEngine: TelnetEngineInterface ;
@@ -30,7 +30,7 @@ module.exports = function (RED: nodered.NodeAPI) {
         this.on("input", async (msg: any, send, done) => {
             if( telnetEngine ) {
                 status.setStatus( true ) ;
-                var textCommand: string = "#LAMPI LEVEL:" 
+                var textCommand: string = "#LAMP LEVEL:" 
                     + (msg.payload.lamp | config.lamp)
                     + "=" 
                     + (msg.payload.level | config.level) ;
@@ -48,11 +48,24 @@ module.exports = function (RED: nodered.NodeAPI) {
                         foo: (obj: any) => {
                             return obj ;
                         }
-                        //, UID: "REQ123" 
+                        , UID: node.id 
                     })
-                    ).then( (r) => {
-                        console.log("then: " + r)
-                    }).catch((e)=>console.log( "catch:" + e))
+                    ).then( (obj) => {
+                        //console.log( obj + JSON.stringify( obj ) ) ;
+                        var result : any = Object.assign({}, msg)
+                        result = objectRename( result, 'payload', 'daliRequest' ) ;
+                        
+                        if( telnetEngine.systemConsole ) {
+                            node.log( obj[0].request + " ==> " + obj[0].response ) ;
+                        }
+
+                        result.payload = obj[0].response ;
+
+                        send([result, ,])
+                        telnetEngine.engine.terminate() ;
+                    }).catch((err) => {
+                        console.log( "catch:" + err)
+                    }) ;
 
 
 
