@@ -39,8 +39,8 @@ class TelnetEnginePool {
             const port = config.port ? config.port : 502;
             result.engine = new telnetEngineLib.Engine(host, port);
             result.engine.timeOut = config.timeOut ? config.timeOut : 1500;
-            result.engine.openTimeout = 1500;
-            result.engine.requestTimeout = 2000;
+            // result.engine.openTimeout = 1500 ;
+            // result.engine.requestTimeout = 2000 ;
             result.engine.outDelimiter = "\r";
             result.engine.modeStrict = false;
             result.systemConsole = config.systemConsole;

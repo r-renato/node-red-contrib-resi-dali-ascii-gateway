@@ -39,8 +39,8 @@ class TelnetEnginePool {
 
             result.engine = new telnetEngineLib.Engine(host, port) ;
             result.engine.timeOut = config.timeOut ? config.timeOut : 1500 ;
-            result.engine.openTimeout = 1500 ;
-            result.engine.requestTimeout = 2000 ;
+            // result.engine.openTimeout = 1500 ;
+            // result.engine.requestTimeout = 2000 ;
             result.engine.outDelimiter = "\r" ;
             result.engine.modeStrict = false ;
 
