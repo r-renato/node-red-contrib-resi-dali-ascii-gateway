@@ -44,6 +44,7 @@ class TelnetEnginePool {
 
             result.engine.systemConsole = config.systemConsole ;
             result.engine.logEnabled = config.logEnabled ;
+            console.log( "[[" + config.systemConsole ) ;
 
             result.proxy = result.engine.proxy() ;
             // result.engine.clearOut = config.clearOut ? config.clearOut : 0 ;
