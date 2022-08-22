@@ -80,7 +80,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                     console.log( "done.")
                 })
                 .catch( (a:any, b:any, c:any) => {
-                    console.log("error:","REQ123" + JSON.stringify(a) + "-" + b + c )
+                    console.log("error:","REQ123" +(typeof a) + "-" + b + c )
                 } ) ;
             }
 
