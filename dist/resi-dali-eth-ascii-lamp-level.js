@@ -35,7 +35,7 @@ module.exports = function (RED) {
                 if (telnetEngine.systemConsole) {
                     telnetEngine.engine.listenString(node.log);
                 }
-                var textCommand = "#LAMP LEVEL:"
+                var textCommand = "#LAMPI LEVEL:"
                     + (msg.payload.lamp | config.lamp)
                     + "="
                     + (msg.payload.level | config.level);
@@ -45,7 +45,11 @@ module.exports = function (RED) {
                     foo: (obj) => {
                         var result = Object.assign({}, msg);
                         result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
+                        if (telnetEngine.systemConsole) {
+                            node.log(textCommand + " ==> " + obj.response);
+                        }
                         if (obj.response == "#OK") {
+                            result.payload = "#OK";
                         }
                         else {
                             // Error

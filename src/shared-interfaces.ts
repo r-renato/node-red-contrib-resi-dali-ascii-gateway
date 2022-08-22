@@ -9,12 +9,12 @@ export interface NodeExtendedInterface extends nodered.Node {
 export interface TelnetEngineInterface {
     engine: any ;
     proxy: any ;
-    timeOut: number ;
-    clearOut: number ;
-    inDelimiter: string ;
-    outDelimiter: string ;
-    modeStrict: boolean ;
-    autoFlush: number ;
+    // timeOut: number ;
+    // clearOut: number ;
+    // inDelimiter: string ;
+    // outDelimiter: string ;
+    // modeStrict: boolean ;
+    // autoFlush: number ;
     statusBroadcaster: any ;
 
     systemConsole: boolean ;
