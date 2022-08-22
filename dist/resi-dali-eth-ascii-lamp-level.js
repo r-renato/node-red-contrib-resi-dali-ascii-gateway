@@ -37,7 +37,7 @@ module.exports = function (RED) {
                     + (msg.payload.level | config.level);
                 console.log("log: " + telnetEngine.systemConsole);
                 if (telnetEngine.systemConsole) {
-                    telnetEngine.engine.listenString(node.log);
+                    //telnetEngine.engine.listenString( node.log ) ;
                     node.log("Sending command: " + textCommand);
                 }
                 function untilMilli(endingT) {
@@ -70,7 +70,8 @@ module.exports = function (RED) {
                         msg1.payload = obj.response;
                         send([result, ,]);
                         return obj.response.length;
-                    }, UID: "REQ123"
+                    }
+                    //, UID: "REQ123" 
                 })
                     .then(() => {
                     console.log("done.");

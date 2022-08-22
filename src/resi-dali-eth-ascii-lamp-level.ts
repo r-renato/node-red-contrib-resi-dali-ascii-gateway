@@ -37,7 +37,7 @@ module.exports = function (RED: nodered.NodeAPI) {
 
                 console.log( "log: " + telnetEngine.systemConsole ) ;
                 if( telnetEngine.systemConsole ) {
-                    telnetEngine.engine.listenString( node.log ) ;
+                    //telnetEngine.engine.listenString( node.log ) ;
                     node.log( "Sending command: " + textCommand ) ;
                 }
                 function untilMilli(endingT:any) {
@@ -73,7 +73,9 @@ module.exports = function (RED: nodered.NodeAPI) {
                         msg1.payload = obj.response
                         send([result, ,])
                         return obj.response.length ;
-                    }, UID: "REQ123" })
+                    }
+                    //, UID: "REQ123" 
+                })
                 .then( () => {
                     console.log( "done.")
                 })
