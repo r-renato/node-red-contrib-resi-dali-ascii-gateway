@@ -1,0 +1,9 @@
+{
+    "dali-contrib" : {
+        "label": {
+            "server": "Server",
+            "lamp": "Lamp",
+            "level" : "level"
+        }
+    }
+}
