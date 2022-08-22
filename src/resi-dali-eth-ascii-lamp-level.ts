@@ -30,17 +30,18 @@ module.exports = function (RED: nodered.NodeAPI) {
         this.on("input", async (msg: any, send, done) => {
             if( telnetEngine ) {
                 status.setStatus( true ) ;
+                var textCommand: string = "#LAMP LEVEL:" 
+                    + (msg.payload.lamp | config.lamp)
+                    + "=" 
+                    + (msg.payload.level | config.level) ;
 
                 console.log( "log: " + telnetEngine.systemConsole ) ;
                 if( telnetEngine.systemConsole ) {
                     telnetEngine.engine.listenString( node.log ) ;
+                    node.log( "Sending command: " + textCommand ) ;
                 }
 
-                var textCommand: string = "#LAMPI LEVEL:" 
-                    + (msg.payload.lamp | config.lamp)
-                    + "=" 
-                    + (msg.payload.level | config.level) ;
-                telnetEngine.proxy.request({
+                telnetEngine.proxy.requestString({
                     request: textCommand.toString(), 
                     test: telnetEngingLib.untilMilli( 1500 ), 
                     foo: (obj: any) => {

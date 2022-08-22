@@ -31,15 +31,16 @@ module.exports = function (RED) {
         this.on("input", (msg, send, done) => __awaiter(this, void 0, void 0, function* () {
             if (telnetEngine) {
                 status.setStatus(true);
-                console.log("log: " + telnetEngine.systemConsole);
-                if (telnetEngine.systemConsole) {
-                    telnetEngine.engine.listenString(node.log);
-                }
-                var textCommand = "#LAMPI LEVEL:"
+                var textCommand = "#LAMP LEVEL:"
                     + (msg.payload.lamp | config.lamp)
                     + "="
                     + (msg.payload.level | config.level);
-                telnetEngine.proxy.request({
+                console.log("log: " + telnetEngine.systemConsole);
+                if (telnetEngine.systemConsole) {
+                    telnetEngine.engine.listenString(node.log);
+                    node.log("Sending command: " + textCommand);
+                }
+                telnetEngine.proxy.requestString({
                     request: textCommand.toString(),
                     test: telnetEngingLib.untilMilli(1500),
                     foo: (obj) => {
