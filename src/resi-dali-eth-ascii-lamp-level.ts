@@ -40,11 +40,20 @@ module.exports = function (RED: nodered.NodeAPI) {
                     telnetEngine.engine.listenString( node.log ) ;
                     node.log( "Sending command: " + textCommand ) ;
                 }
+                function untilMilli(endingT:any) {
+                    var test = (s:any, f:any, obj:any) :any => {
+                        clearTimeout(obj.timer)
+                        obj.timer = setTimeout(f, endingT)
+                    }
+                    //test.delayed = true
+                    return test
+                }
 
                 telnetEngine.proxy.request({
                     request: textCommand.toString(), 
                     //test: telnetEngingLib.untilMilli( 1500 ), 
-                    test: telnetEngingLib.noResponse(),
+                    test: untilMilli(1500),
+                    //test: telnetEngingLib.noResponse(),
                     foo: (obj: any) => {
                         var result : any = Object.assign({}, msg)
                         result = objectRename( result, 'payload', 'daliRequest' ) ;
