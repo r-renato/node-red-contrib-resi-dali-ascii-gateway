@@ -37,7 +37,7 @@ module.exports = function (RED: nodered.NodeAPI) {
 
                 console.log( "log: " + telnetEngine.systemConsole ) ;
                 if( telnetEngine.systemConsole ) {
-                    telnetEngine.engine.listenString( node.log ) ;
+                    telnetEngine.engine.listenString( console.log ) ;
                     node.log( "Sending command: " + textCommand ) ;
                 }
 

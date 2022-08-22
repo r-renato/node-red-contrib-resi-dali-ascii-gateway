@@ -36,7 +36,7 @@ module.exports = function (RED) {
                     + (msg.payload.level | config.level);
                 console.log("log: " + telnetEngine.systemConsole);
                 if (telnetEngine.systemConsole) {
-                    telnetEngine.engine.listenString(node.log);
+                    telnetEngine.engine.listenString(console.log);
                     node.log("Sending command: " + textCommand);
                 }
                 telnetEngine.proxy.request({
