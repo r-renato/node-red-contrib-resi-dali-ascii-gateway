@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const shared_classes_1 = require("./shared-classes");
 const shared_functions_1 = require("./shared-functions");
 const daliLampLevelNodeName = "dali-lamp-level";
+const daliCommand = "#LAMP LEVEL";
 const telnetEngingLib = require("telnet-engine");
 module.exports = function (RED) {
     RED.nodes.registerType(daliLampLevelNodeName, function (config) {
@@ -31,7 +32,7 @@ module.exports = function (RED) {
         this.on("input", (msg, send, done) => __awaiter(this, void 0, void 0, function* () {
             if (telnetEngine) {
                 status.setStatus(true);
-                var textCommand = "#LAMP LEVEL:"
+                var textCommand = daliCommand + ":"
                     + (msg.payload.lamp | config.lamp)
                     + "="
                     + (msg.payload.level | config.level);
@@ -55,15 +56,15 @@ module.exports = function (RED) {
                         node.log(obj[0].request + " ==> " + obj[0].response);
                     }
                     result.payload = obj[0].response;
-                    send([result, ,]);
                     telnetEngine.engine.terminate();
+                    send([result, ,]);
                 }).catch((e) => {
                     if (telnetEngine.systemConsole) {
                         console.log("ERROR! " + e);
                     }
                     var result = Object.assign({}, msg);
                     result.error = {
-                        message: e.toString(),
+                        message: e,
                         source: {
                             id: nodeServer.id,
                             type: nodeServer.type,
@@ -73,28 +74,6 @@ module.exports = function (RED) {
                     send([result, ,]);
                     telnetEngine.engine.terminate();
                 });
-                // telnetEngine.proxy.request({
-                //     request: textCommand.toString(), 
-                //     test: telnetEngingLib.untilMilli( 1500 ), 
-                //     foo: (obj: any) => {
-                //         return obj ;
-                //     }
-                //     //, UID: "REQ123" 
-                // })
-                // .then( ( obj: [any] ) => {
-                //     //console.log( obj + JSON.stringify( obj ) ) ;
-                //     var result : any = Object.assign({}, msg)
-                //     result = objectRename( result, 'payload', 'daliRequest' ) ;
-                //     if( telnetEngine.systemConsole ) {
-                //         node.log( obj[0].request + " ==> " + obj[0].response ) ;
-                //     }
-                //     result.payload = obj[0].response ;
-                //     send([result, ,])
-                //     telnetEngine.engine.terminate() ;
-                // })
-                // .catch( (a:any, b:any, c:any) => {
-                //     console.log("error:","REQ123" +(typeof a) + "-" + b + c )
-                // } ) ;
             }
             done();
         }));
