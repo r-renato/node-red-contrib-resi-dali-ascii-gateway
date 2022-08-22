@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_classes_1 = require("./shared-classes");
+const shared_functions_1 = require("./shared-functions");
 const daliLampLevelNodeName = "dali-lamp-level";
 const telnetEngingLib = require("telnet-engine");
 module.exports = function (RED) {
@@ -43,25 +44,26 @@ module.exports = function (RED) {
                     request: textCommand.toString(),
                     test: telnetEngingLib.untilMilli(1500),
                     foo: (obj) => {
-                        // var result : any = Object.assign({}, msg)
-                        // result = objectRename( result, 'payload', 'daliRequest' ) ;
-                        // if( telnetEngine.systemConsole ) {
-                        //     console.log( textCommand + " ==> " + obj.response ) ;
-                        // }
-                        // if( obj.response == "#OK" ) {
-                        //     result.payload = "#OK" ;
-                        // } else {
-                        //     // Error
-                        // }
-                        // console.log( ">" + obj.response + "<") ;
-                        // var msg1 = Object.assign({}, msg)
-                        // msg1.payload = obj.response
-                        send([msg, msg, ,]);
-                        return obj.response.length;
+                        return obj;
                     }
                     //, UID: "REQ123" 
                 })
-                    .then(() => {
+                    .then((obj) => {
+                    var result = Object.assign({}, msg);
+                    result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
+                    if (telnetEngine.systemConsole) {
+                        console.log(textCommand + " ==> " + obj.response);
+                    }
+                    if (obj.response == "#OK") {
+                        result.payload = "#OK";
+                    }
+                    else {
+                        // Error
+                    }
+                    //console.log( ">" + obj.response + "<") ;
+                    //var msg1 = Object.assign({}, msg)
+                    //msg1.payload = obj.response
+                    send([result, ,]);
                     console.log(">done.");
                 })
                     .catch((a, b, c) => {
