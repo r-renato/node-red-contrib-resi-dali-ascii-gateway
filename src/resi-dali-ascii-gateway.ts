@@ -3,11 +3,6 @@ import { NodeExtendedInterface, TelnetEngineInterface } from './shared-interface
 
 var telnetEngingLib = require( "telnet-engine" ) ;
 
-interface NodeExtended extends nodered.Node {
-    connection: any,
-    getStatusBroadcaster : any
-}
-
 module.exports = function (RED: nodered.NodeAPI) {
 
     RED.nodes.registerType("dali-command",
@@ -16,7 +11,7 @@ module.exports = function (RED: nodered.NodeAPI) {
 
         var node = this;
         var telnetEngine: TelnetEngineInterface ;
-        var nodeServer = <NodeExtended> RED.nodes.getNode( config.server ) ;
+        var nodeServer = <NodeExtendedInterface> RED.nodes.getNode( config.server ) ;
         var statusBroadcasting:any = null ;
         var statusVal:nodered.NodeStatus = { fill: "grey", shape: "ring", text: "idle" } ;
         var statusResetter: any = null;
@@ -51,6 +46,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                 this.log( "T2 => " + (telnetEngine ? true : false) + " msg: " + msg.payload.toString()) ;
                 setStatus(true);
                 telnetEngine.engine.listenString(console.log) ;
+                
                 telnetEngine.proxy.request({request: msg.payload.toString(), test: telnetEngingLib.untilMilli(1000), 
                     foo: (obj: any) => {
                         console.log( ">" + obj.response + "<") ;
