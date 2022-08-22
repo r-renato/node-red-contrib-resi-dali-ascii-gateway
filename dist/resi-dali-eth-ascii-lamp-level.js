@@ -49,17 +49,13 @@ module.exports = function (RED) {
                     //, UID: "REQ123" 
                 })
                     .then((obj) => {
+                    console.log(obj + JSON.stringify(obj));
                     var result = Object.assign({}, msg);
                     result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
                     if (telnetEngine.systemConsole) {
                         console.log(textCommand + " ==> " + obj.response);
                     }
-                    if (obj.response == "#OK") {
-                        result.payload = "#OK";
-                    }
-                    else {
-                        // Error
-                    }
+                    result.payload = "#OK";
                     //console.log( ">" + obj.response + "<") ;
                     //var msg1 = Object.assign({}, msg)
                     //msg1.payload = obj.response

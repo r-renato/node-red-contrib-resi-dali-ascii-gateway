@@ -50,6 +50,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                     //, UID: "REQ123" 
                 })
                 .then( ( obj: any ) => {
+                        console.log( obj + JSON.stringify( obj ) ) ;
                         var result : any = Object.assign({}, msg)
                         result = objectRename( result, 'payload', 'daliRequest' ) ;
                         
@@ -57,11 +58,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                             console.log( textCommand + " ==> " + obj.response ) ;
                         }
 
-                        if( obj.response == "#OK" ) {
-                            result.payload = "#OK" ;
-                        } else {
-                            // Error
-                        }
+                        result.payload = "#OK" ;
 
                         //console.log( ">" + obj.response + "<") ;
                         //var msg1 = Object.assign({}, msg)
