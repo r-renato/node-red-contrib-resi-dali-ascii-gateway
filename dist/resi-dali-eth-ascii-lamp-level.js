@@ -56,7 +56,7 @@ module.exports = function (RED) {
                         node.log(obj[0].request + " ==> " + obj[0].response);
                     }
                     result.payload = obj[0].response;
-                    telnetEngine.engine.detroy();
+                    telnetEngine.engine.destroy();
                     send([result, ,]);
                 }).catch((e) => {
                     if (telnetEngine.systemConsole) {
@@ -72,7 +72,7 @@ module.exports = function (RED) {
                         }
                     };
                     send([result, ,]);
-                    telnetEngine.engine.detroy();
+                    telnetEngine.engine.destroy();
                 });
             }
             done();

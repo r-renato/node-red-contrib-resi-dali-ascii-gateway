@@ -61,7 +61,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                         }
 
                         result.payload = obj[0].response ;
-                        telnetEngine.engine.detroy() ;
+                        telnetEngine.engine.destroy() ;
                         send([result, ,])
                     }).catch((e) => {
                         if( telnetEngine.systemConsole ) {
@@ -78,7 +78,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                             }
                         } ;
                         send([result, ,])
-                        telnetEngine.engine.detroy() ;
+                        telnetEngine.engine.destroy() ;
                     }) ;
             }
 
