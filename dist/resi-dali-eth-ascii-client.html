@@ -1,0 +1,96 @@
+<!--
+ Copyright (c) 2022 Renato Rossi
+ All rights reserved.
+ node-red-contrib-resi-dali-ascii-gateway - MIT License
+
+ @author <a href="mailto:renatrossi@google.com">Renato Rossi</a>
+-->
+
+<script type="text/javascript">
+
+    const regIP = /^[A-Za-z0-9]+([\-\.]{1}[A-Za-z0-9]+)*\.[A-Za-z]{2,5}$/
+    const regURL = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+
+    is_URL_or_IP =
+        (s) => {
+            return regIP.test(s) || regURL.test(s)
+        }
+
+    RED.nodes.registerType('resi-dali-eth-ascii-client', {
+        category: 'config',
+        color: '#c0c0c0',
+        defaults: {
+            name: { value: "RESI-DALI-ETH-ASCII" },
+            address: {
+                value: "127.0.0.1",
+                validate: is_URL_or_IP
+            },
+            port: { value: 502 },
+            timeOut: { value: 1500 },
+            systemConsole: { value: false },
+            logEnabled: { value: false }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "file.png",
+        label: function () {
+            return this.name || "RESI-DALI-ETH ascii client" ;
+        },
+
+    })
+
+</script>
+
+<script type="text/html" data-template-name="resi-dali-eth-ascii-client">
+
+    <div class="form-row">
+        <label for="node-config-input-name">
+            <i class="fa fa-tag"></i>
+            <span> Name</span>
+        </label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-address">
+            <i class="fa fa-at"></i> Address
+        </label>
+        <input type="text" id="node-config-input-address" placeholder="127.0.0.1">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-port"><i class="fa">&#x3a;</i>  Port</label>
+        <input type="number" id="node-config-input-port" placeholder="502">
+    </div>
+
+    <hr>
+    <!--div>
+        <h2>
+            <label><i class="fa fa-cog"></i> Advanced</label>
+        </h2>
+    </div -->
+    <div class="form-row">
+        <label for="node-config-input-timeOut"><i class="fa fa-clock-o"></i> Timeout</label>
+        <input type="number" id="node-config-input-timeOut" placeholder="1500">
+    </div>
+    <div class="form-row">
+        <label style="min-width:160px" for="node-config-input-logEnabled"><i class="fa fa-th"></i> <span data-i18n="dali-contrib.label.logEnabled"></span></label>
+        <input type="checkbox" id="node-config-input-logEnabled" style="max-width:30px">
+    </div>
+    <div class="form-row">
+        <label style="min-width:160px" for="node-config-input-systemConsole"><i class="fa fa-th"></i> <span data-i18n="dali-contrib.label.systemConsole"></span></label>
+        <input type="checkbox" id="node-config-input-systemConsole" style="max-width:30px">
+    </div>    
+</script>
+
+<script type="text/html" data-help-name="resi-dali-eth-ascii-client">
+    <p>A action as a RESI DALI ETH ASCII client.</p>
+    <h3>Details</h3>
+    <h4>Connection</h4>
+    <p>In most cases, all the other parameters can be ignored.</p>
+    <h4>Connection settings detail</h4>
+    <p>
+        This module uses the 'telnet-engine' package to connect to the device.
+        Refer to the package for a detail of the settings.
+
+        https://github.com/CABrouwers/telnet-engine
+    </p>
+</script>

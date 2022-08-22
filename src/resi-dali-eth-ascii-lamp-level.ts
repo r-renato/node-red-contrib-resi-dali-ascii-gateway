@@ -44,14 +44,12 @@ module.exports = function (RED: nodered.NodeAPI) {
                     request: textCommand.toString(), 
                     test: telnetEngingLib.untilMilli( 1500 ), 
                     foo: (obj: any) => {
-                        var result = Object.assign({}, msg)
+                        var result : any = Object.assign({}, msg)
                         result = objectRename( result, 'payload', 'daliRequest' ) ;
                         
 
                         if( obj.response == "#OK" ) {
-                            var result = {
-
-                            }
+                            
                         } else {
                             // Error
                         }

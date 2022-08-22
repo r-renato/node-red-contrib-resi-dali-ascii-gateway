@@ -46,7 +46,6 @@ module.exports = function (RED) {
                         var result = Object.assign({}, msg);
                         result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
                         if (obj.response == "#OK") {
-                            var result = {};
                         }
                         else {
                             // Error
