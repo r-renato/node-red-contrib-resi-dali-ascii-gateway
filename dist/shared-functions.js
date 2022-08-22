@@ -19,6 +19,12 @@ function objectRename(obj, currentKey, newKey) {
 }
 exports.objectRename = objectRename;
 ;
+/**
+ *
+ * @param ms
+ * @param promise
+ * @returns
+ */
 function requestTimeout(ms, promise) {
     // Create a promise that rejects in <ms> milliseconds
     let interrupt = new Promise((resolve, reject) => {

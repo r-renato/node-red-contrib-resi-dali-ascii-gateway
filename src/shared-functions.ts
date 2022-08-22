@@ -15,13 +15,18 @@ export function objectRename( obj : any, currentKey : string, newKey : string ) 
     }
 } ;
 
-
+/**
+ * 
+ * @param ms 
+ * @param promise 
+ * @returns 
+ */
 export function requestTimeout(ms: number, promise: Promise<any> ) {
     // Create a promise that rejects in <ms> milliseconds
     let interrupt = new Promise((resolve, reject) => {
       let id = setTimeout(() => {
-        clearTimeout(id)
-        reject(`Request timed out after + ${ms} ms.`)
+        clearTimeout(id) ;
+        reject( `Request timed out after + ${ms} ms.` ) ;
       }, ms)
     })
   

@@ -58,7 +58,18 @@ module.exports = function (RED) {
                     send([result, ,]);
                     telnetEngine.engine.terminate();
                 }).catch((err) => {
-                    console.log("catch:" + err);
+                    node.error(err);
+                    var result = Object.assign({}, msg);
+                    result.error = {
+                        message: err,
+                        source: {
+                            id: nodeServer.id,
+                            type: nodeServer.type,
+                            name: nodeServer.name
+                        }
+                    };
+                    send([result, ,]);
+                    telnetEngine.engine.terminate();
                 });
                 // telnetEngine.proxy.request({
                 //     request: textCommand.toString(), 
