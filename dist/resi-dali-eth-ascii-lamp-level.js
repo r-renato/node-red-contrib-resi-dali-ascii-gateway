@@ -40,9 +40,9 @@ module.exports = function (RED) {
                     telnetEngine.engine.listenString(node.log);
                     node.log("Sending command: " + textCommand);
                 }
-                telnetEngine.proxy.requestString({
+                telnetEngine.proxy.request({
                     request: textCommand.toString(),
-                    test: telnetEngingLib.untilMilli(1500),
+                    //test: telnetEngingLib.untilMilli( 1500 ), 
                     foo: (obj) => {
                         var result = Object.assign({}, msg);
                         result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
