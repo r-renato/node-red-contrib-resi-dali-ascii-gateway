@@ -80,6 +80,9 @@ module.exports = function (RED: nodered.NodeAPI) {
                     console.log( "done.")
                 })
                 .catch( (a:any, b:any, c:any) => {
+                    for (const [key, val] of Object.entries(a)) {
+                        console.log(key, val)
+                      }
                     console.log("error:","REQ123" +(typeof a) + "-" + b + c )
                 } ) ;
             }

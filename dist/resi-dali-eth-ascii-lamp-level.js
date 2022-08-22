@@ -77,6 +77,9 @@ module.exports = function (RED) {
                     console.log("done.");
                 })
                     .catch((a, b, c) => {
+                    for (const [key, val] of Object.entries(a)) {
+                        console.log(key, val);
+                    }
                     console.log("error:", "REQ123" + (typeof a) + "-" + b + c);
                 });
             }
