@@ -110,6 +110,7 @@ export class RESIClient {
     protected onClientConnectionError() { /* nothing to do */ } ;
 
     private initializeClient() {
+        console.log( "--- initializeClient " + (this.client ? true : false ) ) :
         if( this.client ) this.client.destroy().finally() ;
         this.client = new Telnet() ;
 
