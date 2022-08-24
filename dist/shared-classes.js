@@ -56,13 +56,14 @@ class RESIClient {
             host: '', port: -1, timeout: 1000
         };
         this.connectionState = null;
-        console.log("--------");
+        console.log("-------- in ");
         this.uid = uuid.v4();
         this.systemConsole = systemConsole;
         this.requestQueue = new openpromiseLib.Queue();
         this.paramiters.host = address;
         this.paramiters.port = port;
         this.initializeClient();
+        console.log("-------- out ");
     }
     /**
      *

@@ -146,7 +146,7 @@ export class RESIClient {
     } ;
 
     public constructor( address : string, port : number, systemConsole : boolean ) {
-        console.log( "--------" ) ;
+        console.log( "-------- in " ) ;
         this.uid = uuid.v4() ;
         this.systemConsole = systemConsole ;
 
@@ -156,6 +156,7 @@ export class RESIClient {
         this.paramiters.port = port ;
 
         this.initializeClient() ;
+        console.log( "-------- out " ) ;
     }
 
     /**
