@@ -147,8 +147,10 @@ class RESIClient {
         console.log("--- initializeClient 4");
         this.connectionState = null;
         this.onClientIdle();
+        console.log("--- initializeClient 5");
         if (this.systemConsole)
             this.logger("Client initialized...");
+        console.log("--- initializeClient 6");
     }
     ;
     /**
