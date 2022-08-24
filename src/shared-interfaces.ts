@@ -1,8 +1,8 @@
 import * as nodered from "node-red" ;
-
+import { NodeRESIClientInterface } from './shared-classes' ;
 
 export interface NodeExtendedInterface extends nodered.Node {
-    connection: any,
+    connection: NodeRESIClientInterface,
     getStatusBroadcaster : any
 }
 
@@ -20,3 +20,23 @@ export interface TelnetEngineInterface {
     systemConsole: boolean ;
     logEnabled: boolean ;
 }
+
+export interface RESIResponseInterface extends nodered.NodeMessage {
+    payload : any ;
+    daliRequest : any ;
+    error?: object ;
+
+}
+
+// export interface RESIConnectionInterface {
+//     client: any ;
+//     clientConnectionParams : {
+//         address : string ;
+//         port : number ; 
+//     }
+
+//     statusBroadcaster: any ;
+
+//     systemConsole: boolean ;
+//     logEnabled: boolean ;
+// }

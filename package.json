@@ -27,12 +27,11 @@
     "@types/node-red-node-test-helper": "^0.2.2",
     "modbus-serial": "^8.0.5",
     "mutex": "^1.0.2",
-    "queue": "^6.0.2",
-    "telnet-engine": "^1.2.5"
+    "queue": "^6.0.2"
   },
   "dependencies": {
-    "telnet-client": "^2.0.4",
-    "telnet-engine": "^1.2.5"
+    "openpromise": "^2.3.3",
+    "telnet-client": "^2.0.4"
   },
   "node-red": {
     "nodes": {

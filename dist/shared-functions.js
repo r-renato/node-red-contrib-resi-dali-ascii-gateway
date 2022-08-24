@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.requestTimeout = exports.objectRename = void 0;
+exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
 /**
  *
  * @param obj
@@ -37,4 +37,15 @@ function requestTimeout(ms, promise) {
     return Promise.race([promise, interrupt]);
 }
 exports.requestTimeout = requestTimeout;
+/**
+ *
+ * @param p
+ * @returns
+ */
+function promiseState(p) {
+    const t = {};
+    return Promise.race([p, t])
+        .then(v => (v === t) ? "pending" : "fulfilled", () => "rejected");
+}
+exports.promiseState = promiseState;
 //# sourceMappingURL=shared-functions.js.map

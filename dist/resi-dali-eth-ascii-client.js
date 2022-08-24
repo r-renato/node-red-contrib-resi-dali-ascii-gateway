@@ -9,15 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const telnetEngineLib = require('telnet-engine');
-const openpromiseLib = require('openpromise');
-class TelnetEnginePool {
+const shared_classes_1 = require("./shared-classes");
+class RESIConnectionPool {
     /**
      * The Singleton's constructor should always be private to prevent direct
      * construction calls with the `new` operator.
      */
     constructor() {
-        this.engines = {};
+        this.connectionMap = {};
     }
     /**
      * The static method that controls the access to the singleton instance.
@@ -26,74 +25,26 @@ class TelnetEnginePool {
      * just one instance of each subclass around.
      */
     static getInstance() {
-        if (!TelnetEnginePool.instance) {
-            TelnetEnginePool.instance = new TelnetEnginePool();
+        if (!RESIConnectionPool.instance) {
+            RESIConnectionPool.instance = new RESIConnectionPool();
         }
-        return TelnetEnginePool.instance;
+        return RESIConnectionPool.instance;
     }
-    getEngine(name, node, config) {
-        let result = this.engines[name];
+    getConnection(name, node, config) {
+        let result = this.connectionMap[name];
         if (typeof config !== 'undefined' && typeof node !== 'undefined' && typeof result === 'undefined') {
-            result = {};
-            const host = config.address;
-            const port = config.port ? config.port : 502;
-            result.engine = new telnetEngineLib.Engine(host, port);
-            result.engine.timeOut = config.timeOut ? config.timeOut : 1500;
-            // result.engine.openTimeout = 1500 ;
-            // result.engine.requestTimeout = 2000 ;
-            result.engine.outDelimiter = "\r";
-            result.engine.modeStrict = false;
-            result.systemConsole = config.systemConsole;
-            result.logEnabled = config.logEnabled;
-            result.proxy = result.engine.proxy();
-            // result.engine.clearOut = config.clearOut ? config.clearOut : 0 ;
-            // result.engine.inDelimiter = config.inDelimiter ? RegExp(config.inDelimiter) : /\r\n|\r|\n/ ;
-            // result.engine.outDelimiter = config.outDelimiter ? config.outDelimiter.replace(/\\n/, '\n').replace(/\\r/, '\r').replace(/\\l/, '\l') : "\n" ;
-            // result.engine.modeStrict = false ;
-            // result.engine.autoFlush = 100 ;
-            // result.engine.autoFlush = config.openTries ? config.openTries : 1 ;
-            result.statusBroadcaster = new openpromiseLib.Cycle();
-            const onConnecting = result.engine.onConnecting(() => {
-                result.statusBroadcaster.repeat({ fill: "yellow", text: "connecting" });
-                node.log("Connecting to " + host + ":" + port);
-            });
-            const onSuccess = result.engine.onConnectionSuccess(() => {
-                result.statusBroadcaster.repeat({ fill: "green", text: "OK" });
-                node.log("Connected to " + host + ":" + port);
-            });
-            const onError = result.engine.onConnectionError(() => {
-                node.error('Connection error during communication');
-                result.statusBroadcaster.repeat({ fill: "red", text: "error" });
-            });
-            const onEnd = result.engine.onConnectionEnd(() => {
-                result.statusBroadcaster.repeat({ fill: "grey", text: "closed" });
-                node.log('Requested an end to the  connection');
-            });
-            const onConnectionTimeOut = result.engine.onConnectionTimeOut(() => {
-                result.statusBroadcaster.repeat({ fill: "red", text: "timeout" });
-                node.error('Connection wait exceeded timeout');
-            });
-            const onResponseTimeOut = result.engine.onResponseTimeOut(() => {
-                result.statusBroadcaster.repeat({ fill: "red", text: "timeout" });
-                node.error('Response wait exceeded timeout value (request ${node.engine.timeOut}) ' + result.engine.requestTimeout);
-            });
-            const onReceive = result.engine.onReceive(() => {
-                result.statusBroadcaster.repeat({ fill: "green", text: "OK" });
-            });
-            node.log("RESI-DALI-ETH - create new connection: " + name);
-        }
-        else {
-            console.log("RESI-DALI-ETH - reuse connection: " + name);
+            result = new shared_classes_1.NodeRESIClient(config.address, config.port ? config.port : 502, node, config.systemConsole);
+            this.connectionMap[name] = result;
         }
         return (result);
     }
 }
 module.exports = function (RED) {
-    console.log(">>>" + RED._("dali-contrib.label.logEnabled"));
+    //console.log( ">>>" + RED._("dali-contrib.label.logEnabled"));
     RED.nodes.registerType("resi-dali-eth-ascii-client", function (config) {
         RED.nodes.createNode(this, config);
         var node = this;
-        node.connection = TelnetEnginePool.getInstance().getEngine(config.name, node, config);
+        node.connection = RESIConnectionPool.getInstance().getConnection(config.name, node, config);
         // const host = config.address ;
         // const port = config.port ? config.port : 502 ;
         // node.engine = new telnetEngineLib.Engine(host, port) ;
@@ -132,15 +83,12 @@ module.exports = function (RED) {
         // const onReceive = node.engine.onReceive(() => {
         //     statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
         // })
-        node.getStatusBroadcaster = () => { return node.connection.statusBroadcaster; };
+        node.getStatusBroadcaster = () => { return node.connection.getNodeStatusBroadcaster(); };
         this.on("input", (msg, send, done) => __awaiter(this, void 0, void 0, function* () {
             done();
         }));
         this.on("close", (msg) => __awaiter(this, void 0, void 0, function* () {
-            () => {
-                node.connection.destroy();
-                node.connection.statusBroadcaster.terminate();
-            };
+            // Nothing to do
         }));
     });
 };

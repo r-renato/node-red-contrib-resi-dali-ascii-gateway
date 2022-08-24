@@ -33,3 +33,14 @@ export function requestTimeout(ms: number, promise: Promise<any> ) {
     // Returns a race between our timeout and the passed in promise
     return Promise.race([promise, interrupt]);
   }
+
+  /**
+   * 
+   * @param p 
+   * @returns 
+   */
+  export function promiseState(p : Promise<any>) {
+    const t = {};
+    return Promise.race([p, t])
+      .then(v => (v === t)? "pending" : "fulfilled", () => "rejected");
+  }

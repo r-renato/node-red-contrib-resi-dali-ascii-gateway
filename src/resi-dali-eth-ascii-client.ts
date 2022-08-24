@@ -1,12 +1,10 @@
 import * as nodered from "node-red" ;
-import { NodeExtendedInterface, TelnetEngineInterface } from './shared-interfaces' ;
+import { NodeExtendedInterface } from './shared-interfaces' ;
+import { NodeRESIClientInterface, NodeRESIClient } from './shared-classes' ;
 
-const telnetEngineLib = require( 'telnet-engine' ) ;
-const openpromiseLib = require( 'openpromise' ) ;
-
-class TelnetEnginePool {
-    private static instance: TelnetEnginePool;
-    private engines: {[key: string]: TelnetEngineInterface } = {} ;
+class RESIConnectionPool {
+    private static instance: RESIConnectionPool;
+    private connectionMap : {[key: string]: NodeRESIClientInterface } = {} ;
 
     /**
      * The Singleton's constructor should always be private to prevent direct
@@ -20,79 +18,20 @@ class TelnetEnginePool {
      * This implementation let you subclass the Singleton class while keeping
      * just one instance of each subclass around.
      */
-    public static getInstance(): TelnetEnginePool {
-        if (!TelnetEnginePool.instance) {
-            TelnetEnginePool.instance = new TelnetEnginePool();
+    public static getInstance(): RESIConnectionPool {
+        if (!RESIConnectionPool.instance) {
+            RESIConnectionPool.instance = new RESIConnectionPool();
         }
 
-        return TelnetEnginePool.instance;
+        return RESIConnectionPool.instance;
     }
 
-    public getEngine( name: string, node?: nodered.Node, config?: any ) : TelnetEngineInterface {
-        let result: TelnetEngineInterface = this.engines[ name ] ;
+    public getConnection( name: string, node?: nodered.Node, config?: any ) : NodeRESIClientInterface {
+        let result: NodeRESIClientInterface = this.connectionMap[ name ] ;
         
         if( typeof config !== 'undefined' && typeof node !== 'undefined' && typeof result === 'undefined' ) {
-            result = {} as TelnetEngineInterface ;
-
-            const host = config.address ;
-            const port = config.port ? config.port : 502 ;
-
-            result.engine = new telnetEngineLib.Engine(host, port) ;
-            result.engine.timeOut = config.timeOut ? config.timeOut : 1500 ;
-            // result.engine.openTimeout = 1500 ;
-            // result.engine.requestTimeout = 2000 ;
-            result.engine.outDelimiter = "\r" ;
-            result.engine.modeStrict = false ;
-
-            result.systemConsole = config.systemConsole ;
-            result.logEnabled = config.logEnabled ;
-
-            result.proxy = result.engine.proxy() ;
-            // result.engine.clearOut = config.clearOut ? config.clearOut : 0 ;
-            // result.engine.inDelimiter = config.inDelimiter ? RegExp(config.inDelimiter) : /\r\n|\r|\n/ ;
-            // result.engine.outDelimiter = config.outDelimiter ? config.outDelimiter.replace(/\\n/, '\n').replace(/\\r/, '\r').replace(/\\l/, '\l') : "\n" ;
-            // result.engine.modeStrict = false ;
-            // result.engine.autoFlush = 100 ;
-            // result.engine.autoFlush = config.openTries ? config.openTries : 1 ;
-
-            result.statusBroadcaster = new openpromiseLib.Cycle() ;
-
-            const onConnecting = result.engine.onConnecting(() => {
-                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "yellow", text: "connecting" } ) ;
-                node.log( "Connecting to " + host + ":" + port ) ;
-            })
-            const onSuccess = result.engine.onConnectionSuccess(() => {
-                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
-                node.log( "Connected to " + host + ":" + port ) ;
-            })
-    
-            const onError = result.engine.onConnectionError(() => {
-                node.error( 'Connection error during communication' ) ;
-                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "error" } ) ;
-            })
-    
-            const onEnd = result.engine.onConnectionEnd(() => {
-                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "closed" } ) ;
-                node.log( 'Requested an end to the  connection' ) ;
-            })
-    
-            const onConnectionTimeOut = result.engine.onConnectionTimeOut(() => {
-                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "timeout" } ) ;
-                node.error( 'Connection wait exceeded timeout' ) ;
-            })
-    
-            const onResponseTimeOut = result.engine.onResponseTimeOut(() => {
-                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "timeout" } ) ;
-                node.error( 'Response wait exceeded timeout value (request ${node.engine.timeOut}) ' + result.engine.requestTimeout ) ;
-            })
-    
-            const onReceive = result.engine.onReceive(() => {
-                result.statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
-            })
-    
-            node.log( "RESI-DALI-ETH - create new connection: " + name ) ;
-        } else {
-            console.log( "RESI-DALI-ETH - reuse connection: " + name ) ;
+            result = new NodeRESIClient( config.address, config.port ? config.port : 502, node, config.systemConsole ) ;
+            this.connectionMap[ name ] = result ;
         }
 
         return( result ) ;
@@ -100,7 +39,7 @@ class TelnetEnginePool {
 }
 
 module.exports = function (RED: nodered.NodeAPI) {
-    console.log( ">>>" + RED._("dali-contrib.label.logEnabled"));
+    //console.log( ">>>" + RED._("dali-contrib.label.logEnabled"));
 
     RED.nodes.registerType( "resi-dali-eth-ascii-client",
     function (this: nodered.Node, config: any): void {
@@ -108,7 +47,7 @@ module.exports = function (RED: nodered.NodeAPI) {
 
         var node = <NodeExtendedInterface> this ;
 
-        node.connection = TelnetEnginePool.getInstance().getEngine( config.name, node, config ) ;
+        node.connection = RESIConnectionPool.getInstance().getConnection( config.name, node, config ) ;
 
 
         // const host = config.address ;
@@ -160,17 +99,14 @@ module.exports = function (RED: nodered.NodeAPI) {
         //     statusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "OK" } ) ;
         // })
 
-        node.getStatusBroadcaster = () => { return node.connection.statusBroadcaster } ;
+        node.getStatusBroadcaster = () => { return node.connection.getNodeStatusBroadcaster() } ;
 
         this.on("input", async (msg: any, send, done) => {
             done();
         }) ;
         
         this.on("close", async (msg: any) => {
-            () => {
-                node.connection.destroy() ;
-                node.connection.statusBroadcaster.terminate() ;
-            }
+            // Nothing to do
         }) ;
     }) ;
 }

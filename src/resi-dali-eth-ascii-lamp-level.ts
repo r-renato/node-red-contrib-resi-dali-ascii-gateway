@@ -1,11 +1,11 @@
 import * as nodered from "node-red" ;
-import { NodeExtendedInterface, TelnetEngineInterface } from './shared-interfaces' ;
-import { Status, StatusInterface } from './shared-classes' ;
+import { NodeExtendedInterface, RESIResponseInterface } from './shared-interfaces' ;
+import { Status, StatusInterface, NodeRESIClientInterface } from './shared-classes' ;
 import { objectRename, requestTimeout } from './shared-functions' ;
 
 const daliLampLevelNodeName:string = "dali-lamp-level" ;
 const daliCommand: string = "#LAMP LEVEL" 
-const telnetEngingLib = require( "telnet-engine" ) ;
+//const telnetEngingLib = require( "telnet-engine" ) ;
 
 module.exports = function (RED: nodered.NodeAPI) {
 
@@ -15,12 +15,12 @@ module.exports = function (RED: nodered.NodeAPI) {
         var node: nodered.Node = this;
 
         var nodeServer = <NodeExtendedInterface> RED.nodes.getNode( config.server ) ;
-        var telnetEngine: TelnetEngineInterface ;
+        var resiClient: NodeRESIClientInterface ;
         var status: StatusInterface ;
 
         if( nodeServer ) {
             status = new Status( node, nodeServer ) ;
-            telnetEngine = <TelnetEngineInterface> nodeServer.connection ;
+            resiClient = nodeServer.connection ;
 
             status.setStatus( false ) ;
         }
@@ -29,57 +29,32 @@ module.exports = function (RED: nodered.NodeAPI) {
          * 
          */
         this.on("input", async (msg: any, send, done) => {
-            if( telnetEngine ) {
+            if( nodeServer ) {
                 status.setStatus( true ) ;
                 var textCommand: string = daliCommand + ":" 
                     + (msg.payload.lamp | config.lamp)
                     + "=" 
                     + (msg.payload.level | config.level) ;
 
-                console.log( "log: " + telnetEngine.systemConsole ) ;
-                if( telnetEngine.systemConsole ) {
-                    telnetEngine.engine.listenString( console.log ) ;
-                    node.log( "Sending command: " + textCommand ) ;
-                }
+                if( resiClient.isSystemConsole() ) node.log( "Try to sending command: " + textCommand ) ;
 
-                requestTimeout(2000, 
-                    telnetEngine.proxy.request({
-                        request: textCommand.toString(), 
-                        test: telnetEngingLib.untilMilli( 500 ), 
-                        foo: (obj: any) => {
-                            return obj ;
+                nodeServer.connection.send( textCommand ).then( ( response ) => {
+                    var result = <RESIResponseInterface> Object.assign({}, msg)
+                    result = objectRename( result, 'payload', 'daliRequest' ) ;
+                    result.payload = response[0].response ;
+                    send(<nodered.NodeMessage> result) ;
+                }).catch( ( error ) => {
+                    var result : any = Object.assign({}, msg) ;
+                    result.error = {
+                        message : error,
+                        source : {
+                            id : nodeServer.id,
+                            type : nodeServer.type,
+                            name : nodeServer.name
                         }
-                        , UID: node.id 
-                    })
-                    ).then( (obj) => {
-                        //console.log( obj + JSON.stringify( obj ) ) ;
-                        var result : any = Object.assign({}, msg)
-                        result = objectRename( result, 'payload', 'daliRequest' ) ;
-                        
-                        if( telnetEngine.systemConsole ) {
-                            node.log( obj[0].request + " ==> " + obj[0].response ) ;
-                        }
-
-                        result.payload = obj[0].response ;
-                        telnetEngine.engine.destroy() ;
-                        send([result, ,])
-                    }).catch((e) => {
-                        if( telnetEngine.systemConsole ) {
-                            console.log( "ERROR! " + e ) ;
-                        }
-                        
-                        var result : any = Object.assign({}, msg) ;
-                        result.error = {
-                            message : e,
-                            source : {
-                                id : nodeServer.id,
-                                type : nodeServer.type,
-                                name : nodeServer.name
-                            }
-                        } ;
-                        send([result, ,])
-                        telnetEngine.engine.destroy() ;
-                    }) ;
+                    } ;
+                    send([result, ,])
+                }) ;
             }
 
             done() ;
@@ -89,10 +64,10 @@ module.exports = function (RED: nodered.NodeAPI) {
          * 
          */
         this.on( "close", async () => {
-            if( telnetEngine.systemConsole ) {
+            if( resiClient.isSystemConsole() ) {
                 node.log( "close" ) ;
             }
-            if( telnetEngine ) {
+            if( resiClient ) {
                 if ( status.getStatusBroadcasting() ) { status.getStatusBroadcasting().resolve(); }
             }
         });
