@@ -260,14 +260,29 @@ class NodeRESIClient extends RESIClient {
     }
     getNodeStatusBroadcaster() { return this.nodeStatusBroadcaster; }
     ;
-    onClientConnect() { this.nodeStatusBroadcaster.repeat({ fill: "green", text: "Connected" }); }
-    onClientIdle() { this.nodeStatusBroadcaster.repeat({ fill: "grey", text: "Idle" }); }
+    onClientConnect() {
+        if (this.nodeStatusBroadcaster)
+            this.nodeStatusBroadcaster.repeat({ fill: "green", text: "Connected" });
+    }
+    onClientIdle() {
+        if (this.nodeStatusBroadcaster)
+            this.nodeStatusBroadcaster.repeat({ fill: "grey", text: "Idle" });
+    }
     ;
-    onClientConnected() { this.nodeStatusBroadcaster.repeat({ fill: "green", text: "Connected" }); }
+    onClientConnected() {
+        if (this.nodeStatusBroadcaster)
+            this.nodeStatusBroadcaster.repeat({ fill: "green", text: "Connected" });
+    }
     ;
-    onClientConnectionEnd() { this.nodeStatusBroadcaster.repeat({ fill: "grey", text: "Closed" }); }
+    onClientConnectionEnd() {
+        if (this.nodeStatusBroadcaster)
+            this.nodeStatusBroadcaster.repeat({ fill: "grey", text: "Closed" });
+    }
     ;
-    onClientConnectionError() { this.nodeStatusBroadcaster.repeat({ fill: "red", text: "Connection error" }); }
+    onClientConnectionError() {
+        if (this.nodeStatusBroadcaster)
+            this.nodeStatusBroadcaster.repeat({ fill: "red", text: "Connection error" });
+    }
     ;
 }
 exports.NodeRESIClient = NodeRESIClient;
