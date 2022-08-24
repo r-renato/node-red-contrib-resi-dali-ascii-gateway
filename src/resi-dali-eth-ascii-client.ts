@@ -18,8 +18,8 @@ class RESIConnectionPool {
      * This implementation let you subclass the Singleton class while keeping
      * just one instance of each subclass around.
      */
-    public static getInstance(): RESIConnectionPool {
-        if (!RESIConnectionPool.instance) {
+    public static getInstance() : RESIConnectionPool {
+        if( !RESIConnectionPool.instance ) {
             RESIConnectionPool.instance = new RESIConnectionPool();
         }
 

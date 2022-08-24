@@ -146,6 +146,7 @@ export class RESIClient {
     } ;
 
     public constructor( address : string, port : number, systemConsole : boolean ) {
+        console.log( "--------" ) ;
         this.uid = uuid.v4() ;
         this.systemConsole = systemConsole ;
 
@@ -267,7 +268,7 @@ export class NodeRESIClient extends RESIClient implements NodeRESIClientInterfac
     private nodeStatusBroadcaster : any ;
 
     public constructor( address : string, port : number, nodeConnection : nodered.Node, systemConsole : boolean ) {
-        super( address, port, systemConsole, ) ;
+        super( address, port, systemConsole ) ;
 
         this.nodeStatusBroadcaster = new openpromiseLib.Cycle() ;
     }

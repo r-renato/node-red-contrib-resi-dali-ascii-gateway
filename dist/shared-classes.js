@@ -56,6 +56,7 @@ class RESIClient {
             host: '', port: -1, timeout: 1000
         };
         this.connectionState = null;
+        console.log("--------");
         this.uid = uuid.v4();
         this.systemConsole = systemConsole;
         this.requestQueue = new openpromiseLib.Queue();
