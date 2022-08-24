@@ -56,14 +56,12 @@ class RESIClient {
             host: '', port: -1, timeout: 1000
         };
         this.connectionState = null;
-        console.log("-------- in ");
         this.uid = uuid.v4();
         this.systemConsole = systemConsole;
         this.requestQueue = new openpromiseLib.Queue();
         this.paramiters.host = address;
         this.paramiters.port = port;
         this.initializeClient();
-        console.log("-------- out ");
     }
     /**
      *
@@ -110,11 +108,9 @@ class RESIClient {
     onClientConnectionError() { }
     ;
     initializeClient() {
-        console.log("--- initializeClient " + (this.client ? true : false));
         if (this.client)
             this.client.destroy().finally();
         this.client = new Telnet();
-        console.log("--- initializeClient 1");
         this.client.on('connect', () => {
             this.connectionState = 'connected';
             this.onClientConnected();
@@ -122,7 +118,6 @@ class RESIClient {
             if (this.systemConsole)
                 this.logger("Connected to " + this.paramiters.host + ":" + this.paramiters.port);
         });
-        console.log("--- initializeClient 2");
         this.client.on('end', () => {
             //this.logger( "sockw: " + (<Socket> this.client.getSocket()).readyState ) ;
             this.connectionState = 'closed';
@@ -132,7 +127,6 @@ class RESIClient {
             this.client.destroy().finally();
             this.initializeClient();
         });
-        console.log("--- initializeClient 3");
         this.client.on('error', (error) => {
             switch (error) {
                 case 'Cannot connect':
@@ -144,13 +138,10 @@ class RESIClient {
             }
             //if( this.systemConsole ) this.logger( "Connected to " + this.paramiters.host + ":" + this.paramiters.port ) ;
         });
-        console.log("--- initializeClient 4");
         this.connectionState = null;
         this.onClientIdle();
-        console.log("--- initializeClient 5");
         if (this.systemConsole)
             this.logger("Client initialized...");
-        console.log("--- initializeClient 6");
     }
     ;
     /**
