@@ -42,8 +42,7 @@ module.exports = function (RED) {
                 nodeServer.connection.send(textCommand).then((response) => {
                     var result = Object.assign({}, msg);
                     result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
-                    console.log(typeof response);
-                    result.payload = response[0].response;
+                    result.payload = response;
                     send(result);
                 }).catch((error) => {
                     var result = Object.assign({}, msg);
