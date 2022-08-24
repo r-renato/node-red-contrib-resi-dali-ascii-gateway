@@ -46,47 +46,75 @@
   <p>Connects to a Modbus TCP or serial to write coils/registers at each incoming msg.</p>
   <p>
       <h4>DALI 1.0 COMMAND FOR LAMP</h4>
-      <p>Available DALI commands:
-        <style type="text/css">
-          .tg  {border-collapse:collapse;border-spacing:0;}
-          .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-            overflow:hidden;padding:10px 5px;word-break:normal;}
-          .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-            font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-          .tg .tg-hvas{font-size:xx-small;text-align:left;vertical-align:top}
-          .tg .tg-0lax{text-align:left;vertical-align:top}
-          </style>
-          <table class="tg">
+      <style type="text/css">
+        .tg  {border-collapse:collapse;border-spacing:0;}
+        .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+          overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+          font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg .tg-88oy{font-size:xx-small;text-align:center;vertical-align:top}
+        .tg .tg-0lax{text-align:left;vertical-align:top}
+        </style>
+        <table class="tg">
+        <thead>
+          <tr>
+            <th class="tg-88oy" colspan="7">Available DALI commands</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tg-0lax">OFF</td>
+            <td class="tg-0lax">OF UP</td>
+            <td class="tg-0lax">UP DOWN</td>
+            <td class="tg-0lax">DO STEP UP</td>
+            <td class="tg-0lax">SUP STEP DOWN</td>
+            <td class="tg-0lax">SDO RECALL MAX LEVEL</td>
+            <td class="tg-0lax">RMAXL RECALL MIN LEVEL</td>
+          </tr>
+          <tr>
+            <td class="tg-0lax">RMINL STEP DOWN AND OFF</td>
+            <td class="tg-0lax">SDOO ON AND STEP UP</td>
+            <td class="tg-0lax">OSUP ENABLE DAPC SEQUENCE</td>
+            <td class="tg-0lax">EDAPCS GOTO LAST ACTIVE LEVEL</td>
+            <td class="tg-0lax">GLAL</td>
+            <td class="tg-0lax">---</td>
+            <td class="tg-0lax">---</td>
+          </tr>
+        </tbody>
+        </table>
+
+        Available DALI commands which are repeated twice within 100ms: 
+        RESET,RESET-STORE ACTUAL LEVEL IN DTR,SALD-STORE DTR AS MAX LEVEL,SDMAXL-STORE DTR AS MIN LEVEL,
+        SDMINL-STORE DTR AS SYSTEM FAILURE LEVEL,SDSFL-STORE DTR AS POWER ON LEVEL,SDPOL-STORE DTR AS FADE TIME,
+        SDFT-STORE DTR AS FADE RATE,SDFR-STIORE DTR AS SHORT ADDRESS,SDSA-ENABLE WRITE MEMORY,EWM        
+        <table class="tg">
           <thead>
             <tr>
-              <th class="tg-0lax" colspan="7">Available DALI commands</th>
+              <th class="tg-88oy" colspan="7">Available DALI commands which are repeated twice within 100ms</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="tg-0lax">OFF</td>
-              <td class="tg-0lax">OF UP</td>
-              <td class="tg-0lax">UP DOWN</td>
-              <td class="tg-0lax">DO STEP UP</td>
-              <td class="tg-0lax">SUP STEP DOWN</td>
-              <td class="tg-0lax">SDO RECALL MAX LEVEL</td>
-              <td class="tg-0lax">RMAXL RECALL MIN LEVEL</td>
+              <td class="tg-0lax">RESET</td>
+              <td class="tg-0lax">RESET-STORE ACTUAL LEVEL IN DTR</td>
+              <td class="tg-0lax">SALD-STORE DTR AS MAX LEVEL</td>
+              <td class="tg-0lax">SDMAXL-STORE DTR AS MIN LEVELP</td>
+              <td class="tg-0lax">SDMINL-STORE DTR AS SYSTEM FAILURE LEVEL</td>
+              <td class="tg-0lax">SDSFL-STORE DTR AS POWER ON LEVEL</td>
+              <td class="tg-0lax">SDPOL-STORE DTR AS FADE TIME</td>
             </tr>
             <tr>
-              <td class="tg-0lax">RMINL STEP DOWN AND OFF</td>
-              <td class="tg-0lax">SDOO ON AND STEP UP</td>
-              <td class="tg-0lax">OSUP ENABLE DAPC SEQUENCE</td>
-              <td class="tg-0lax">EDAPCS GOTO LAST ACTIVE LEVEL</td>
-              <td class="tg-0lax">GLAL</td>
+              <td class="tg-0lax">SDFT-STORE DTR AS FADE RATE</td>
+              <td class="tg-0lax">SDFR-STIORE DTR AS SHORT ADDRESS</td>
+              <td class="tg-0lax">SDSA-ENABLE WRITE MEMORY</td>
+              <td class="tg-0lax">EWM</td>
+              <td class="tg-0lax">---</td>
               <td class="tg-0lax">---</td>
               <td class="tg-0lax">---</td>
             </tr>
           </tbody>
           </table>
 
-      </p>
-      Available DALI commands: OFF,OF-UP,UP-DOWN,DO-STEP UP,SUP-STEP DOWN,SDO-RECALL MAX LEVEL,RMAXL-RECALL MIN LEVEL,
-      RMINL-STEP DOWN AND OFF,SDOO-ON AND STEP UP,OSUP-ENABLE DAPC SEQUENCE,EDAPCS-GOTO LAST ACTIVE LEVEL,GLAL
       <ul>
         <li>FC 5: Force Single Coil</li>
         <li>FC 6: Preset Single Register</li>
