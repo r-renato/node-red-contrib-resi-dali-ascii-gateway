@@ -42,7 +42,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                 nodeServer.connection.send( textCommand ).then( ( response ) => {
                     var result = <RESIResponseInterface> Object.assign({}, msg)
                     result = objectRename( result, 'payload', 'daliRequest' ) ;
-                    result.payload = response ;
+                    result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
                     send(<nodered.NodeMessage> result) ;
                 }).catch( ( error ) => {
                     var result : any = Object.assign({}, msg) ;

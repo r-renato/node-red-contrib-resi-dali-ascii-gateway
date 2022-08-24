@@ -42,7 +42,7 @@ module.exports = function (RED) {
                 nodeServer.connection.send(textCommand).then((response) => {
                     var result = Object.assign({}, msg);
                     result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
-                    result.payload = response;
+                    result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '');
                     send(result);
                 }).catch((error) => {
                     var result = Object.assign({}, msg);
