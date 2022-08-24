@@ -33,9 +33,14 @@ class RESIConnectionPool {
     getConnection(name, node, config) {
         let result = this.connectionMap[name];
         if (typeof config !== 'undefined' && typeof node !== 'undefined' && typeof result === 'undefined') {
-            console.log("systemConsole: " + config.systemConsole);
+            if (config.systemConsole)
+                console.log("systemConsole: " + config.systemConsole);
             result = new shared_classes_1.NodeRESIClient(config.address, config.port ? config.port : 502, node, config.systemConsole);
+            if (config.systemConsole)
+                console.log("RESIConnectionPool:getConnection => NodeRESIClient created.");
             this.connectionMap[name] = result;
+            if (config.systemConsole)
+                console.log("RESIConnectionPool:getConnection => NodeRESIClient cached.");
         }
         return (result);
     }
