@@ -4,7 +4,7 @@ import { Status, StatusInterface, NodeRESIClientInterface } from './shared-class
 import { objectRename, invalidPayloadIn } from './shared-functions' ;
 
 const daliLampLevelNodeName:string = "dali-generic" ;
-const daliCommand: string = "#LAMP LEVEL" 
+
 //const telnetEngingLib = require( "telnet-engine" ) ;
 
 module.exports = function (RED: nodered.NodeAPI) {
@@ -35,10 +35,7 @@ module.exports = function (RED: nodered.NodeAPI) {
             }
 
             status.setStatus( true ) ;
-            var textCommand: string = daliCommand + ":" 
-                + (msg.payload.lamp | config.lamp)
-                + "=" 
-                + (msg.payload.level | config.level) ;
+            var textCommand: string = msg.payload.command ;
 
             if( resiClient.isSystemConsole() ) node.log( "Try to sending command: " + textCommand ) ;
 

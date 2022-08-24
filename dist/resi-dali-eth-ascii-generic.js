@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const shared_classes_1 = require("./shared-classes");
 const shared_functions_1 = require("./shared-functions");
 const daliLampLevelNodeName = "dali-generic";
-const daliCommand = "#LAMP LEVEL";
 //const telnetEngingLib = require( "telnet-engine" ) ;
 module.exports = function (RED) {
     RED.nodes.registerType(daliLampLevelNodeName, function (config) {
@@ -35,10 +34,7 @@ module.exports = function (RED) {
                 return;
             }
             status.setStatus(true);
-            var textCommand = daliCommand + ":"
-                + (msg.payload.lamp | config.lamp)
-                + "="
-                + (msg.payload.level | config.level);
+            var textCommand = msg.payload.command;
             if (resiClient.isSystemConsole())
                 node.log("Try to sending command: " + textCommand);
             nodeServer.connection.send(textCommand).then((response) => {
