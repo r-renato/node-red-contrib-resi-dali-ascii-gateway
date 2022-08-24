@@ -62,12 +62,14 @@ module.exports = function (RED) {
          *
          */
         this.on("close", () => __awaiter(this, void 0, void 0, function* () {
-            if (resiClient.isSystemConsole()) {
-                node.log("close");
-            }
-            if (resiClient) {
-                if (status.getStatusBroadcasting()) {
-                    status.getStatusBroadcasting().resolve();
+            if (nodeServer) {
+                if (resiClient.isSystemConsole()) {
+                    node.log("close");
+                }
+                if (resiClient) {
+                    if (status.getStatusBroadcasting()) {
+                        status.getStatusBroadcasting().resolve();
+                    }
                 }
             }
         }));
