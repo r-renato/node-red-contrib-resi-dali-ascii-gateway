@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
+exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
 /**
  *
  * @param obj
@@ -48,4 +48,8 @@ function promiseState(p) {
         .then(v => (v === t) ? "pending" : "fulfilled", () => "rejected");
 }
 exports.promiseState = promiseState;
+function invalidPayloadIn(msg) {
+    return !(msg && Object.prototype.hasOwnProperty.call(msg, 'payload'));
+}
+exports.invalidPayloadIn = invalidPayloadIn;
 //# sourceMappingURL=shared-functions.js.map

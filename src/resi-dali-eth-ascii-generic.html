@@ -1,0 +1,45 @@
+<!--
+ Copyright (c) 2022 Renato Rossi
+ All rights reserved.
+ node-red-contrib-resi-dali-ascii-gateway - MIT License
+
+ @author <a href="mailto:renatrossi@google.com">Renato Rossi</a>
+-->
+<script type="text/javascript">
+    RED.nodes.registerType('dali-generic', {
+      category: 'RESI DALI ETH ASCII Gateway',
+      color: '#E9967A',
+      defaults: {
+        name: {value: ''},
+        server: {type: 'resi-dali-eth-ascii-client', required: true}
+      },
+      inputs: 1,
+      outputs: 1,
+      align: "right",
+      icon: 'modbus.png',
+      align: 'right',
+      paletteLabel: 'dali-generic',
+      label: function () {
+        return this.name || 'DALI Lamp Level'
+      }
+    })
+  </script>
+
+<script type="text/html" data-template-name="dali-generic">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-server"><i class="icon-bookmark"></i> <span data-i18n="dali-contrib.label.server"></span></label>
+        <input type="text" id="node-input-server">
+    </div>
+    <hr>
+  </script>
+
+  <script type="text/x-red" data-help-name="dali-generic">
+
+  </script>
+
+
+

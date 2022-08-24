@@ -3,7 +3,7 @@ import { NodeExtendedInterface, RESIResponseInterface } from './shared-interface
 import { Status, StatusInterface, NodeRESIClientInterface } from './shared-classes' ;
 import { objectRename, invalidPayloadIn } from './shared-functions' ;
 
-const daliLampLevelNodeName:string = "dali-lamp-level" ;
+const daliLampLevelNodeName:string = "dali-generic" ;
 const daliCommand: string = "#LAMP LEVEL" 
 //const telnetEngingLib = require( "telnet-engine" ) ;
 

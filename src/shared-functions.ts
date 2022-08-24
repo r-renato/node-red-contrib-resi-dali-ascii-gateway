@@ -44,3 +44,7 @@ export function requestTimeout(ms: number, promise: Promise<any> ) {
     return Promise.race([p, t])
       .then(v => (v === t)? "pending" : "fulfilled", () => "rejected");
   }
+
+  export function invalidPayloadIn( msg : any ) {
+    return !( msg && Object.prototype.hasOwnProperty.call( msg, 'payload' ) ) ;
+  }

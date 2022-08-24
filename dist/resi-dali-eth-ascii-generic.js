@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_classes_1 = require("./shared-classes");
 const shared_functions_1 = require("./shared-functions");
-const daliLampLevelNodeName = "dali-lamp-level";
+const daliLampLevelNodeName = "dali-generic";
 const daliCommand = "#LAMP LEVEL";
 //const telnetEngingLib = require( "telnet-engine" ) ;
 module.exports = function (RED) {
@@ -77,4 +77,4 @@ module.exports = function (RED) {
         }));
     });
 };
-//# sourceMappingURL=resi-dali-eth-ascii-lamp-level.js.map
+//# sourceMappingURL=resi-dali-eth-ascii-generic.js.map
