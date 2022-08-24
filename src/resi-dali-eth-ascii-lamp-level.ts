@@ -18,6 +18,7 @@ module.exports = function (RED: nodered.NodeAPI) {
         var resiClient: NodeRESIClientInterface ;
         var status: StatusInterface ;
 
+        node.log( "isSystemConsole: " + nodeServer.connection.isSystemConsole() ) ;
         if( nodeServer ) {
             status = new Status( node, nodeServer ) ;
             resiClient = nodeServer.connection ;

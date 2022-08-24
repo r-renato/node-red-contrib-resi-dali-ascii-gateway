@@ -21,6 +21,7 @@ module.exports = function (RED) {
         var nodeServer = RED.nodes.getNode(config.server);
         var resiClient;
         var status;
+        node.log("isSystemConsole: " + nodeServer.connection.isSystemConsole());
         if (nodeServer) {
             status = new shared_classes_1.Status(node, nodeServer);
             resiClient = nodeServer.connection;

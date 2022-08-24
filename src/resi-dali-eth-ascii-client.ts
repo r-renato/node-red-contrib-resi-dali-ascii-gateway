@@ -30,6 +30,7 @@ class RESIConnectionPool {
         let result: NodeRESIClientInterface = this.connectionMap[ name ] ;
         
         if( typeof config !== 'undefined' && typeof node !== 'undefined' && typeof result === 'undefined' ) {
+            console.log( "systemConsole: " + config.systemConsole ) ;
             result = new NodeRESIClient( config.address, config.port ? config.port : 502, node, config.systemConsole ) ;
             this.connectionMap[ name ] = result ;
         }
