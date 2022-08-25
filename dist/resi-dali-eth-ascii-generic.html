@@ -48,12 +48,32 @@
     .tg .tg-5qt9{font-size:small;text-align:left;vertical-align:top}
     .tg .tg-0lax{text-align:left;vertical-align:top}
     </style>
+
   <p>
       Generic modbus ascii command.
   </p>
 
   <p>RESI DALI ETH ASCII node triggered with <strong>msg.payload</strong> to write.</p>
   <p>Connects to a RESI DALI ETH ASCII to manage DALI LAMP\Device at each incoming msg.</p>
+  <p>
+    <h4><strong>Index</strong></h4><hr>
+    <dl>
+      <dt>General commands</dt>
+      <dd>- Check DALI Bus Error</dd>
+      <dt>General commands for Lamps</dt>
+      <dd>- Set Lamp level</dd>
+      <dd>- Set the Lamp level of a group</dd>
+      <dd>- Set All Lamp level</dd>
+      <dt>DALI 1.0 commands for Lamps</dt>
+      <dd>- Execute a DALI 1.0 Command for a Lamp</dd>
+      <dd>- Execute a DALI 1.0 Command for a Group of Lamps</dd>
+      <dd>- Execute a DALI 1.0 Command for All Lamps</dd>
+      <dt>DALI 1.0 Scene commands for Lamps</dt>
+      <dd>- Goto Scene for a Lamp</dd>
+      <dd>- Goto Scene for a Group of Lamp</dd>
+      <dd>- Goto Scene for All Lamp</dd>
+    </dl>
+  </p>
   
   <br><!-- DALI BUS ERROR Session-->
   <p>
@@ -637,8 +657,161 @@
 
       <h5>Available DALI commands for queries:</h5>
       <p>For the available commands refer to <a href="#5_available_dali_commands_for_queries">5. DALI 1.0 COMMAND FOR LAMP session</a></p>
-
     </p>
+
+
+  <br><!-- DALI 1.0 COMMAND FOR ALL LAMPS Session-->
+  <p>
+    <h4><strong>7. DALI 1.0 COMMAND FOR ALL LAMPS</strong></h4><hr>
+    <p>
+      <h5>Description</h5>
+      Sends the selected DALI1.0 command to all lamps
+
+      <table class="tg" width="100%">
+        <thead>
+          <tr>
+            <th class="tg-lap0" width="10%">&nbsp;</th>
+            <th class="tg-lap0" width="40%">Sample DALI commands</th>
+            <th class="tg-lap0" width="50%">Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>ASCII WRITE COMMAND</strong></th>
+            <td class="tg-5qt9"><code>
+              #ALL RESET:&lt;GROUP&gt;&lt;CR&gt;<br>
+              #ARESET&lt;CR&gt;<br>
+              Result:<br>
+              #OK&lt;CR&gt;
+            </code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>   
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>TX</strong></th>
+            <td class="tg-5qt9"><code>
+              #ALL RESET&lt;CR&gt;
+            </code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>   
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>RX</strong></th>
+            <td class="tg-5qt9"><code>
+              #OK&lt;CR&gt;
+            </code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>        
+        </tbody>
+      </table>
+
+      <h5>Available DALI commands:</h5>
+      <p>For the available commands refer to <a href="#5_available_dali_commands">5. DALI 1.0 COMMAND FOR LAMP session</a></p>
+
+      <h5>Available DALI commands which are repeated twice within 100ms:</h5>
+      <p>For the available commands refer to <a href="#5_available_dali_commands_which">5. DALI 1.0 COMMAND FOR LAMP session</a></p>
+
+      <h5>Available DALI commands for queries:</h5>
+      <p>For the available commands refer to <a href="#5_available_dali_commands_for_queries">5. DALI 1.0 COMMAND FOR LAMP session</a></p>
+    </p>
+
+    <br><!-- DALI 1.0 SCENE COMMAND FOR LAMP Session-->
+    <p>
+      <h4><strong>8. DALI 1.0 SCENE COMMAND FOR LAMP</strong></h4><hr>
+      <p>
+        <h5>Description</h5>
+        Activates the choosen DALI 1.0 scene on the selected lamp
+  
+        <table class="tg" width="100%">
+          <thead>
+            <tr>
+              <th class="tg-lap0" width="10%">&nbsp;</th>
+              <th class="tg-lap0" width="40%">Sample DALI commands</th>
+              <th class="tg-lap0" width="50%">Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row" class="tg-5qt9"><strong>ASCII WRITE COMMAND</strong></th>
+              <td class="tg-5qt9"><code>
+                #LAMP GOTO SCENE:&lt;LAMP&gt;=&lt;SCENE&gt;&lt;CR&gt;<br>
+                #LAMP GOTO SCENE:&lt;LAMP&gt;,&lt;SCENE&gt;&lt;CR&gt;<br>
+                #LGS:&lt;LAMP&gt;,&lt;SCENE&gt;&lt;CR&gt;<br>
+                Result:<br>
+                #OK&lt;CR&gt;
+              </code>
+              </td>
+              <td class="tg-5qt9">&nbsp;</td>
+            </tr>   
+            <tr>
+              <th scope="row" class="tg-5qt9"><strong>TX</strong></th>
+              <td class="tg-5qt9"><code>
+                #LAMP GOTO SCENE:5=7&lt;CR&gt;
+              </code>
+              </td>
+              <td class="tg-5qt9">&nbsp;</td>
+            </tr>   
+            <tr>
+              <th scope="row" class="tg-5qt9"><strong>RX</strong></th>
+              <td class="tg-5qt9"><code>
+                #OK&lt;CR&gt;
+              </code>
+              </td>
+              <td class="tg-5qt9">&nbsp;</td>
+            </tr>        
+          </tbody>
+        </table>
+      </p>
+
+      <br><!-- DALI 1.0 SCENE COMMAND FOR LAMP GROUP Session-->
+      <p>
+        <h4><strong>9. DALI 1.0 SCENE COMMAND FOR LAMP GROUP</strong></h4><hr>
+        <p>
+          <h5>Description</h5>
+          Activates the choosen DALI 1.0 scene on the selected lamp group
+    
+          <table class="tg" width="100%">
+            <thead>
+              <tr>
+                <th class="tg-lap0" width="10%">&nbsp;</th>
+                <th class="tg-lap0" width="40%">Sample DALI commands</th>
+                <th class="tg-lap0" width="50%">Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row" class="tg-5qt9"><strong>ASCII WRITE COMMAND</strong></th>
+                <td class="tg-5qt9"><code>
+                  #LAMP GOTO SCENE:&lt;LAMP&gt;=&lt;SCENE&gt;&lt;CR&gt;<br>
+                  #LAMP GOTO SCENE:&lt;LAMP&gt;,&lt;SCENE&gt;&lt;CR&gt;<br>
+                  #LGS:&lt;LAMP&gt;,&lt;SCENE&gt;&lt;CR&gt;<br>
+                  Result:<br>
+                  #OK&lt;CR&gt;
+                </code>
+                </td>
+                <td class="tg-5qt9">&nbsp;</td>
+              </tr>   
+              <tr>
+                <th scope="row" class="tg-5qt9"><strong>TX</strong></th>
+                <td class="tg-5qt9"><code>
+                  #LAMP GOTO SCENE:5=7&lt;CR&gt;
+                </code>
+                </td>
+                <td class="tg-5qt9">&nbsp;</td>
+              </tr>   
+              <tr>
+                <th scope="row" class="tg-5qt9"><strong>RX</strong></th>
+                <td class="tg-5qt9"><code>
+                  #OK&lt;CR&gt;
+                </code>
+                </td>
+                <td class="tg-5qt9">&nbsp;</td>
+              </tr>        
+            </tbody>
+          </table>
+        </p>
+  
 
 </script>
 
