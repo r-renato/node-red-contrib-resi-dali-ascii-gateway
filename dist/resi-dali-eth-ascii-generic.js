@@ -48,12 +48,19 @@ module.exports = function (RED) {
         this.on("input", (msg, send, done) => __awaiter(this, void 0, void 0, function* () {
             if ((0, shared_functions_1.invalidPayloadIn)(msg) || !nodeServer) {
                 node.error('payload Not Found', msg);
+                //TODO
+                // Va restituito un errore
                 done();
                 return;
             }
             if (isValidDALIMsg(msg)) {
                 //status.setStatus( true ) ;
-                var textCommand = msg.payload.command;
+                var textCommand = "#"
+                    + msg.payload.command.replace(/^\s+|\s+$/g, '')
+                    + " "
+                    + msg.payload.action.replace(/^\s+|\s+$/g, '')
+                    + (msg.payload.params.replace(/^\s+|\s+$/g, '').length > 0
+                        ? msg.payload.params.replace(/^\s+|\s+$/g, '') : '');
                 if (resiClient.isSystemConsole())
                     node.log("Try to sending command: " + textCommand);
                 nodeServer.connection.send(textCommand).then((response) => {

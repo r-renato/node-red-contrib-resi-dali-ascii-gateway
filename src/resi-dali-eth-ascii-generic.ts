@@ -52,13 +52,21 @@ module.exports = function (RED: nodered.NodeAPI) {
         this.on("input", async (msg: any, send, done) => {
             if( invalidPayloadIn(msg) || !nodeServer) {
                 node.error( 'payload Not Found', msg ) ;
+                //TODO
+                // Va restituito un errore
                 done() ;
                 return ;
             }
 
             if( isValidDALIMsg( msg ) ) {
                 //status.setStatus( true ) ;
-                var textCommand: string = msg.payload.command ;
+                var textCommand: string = "#" 
+                    + msg.payload.command.replace(/^\s+|\s+$/g, '')
+                    + " "
+                    + msg.payload.action.replace(/^\s+|\s+$/g, '')
+                    + ((<string> msg.payload.params.replace(/^\s+|\s+$/g, '')).length > 0 
+                        ? msg.payload.params.replace(/^\s+|\s+$/g, '') : '')                    
+                    ;
 
                 if( resiClient.isSystemConsole() ) node.log( "Try to sending command: " + textCommand ) ;
 
