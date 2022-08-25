@@ -62,7 +62,7 @@ module.exports = function (RED) {
                     node.log("Try to sending command: " + queryStatusCmd);
                     node.log("Try to sending command: " + queryActualLevel);
                 }
-                Promise.all([
+                Promise.allSettled([
                     executeDALICommand(queryStatusCmd, (msg) => {
                         let result = Object.assign({}, msg);
                         result.command = 'LAMP';
@@ -79,8 +79,8 @@ module.exports = function (RED) {
                     })
                 ]).then((responses) => {
                     console.log(typeof responses + "" + responses);
-                }).catch(() => {
-                    console.log('erroreeee');
+                }).catch((e) => {
+                    console.log('erroreeee' + e);
                 });
                 //status.setStatus( true ) ;
                 // nodeServer.connection.send( textCommand ).then( ( response ) => {
