@@ -67,6 +67,7 @@ module.exports = function (RED) {
                     var result = Object.assign({}, msg);
                     result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
                     result.payload = (0, shared_functions_1.prepareDALIResponse)(msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, ''));
+                    result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '');
                     //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
                     send(result);
                 }).catch((error) => {

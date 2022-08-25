@@ -58,33 +58,41 @@ function isSet(value, bitPos) {
 }
 function decodeDALIQueryStatusResp(prefix, suffix) {
     let data = suffix.split(',');
+    let code = parseInt(data[0]);
     let resp = parseInt(data[1]);
-    let result = {
-        done: ("#OK" == prefix),
-        /* Note STATUS INFORMATION: 8-bit data indicating the status of a slave. The meanings of the bits are as follows:
-           bit 0 Status of control gear :<0>=OK
-           bit 1 Lamp failure :<0>=OK
-           bit 2 Lamp arc power on :<0>=OFF
-           bit 3 Query Limit Error :<0>=No
-           bit 4 Fade running:<0>=fade is ready, <1>=fade is running
-           bit 5 Query RESET STATE :<0>=No
-           bit 6 Query Missing short address :<0>=No
-           bit 7 Query POWER FAILURE :<0>=No
-         */
-        // bit 0 Status of control gear; "0" = OK
-        statusControlGear: isSet(resp, 0),
-        lampFailure: isSet(resp, 1),
-        lampArcPowerOn: isSet(resp, 2),
-        queryLimitError: isSet(resp, 3),
-        fadeRunning: isSet(resp, 4),
-        queryResetState: isSet(resp, 5),
-        queryMissingShortAddress: isSet(resp, 6),
-        queryPowerFailure: isSet(resp, 7)
-    };
+    let exitCode = ("#OK" == prefix && code == 1);
+    let result = {};
+    if (exitCode) {
+        result = {
+            /* Note STATUS INFORMATION: 8-bit data indicating the status of a slave.
+               The meanings of the bits are as follows:
+               bit 0 Status of control gear :<0>=OK
+               bit 1 Lamp failure :<0>=OK
+               bit 2 Lamp arc power on :<0>=OFF
+               bit 3 Query Limit Error :<0>=No
+               bit 4 Fade running:<0>=fade is ready, <1>=fade is running
+               bit 5 Query RESET STATE :<0>=No
+               bit 6 Query Missing short address :<0>=No
+               bit 7 Query POWER FAILURE :<0>=No
+             */
+            statusControlGear: isSet(resp, 0),
+            lampFailure: isSet(resp, 1),
+            lampArcPowerOn: isSet(resp, 2),
+            queryLimitError: isSet(resp, 3),
+            fadeRunning: isSet(resp, 4),
+            queryResetState: isSet(resp, 5),
+            queryMissingShortAddress: isSet(resp, 6),
+            queryPowerFailure: isSet(resp, 7)
+        };
+    }
+    ;
+    result.done = ("#OK" == prefix);
+    if (code !== 1)
+        result.error = (code !== 1);
     return (result);
 }
 function prepareDALIResponse(msg, response) {
-    let result = { raw: response };
+    let result = {};
     let repTokenized = response.split(':');
     console.log(repTokenized);
     switch (msg.payload.command) {

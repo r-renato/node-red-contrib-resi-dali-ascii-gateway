@@ -74,6 +74,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                     var result = <RESIResponseInterface> Object.assign({}, msg)
                     result = objectRename( result, 'payload', 'daliRequest' ) ;
                     result.payload = prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
+                    result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
                     //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
                     send(<nodered.NodeMessage> result) ;
                 }).catch( ( error ) => {
