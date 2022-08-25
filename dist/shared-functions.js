@@ -56,6 +56,18 @@ function isSet(value, bitPos) {
     var result = Math.floor(value / Math.pow(2, bitPos)) % 2;
     return result == 1;
 }
+function decodeDALIResp(prefix, suffix) {
+    let data = suffix.split(',');
+    let result = {};
+    result.done = ("#OK" == prefix);
+    if (data.length > 1) {
+        let code = parseInt(data[0]);
+        let resp = parseInt(data[1]);
+        result.value = resp;
+        if ("#OK" == prefix && code == 9)
+            result.timeout = ("#OK" == prefix && code == 9);
+    }
+}
 function decodeDALIQueryStatusResp(prefix, suffix) {
     let data = suffix.split(',');
     let code = parseInt(data[0]);
@@ -65,16 +77,16 @@ function decodeDALIQueryStatusResp(prefix, suffix) {
     if (exitCode) {
         result = {
             /* Note STATUS INFORMATION: 8-bit data indicating the status of a slave.
-               The meanings of the bits are as follows:
-               bit 0 Status of control gear :<0>=OK
-               bit 1 Lamp failure :<0>=OK
-               bit 2 Lamp arc power on :<0>=OFF
-               bit 3 Query Limit Error :<0>=No
-               bit 4 Fade running:<0>=fade is ready, <1>=fade is running
-               bit 5 Query RESET STATE :<0>=No
-               bit 6 Query Missing short address :<0>=No
-               bit 7 Query POWER FAILURE :<0>=No
-             */
+                The meanings of the bits are as follows:
+                bit 0 Status of control gear :<0>=OK
+                bit 1 Lamp failure :<0>=OK
+                bit 2 Lamp arc power on :<0>=OFF
+                bit 3 Query Limit Error :<0>=No
+                bit 4 Fade running:<0>=fade is ready, <1>=fade is running
+                bit 5 Query RESET STATE :<0>=No
+                bit 6 Query Missing short address :<0>=No
+                bit 7 Query POWER FAILURE :<0>=No
+              */
             statusControlGear: isSet(resp, 0),
             lampFailure: isSet(resp, 1),
             lampArcPowerOn: isSet(resp, 2),
@@ -100,6 +112,9 @@ function prepareDALIResponse(msg, response) {
             switch (msg.payload.action) {
                 case 'QUERY STATUS':
                     result = decodeDALIQueryStatusResp(repTokenized[0], repTokenized[1]);
+                    break;
+                case 'QUERY ACTUAL LEVEL':
+                    result = decodeDALIResp(repTokenized[0], repTokenized[1]);
                     break;
             }
             break;
