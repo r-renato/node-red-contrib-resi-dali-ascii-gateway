@@ -62,8 +62,9 @@ module.exports = function (RED: nodered.NodeAPI) {
             done();
         }) ;
         
-        this.on("close", async (msg: any) => {
+        this.on("close", async (done:any) => {
             // Nothing to do
+            done() ;
         }) ;
     }) ;
 }

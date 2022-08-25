@@ -2,6 +2,7 @@ import * as nodered from "node-red" ;
 import { NodeExtendedInterface, RESIResponseInterface } from './shared-interfaces' ;
 import { Status, StatusInterface, NodeRESIClientInterface } from './shared-classes' ;
 import { objectRename, invalidPayloadIn } from './shared-functions' ;
+import { doesNotMatch } from "assert";
 
 const daliLampLevelNodeName:string = "dali-generic" ;
 
@@ -18,6 +19,25 @@ module.exports = function (RED: nodered.NodeAPI) {
         var resiClient: NodeRESIClientInterface ;
         var status: StatusInterface ;
 
+        const isValidDALIMsg = function( msg : any ) : boolean {
+            let isValid = true
+      
+            if( !(isValid && Object.prototype.hasOwnProperty.call( msg.payload, 'command' )) ) { 
+                node.error( 'command Not Found', msg ) ;
+                isValid = false ;
+            }
+            if( !(isValid && Object.prototype.hasOwnProperty.call( msg.payload, 'action' )) ) { 
+                node.error( 'action Not Found', msg ) ;
+                isValid = false ;
+            }           
+            if( !(isValid && Object.prototype.hasOwnProperty.call( msg.payload, 'params' )) ) { 
+                node.error( 'params Not Found', msg ) ;
+                isValid = false ;
+            }  
+            
+            return( isValid ) ;
+        }
+
         node.log( "isSystemConsole: " + nodeServer.connection.isSystemConsole() ) ;
         if( nodeServer ) {
             status = new Status( node, nodeServer ) ;
@@ -31,39 +51,41 @@ module.exports = function (RED: nodered.NodeAPI) {
          */
         this.on("input", async (msg: any, send, done) => {
             if( invalidPayloadIn(msg) || !nodeServer) {
-                return
+                node.error( 'payload Not Found', msg ) ;
+                done() ;
             }
 
-            status.setStatus( true ) ;
-            var textCommand: string = msg.payload.command ;
+            if( isValidDALIMsg( msg ) ) {
+                //status.setStatus( true ) ;
+                var textCommand: string = msg.payload.command ;
 
-            if( resiClient.isSystemConsole() ) node.log( "Try to sending command: " + textCommand ) ;
+                if( resiClient.isSystemConsole() ) node.log( "Try to sending command: " + textCommand ) ;
 
-            nodeServer.connection.send( textCommand ).then( ( response ) => {
-                var result = <RESIResponseInterface> Object.assign({}, msg)
-                result = objectRename( result, 'payload', 'daliRequest' ) ;
-                result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
-                send(<nodered.NodeMessage> result) ;
-            }).catch( ( error ) => {
-                var result : any = Object.assign({}, msg) ;
-                result.error = {
-                    message : error,
-                    source : {
-                        id : nodeServer.id,
-                        type : nodeServer.type,
-                        name : nodeServer.name
-                    }
-                } ;
-                send([result, ,])
-            }) ;
-
-            done() ;
+                nodeServer.connection.send( textCommand ).then( ( response ) => {
+                    var result = <RESIResponseInterface> Object.assign({}, msg)
+                    result = objectRename( result, 'payload', 'daliRequest' ) ;
+                    result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
+                    send(<nodered.NodeMessage> result) ;
+                }).catch( ( error ) => {
+                    var result : any = Object.assign({}, msg) ;
+                    result.error = {
+                        message : error,
+                        source : {
+                            id : nodeServer.id,
+                            type : nodeServer.type,
+                            name : nodeServer.name
+                        }
+                    } ;
+                    send([result, ,])
+                }) ;
+                done() ;
+            }
         });
 
         /**
          * 
          */
-        this.on( "close", async () => {
+        this.on( "close", async (done:any) => {
             if( nodeServer ) {
                 if( resiClient.isSystemConsole() ) {
                     node.log( "close" ) ;
@@ -72,8 +94,8 @@ module.exports = function (RED: nodered.NodeAPI) {
                     if ( status.getStatusBroadcasting() ) { status.getStatusBroadcasting().resolve(); }
                 }
             }
+            done() ;
         });
-
     });
     
 } 

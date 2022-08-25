@@ -59,8 +59,9 @@ module.exports = function (RED) {
             node.log('dali-client [input]');
             done();
         }));
-        this.on("close", (msg) => __awaiter(this, void 0, void 0, function* () {
+        this.on("close", (done) => __awaiter(this, void 0, void 0, function* () {
             // Nothing to do
+            done();
         }));
     });
 };

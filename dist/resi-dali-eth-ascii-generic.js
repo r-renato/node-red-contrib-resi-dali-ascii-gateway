@@ -20,6 +20,22 @@ module.exports = function (RED) {
         var nodeServer = RED.nodes.getNode(config.server);
         var resiClient;
         var status;
+        const isValidDALIMsg = function (msg) {
+            let isValid = true;
+            if (!(isValid && Object.prototype.hasOwnProperty.call(msg.payload, 'command'))) {
+                node.error('command Not Found', msg);
+                isValid = false;
+            }
+            if (!(isValid && Object.prototype.hasOwnProperty.call(msg.payload, 'action'))) {
+                node.error('action Not Found', msg);
+                isValid = false;
+            }
+            if (!(isValid && Object.prototype.hasOwnProperty.call(msg.payload, 'params'))) {
+                node.error('params Not Found', msg);
+                isValid = false;
+            }
+            return (isValid);
+        };
         node.log("isSystemConsole: " + nodeServer.connection.isSystemConsole());
         if (nodeServer) {
             status = new shared_classes_1.Status(node, nodeServer);
@@ -31,35 +47,38 @@ module.exports = function (RED) {
          */
         this.on("input", (msg, send, done) => __awaiter(this, void 0, void 0, function* () {
             if ((0, shared_functions_1.invalidPayloadIn)(msg) || !nodeServer) {
-                return;
+                node.error('payload Not Found', msg);
+                done();
             }
-            status.setStatus(true);
-            var textCommand = msg.payload.command;
-            if (resiClient.isSystemConsole())
-                node.log("Try to sending command: " + textCommand);
-            nodeServer.connection.send(textCommand).then((response) => {
-                var result = Object.assign({}, msg);
-                result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
-                result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '');
-                send(result);
-            }).catch((error) => {
-                var result = Object.assign({}, msg);
-                result.error = {
-                    message: error,
-                    source: {
-                        id: nodeServer.id,
-                        type: nodeServer.type,
-                        name: nodeServer.name
-                    }
-                };
-                send([result, ,]);
-            });
-            done();
+            if (isValidDALIMsg(msg)) {
+                //status.setStatus( true ) ;
+                var textCommand = msg.payload.command;
+                if (resiClient.isSystemConsole())
+                    node.log("Try to sending command: " + textCommand);
+                nodeServer.connection.send(textCommand).then((response) => {
+                    var result = Object.assign({}, msg);
+                    result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
+                    result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '');
+                    send(result);
+                }).catch((error) => {
+                    var result = Object.assign({}, msg);
+                    result.error = {
+                        message: error,
+                        source: {
+                            id: nodeServer.id,
+                            type: nodeServer.type,
+                            name: nodeServer.name
+                        }
+                    };
+                    send([result, ,]);
+                });
+                done();
+            }
         }));
         /**
          *
          */
-        this.on("close", () => __awaiter(this, void 0, void 0, function* () {
+        this.on("close", (done) => __awaiter(this, void 0, void 0, function* () {
             if (nodeServer) {
                 if (resiClient.isSystemConsole()) {
                     node.log("close");
@@ -70,6 +89,7 @@ module.exports = function (RED) {
                     }
                 }
             }
+            done();
         }));
     });
 };
