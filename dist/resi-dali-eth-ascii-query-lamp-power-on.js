@@ -35,13 +35,15 @@ module.exports = function (RED) {
             status.setStatus(false);
         }
         const executeDALICommand = function (textCommand, msg) {
-            return nodeServer.connection.send(textCommand).then((response) => {
-                var result = Object.assign({}, msg);
-                result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
-                result.payload = (0, shared_functions_1.prepareDALIResponse)(msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, ''));
-                result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '');
-                //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
-                return result;
+            return new Promise((resolve, reject) => {
+                nodeServer.connection.send(textCommand).then((response) => {
+                    var result = Object.assign({}, msg);
+                    result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
+                    result.payload = (0, shared_functions_1.prepareDALIResponse)(msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, ''));
+                    result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '');
+                    //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
+                    resolve(result);
+                });
             });
         };
         /**
@@ -62,20 +64,21 @@ module.exports = function (RED) {
                     node.log("Try to sending command: " + queryStatusCmd);
                     node.log("Try to sending command: " + queryActualLevel);
                 }
-                // , 
-                //     executeDALICommand( queryStatusCmd, ( msg : any ) => {
-                //         let result =  Object.assign({}, msg) ;
-                //         result.command = 'LAMP' ; result.action = 'QUERY STATUS' ; result.params = '' ;
-                //         return( result ) ;
-                //     }),
-                //     executeDALICommand( queryActualLevel, ( msg : any ) => {
-                //         let result =  Object.assign({}, msg) ;
-                //         result.command = 'LAMP' ; result.action = 'QUERY ACTUAL LEVEL' ; result.params = '' ;
-                //         return( result ) ;
-                //     })
                 Promise.allSettled([
-                    nodeServer.connection.send(queryStatusCmd),
-                    nodeServer.connection.send(queryActualLevel)
+                    executeDALICommand(queryStatusCmd, (msg) => {
+                        let result = Object.assign({}, msg);
+                        result.command = 'LAMP';
+                        result.action = 'QUERY STATUS';
+                        result.params = '';
+                        return (result);
+                    }),
+                    executeDALICommand(queryActualLevel, (msg) => {
+                        let result = Object.assign({}, msg);
+                        result.command = 'LAMP';
+                        result.action = 'QUERY ACTUAL LEVEL';
+                        result.params = '';
+                        return (result);
+                    })
                 ]).then((responses) => {
                     console.log(JSON.stringify(responses));
                 }).catch((e) => {
