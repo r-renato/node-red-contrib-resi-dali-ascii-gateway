@@ -38,23 +38,48 @@
 </script>
 
 <script type="text/x-red" data-help-name="dali-generic">
+  <style type="text/css">
+    .tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0;}
+    .tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+      font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+      font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-lap0{font-size:100%;text-align:center;vertical-align:top}
+    .tg .tg-5qt9{font-size:small;text-align:left;vertical-align:top}
+    .tg .tg-0lax{text-align:left;vertical-align:top}
+    </style>
   <p>
       Generic modbus ascii command.
   </p>
 
-  <p>Modbus TCP/Serial node triggered with <strong>msg.payload</strong> to write.</p>
-  <p>Connects to a Modbus TCP or serial to write coils/registers at each incoming msg.</p>
+  <p>RESI DALI ETH ASCII node triggered with <strong>msg.payload</strong> to write.</p>
+  <p>Connects to a RESI DALI ETH ASCII to manage DALI LAMP\Device at each incoming msg.</p>
+  <p>
+      <h4>DALI BUS ERROR</h4>
+      <p>
+        <h5>Description</h5>
+          Shows the status of the DALI bus.BusErrDec,BusErrHex:=0:DALI bus is OK and fully functional=1:DALI bus error,
+          short circuit on DALI line, overload on DALI line or no DALI power supply
+      </p>
+      <table class="tg">
+        <tbody>
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>ASCII READ COMMAND</strong></th>
+            <td class="tg-5qt9"><code>
+              #DALI BUS ERROR<CR><br>
+              #DBERR<CR><br>
+              Result:#DBERR:<br>
+              <BusErrDec>,<BusErrHex><CR>
+              <code>
+            </td>
+            <td class="tg-5qt9">OF UP</td>
+            <td class="tg-5qt9">UP DOWN</td>
+          </tr>       
+        </tbody>
+      </table>
+  </p>
   <p>
       <h4>DALI 1.0 COMMAND FOR LAMP</h4>
-      <style type="text/css">
-        .tg  {border-collapse:collapse;border-spacing:0;}
-        .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-          overflow:hidden;padding:10px 5px;word-break:normal;}
-        .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-          font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-        .tg .tg-lap0{font-size:100%;text-align:center;vertical-align:top}
-        .tg .tg-5qt9{font-size:small;text-align:left;vertical-align:top}
-        </style>
         <table class="tg">
         <thead>
           <tr>
