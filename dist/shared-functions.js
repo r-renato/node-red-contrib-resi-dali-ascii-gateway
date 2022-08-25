@@ -84,7 +84,7 @@ function decodeDALIQueryStatusResp(prefix, suffix) {
     return (result);
 }
 function prepareDALIResponse(msg, response) {
-    let result = {};
+    let result = { raw: response };
     let repTokenized = response.split(':');
     console.log(repTokenized);
     switch (msg.payload.command) {
@@ -94,6 +94,9 @@ function prepareDALIResponse(msg, response) {
                     result = decodeDALIQueryStatusResp(repTokenized[0], repTokenized[1]);
                     break;
             }
+            break;
+        default:
+            result.done = ("#OK" == repTokenized[0]);
             break;
     }
     return (result);

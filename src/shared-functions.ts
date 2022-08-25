@@ -84,7 +84,7 @@ export function requestTimeout(ms: number, promise: Promise<any> ) {
   }
 
   export function prepareDALIResponse( msg:any, response: string ) : any {
-    let result : any = {} ;
+    let result : any = { raw : response } ;
     let repTokenized = response.split( ':' ) ;
     console.log( repTokenized ) ;
 
@@ -95,6 +95,9 @@ export function requestTimeout(ms: number, promise: Promise<any> ) {
             result = decodeDALIQueryStatusResp( repTokenized[ 0 ], repTokenized[ 1 ] ) ;
             break ;
         }
+        break ;
+      default:
+        result.done = ( "#OK" == repTokenized[ 0 ])
         break ;
     }
 
