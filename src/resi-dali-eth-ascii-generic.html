@@ -299,50 +299,73 @@
           <th class="tg-lap0" width="15%">Command</th>
           <th class="tg-lap0" width="40%">Sample</th>
           <th class="tg-lap0" width="45%">Note</th>
-          <th class="tg-lap0" width="15%">Command</th>
-          <th class="tg-lap0" width="40%">Sample</th>
-          <th class="tg-lap0" width="45%">Note</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td class="tg-5qt9">OFF</td>
-          <td class="tg-5qt9">sample</td>
-          <td class="tg-5qt9">note</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>
+        </tr>
+        <tr>
           <td class="tg-5qt9">OF UP</td>
-          <td class="tg-5qt9">sample</td>
-          <td class="tg-5qt9">note</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="tg-5qt9">UP DOWN</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="tg-5qt9">DO STEP UP</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="tg-5qt9">SUP STEP DOWN</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="tg-5qt9">SDO RECALL MAX LEVEL</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="tg-5qt9">RMAXL RECALL MIN LEVEL</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="tg-5qt9">RMINL STEP DOWN AND OFF</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="tg-5qt9">SDOO ON AND STEP UP</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="tg-5qt9">OSUP ENABLE DAPC SEQUENCE</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="tg-5qt9">EDAPCS GOTO LAST ACTIVE LEVEL</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="tg-5qt9">GLAL</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>
         </tr>
       </tbody>
     </table>  
 
-        <table class="tg">
-        <thead>
-          <tr>
-            <th class="tg-lap0" colspan="7">Available DALI commands</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="tg-5qt9">OFF</td>
-            <td class="tg-5qt9">OF UP</td>
-            <td class="tg-5qt9">UP DOWN</td>
-            <td class="tg-5qt9">DO STEP UP</td>
-            <td class="tg-5qt9">SUP STEP DOWN</td>
-            <td class="tg-5qt9">SDO RECALL MAX LEVEL</td>
-            <td class="tg-5qt9">RMAXL RECALL MIN LEVEL</td>
-          </tr>
-          <tr>
-            <td class="tg-5qt9">RMINL STEP DOWN AND OFF</td>
-            <td class="tg-5qt9">SDOO ON AND STEP UP</td>
-            <td class="tg-5qt9">OSUP ENABLE DAPC SEQUENCE</td>
-            <td class="tg-5qt9">EDAPCS GOTO LAST ACTIVE LEVEL</td>
-            <td class="tg-5qt9">GLAL</td>
-            <td class="tg-5qt9">---</td>
-            <td class="tg-5qt9">---</td>
-          </tr>
-        </tbody>
-        </table>
+
 
         <table class="tg">
           <thead>
@@ -418,24 +441,6 @@
           </tbody>
         </table>
   </p>
-  <p>
-      Choose a function code (FC) from the dropdown menu,
-      select the coil/register start address (0:65535) and the quantity to write.
-      Choose or edit the Modbus TCP/serial server configuration to specify the server to connect to.
-  </p>
-
-  <p>Unit-Id (0..255 tcp | 0..247 serial) - leave empty, otherwise it overrides the default Unit-ID of client
-   config</p>
-
-  <p>
-      For FC 5, <strong>msg.payload</strong> must be a value of 1 or 0 or true or false.
-      For FC 15, <strong>msg.payload</strong> must be an array[] of comma separated values true or false each.
-      For FC 6, <strong>msg.payload</strong> must be a single value between 0:65535.
-      For FC 16, <strong>msg.payload</strong> must be an array[] of comma separated values between 0:65535 each.
-  </p>
-
-   <p>Output 1: all given data, modbus response Buffer, input message</p>
-   <p>Output 2: modbus response Buffer, all given data, input message</p>
 
 </script>
 
