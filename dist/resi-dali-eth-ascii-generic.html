@@ -56,8 +56,9 @@
   <p>Connects to a RESI DALI ETH ASCII to manage DALI LAMP\Device at each incoming msg.</p>
   
   <br><!-- DALI BUS ERROR Session-->
+  <hr>
   <p>
-      <h4>DALI BUS ERROR</h4>
+      <h4><strong>1. DALI BUS ERROR</strong></h4>
       <p>
         <h5>Description</h5>
           Shows the status of the DALI bus.<br>
@@ -108,7 +109,7 @@
 
   <br><!-- LAMP LEVEL Session-->
   <p>
-      <h4>LAMP LEVEL</h4>
+      <h4><strong>2. LAMP LEVEL</strong></h4>
       <p>
         <h5>Description</h5>
         Sets for a lamp short address a new brightness level between 0 and 254. 255 means MASK.
@@ -433,6 +434,53 @@
       </tbody>
     </table>  
 
+    <h5>Available DALI commands for queries:</h5>
+    <table class="tg" width="100%">
+      <thead>
+        <tr>
+          <th class="tg-lap0" width="15%">Command</th>
+          <th class="tg-lap0" width="40%">Sample</th>
+          <th class="tg-lap0" width="45%">Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tg-5qt9">QUERY STATUS</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>       
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QS QUERY CONTROL GEAR</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>       
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QCG QUERY LAMP FAILURE</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>       
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QLF QUERY LAMP POWER ON</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>       
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QLPO QUERY LIMIT ERROR</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>       
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QLE QUERY RESET STATE</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>       
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QRS QUERY MISSING SHORT ADDRESS</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>  
+        </tr>
+      </tbody>
+    </table>  
 
         <table class="tg">
           <thead>
@@ -441,15 +489,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td class="tg-5qt9">QUERY STATUS</td>
-              <td class="tg-5qt9">QS QUERY CONTROL GEAR</td>
-              <td class="tg-5qt9">QCG QUERY LAMP FAILURE</td>
-              <td class="tg-5qt9">QLF QUERY LAMP POWER ON</td>
-              <td class="tg-5qt9">QLPO QUERY LIMIT ERROR</td>
-              <td class="tg-5qt9">QLE QUERY RESET STATE</td>
-              <td class="tg-5qt9">QRS QUERY MISSING SHORT ADDRESS</td>
-            </tr>
+
             <tr>
               <td class="tg-5qt9">QMSA QUERY VERSION NUMBER</td>
               <td class="tg-5qt9">QVN QUERY CONTENT DTR</td>
