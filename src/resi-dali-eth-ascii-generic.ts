@@ -1,7 +1,7 @@
 import * as nodered from "node-red" ;
 import { NodeExtendedInterface, RESIResponseInterface } from './shared-interfaces' ;
 import { Status, StatusInterface, NodeRESIClientInterface } from './shared-classes' ;
-import { objectRename, invalidPayloadIn } from './shared-functions' ;
+import { objectRename, invalidPayloadIn, prepareDALIResponse } from './shared-functions' ;
 import { doesNotMatch } from "assert";
 
 const daliLampLevelNodeName:string = "dali-generic" ;
@@ -73,6 +73,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                 nodeServer.connection.send( textCommand ).then( ( response ) => {
                     var result = <RESIResponseInterface> Object.assign({}, msg)
                     result = objectRename( result, 'payload', 'daliRequest' ) ;
+                    prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
                     result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
                     send(<nodered.NodeMessage> result) ;
                 }).catch( ( error ) => {

@@ -48,3 +48,23 @@ export function requestTimeout(ms: number, promise: Promise<any> ) {
   export function invalidPayloadIn( msg : any ) {
     return !( msg && Object.prototype.hasOwnProperty.call( msg, 'payload' ) ) ;
   }
+
+  function decodeDALIQueryStatusResp() {
+
+  }
+  
+  export function prepareDALIResponse( msg:any, response: string ) : any {
+    let repTokenized = response.split( ':' ) ;
+    console.log( repTokenized ) ;
+
+    switch( msg.payload.command ) {
+      case 'LAMP':
+        switch( msg.payload.action ) {
+
+
+        }
+        break ;
+    }
+
+    return ;
+  }

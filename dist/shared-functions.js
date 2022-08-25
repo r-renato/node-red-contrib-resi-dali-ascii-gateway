@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
+exports.prepareDALIResponse = exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
 /**
  *
  * @param obj
@@ -52,4 +52,18 @@ function invalidPayloadIn(msg) {
     return !(msg && Object.prototype.hasOwnProperty.call(msg, 'payload'));
 }
 exports.invalidPayloadIn = invalidPayloadIn;
+function decodeDALIQueryStatusResp() {
+}
+function prepareDALIResponse(msg, response) {
+    let repTokenized = response.split(':');
+    console.log(repTokenized);
+    switch (msg.payload.command) {
+        case 'LAMP':
+            switch (msg.payload.action) {
+            }
+            break;
+    }
+    return;
+}
+exports.prepareDALIResponse = prepareDALIResponse;
 //# sourceMappingURL=shared-functions.js.map
