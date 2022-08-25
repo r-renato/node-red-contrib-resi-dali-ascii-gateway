@@ -61,20 +61,42 @@
           Shows the status of the DALI bus.BusErrDec,BusErrHex:=0:DALI bus is OK and fully functional=1:DALI bus error,
           short circuit on DALI line, overload on DALI line or no DALI power supply
       </p>
-      <table class="tg">
+      <table class="tg" with="100%">
+        <thead>
+          <tr>
+            <th class="tg-lap0" with="20%">&nbsp;</th>
+            <th class="tg-lap0" with="30">Available DALI commands</th>
+            <th class="tg-lap0" with="50">Note</th>
+          </tr>
+        </thead>
         <tbody>
           <tr>
             <th scope="row" class="tg-5qt9"><strong>ASCII READ COMMAND</strong></th>
             <td class="tg-5qt9"><code>
-              #DALI BUS ERROR<CR><br>
-              #DBERR<CR><br>
+              #DALI BUS ERROR&lt;CR&gt;<br>
+              #DBERR&lt;CR&gt;<br>
               Result:#DBERR:<br>
-              <BusErrDec>,<BusErrHex><CR>
+              &lt;BusErrDec&gt;,&lt;BusErrHex&gt;&lt;CR&gt;
               <code>
             </td>
             <td class="tg-5qt9">&nbsp;</td>
-
-          </tr>       
+          </tr>   
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>TX</strong></th>
+            <td class="tg-5qt9"><code>
+              #DALI BUS ERROR&lt;CR&gt;
+              <code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>   
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>RX</strong></th>
+            <td class="tg-5qt9"><code>
+              #255,DBERR:0,0x0&lt;CR&gt;
+              <code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>        
         </tbody>
       </table>
   </p>
