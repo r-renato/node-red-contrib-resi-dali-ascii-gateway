@@ -36,8 +36,8 @@ module.exports = function (RED) {
         }
         const executeDALICommand = function (textCommand, msg) {
             return new Promise((resolve, reject) => {
-                console.log(">>> " + JSON.stringify(msg));
                 nodeServer.connection.send(textCommand).then((response) => {
+                    console.log(">>> " + JSON.stringify(response));
                     var result = Object.assign({}, msg);
                     result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
                     result.payload = (0, shared_functions_1.prepareDALIResponse)(msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, ''));
