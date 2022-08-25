@@ -54,6 +54,8 @@
 
   <p>RESI DALI ETH ASCII node triggered with <strong>msg.payload</strong> to write.</p>
   <p>Connects to a RESI DALI ETH ASCII to manage DALI LAMP\Device at each incoming msg.</p>
+  
+  <br><!-- DALI BUS ERROR Session-->
   <p>
       <h4>DALI BUS ERROR</h4>
       <p>
@@ -67,8 +69,8 @@
       <table class="tg" width="100%">
         <thead>
           <tr>
-            <th class="tg-lap0" width="20%">&nbsp;</th>
-            <th class="tg-lap0" width="30%">Available DALI commands</th>
+            <th class="tg-lap0" width="10%">&nbsp;</th>
+            <th class="tg-lap0" width="40%">Available DALI commands</th>
             <th class="tg-lap0" width="50%">Note</th>
           </tr>
         </thead>
@@ -78,8 +80,8 @@
             <td class="tg-5qt9"><code>
               #DALI BUS ERROR&lt;CR&gt;<br>
               #DBERR&lt;CR&gt;<br>
-              Result:#DBERR:<br>
-              &lt;BusErrDec&gt;,&lt;BusErrHex&gt;&lt;CR&gt;
+              Result:<br>
+              #DBERR:&lt;BusErrDec&gt;,&lt;BusErrHex&gt;&lt;CR&gt;
               <code>
             </td>
             <td class="tg-5qt9">&nbsp;</td>
@@ -103,6 +105,55 @@
         </tbody>
       </table>
   </p>
+
+  <br><!-- LAMP LEVEL Session-->
+  <p>
+      <h4>LAMP LEVEL</h4>
+      <p>
+        <h5>Description</h5>
+        Sets for a lamp short address a new brightness level between 0 and 254. 255 means MASK.
+      <table class="tg" width="100%">
+        <thead>
+          <tr>
+            <th class="tg-lap0" width="10%">&nbsp;</th>
+            <th class="tg-lap0" width="40%">Available DALI commands</th>
+            <th class="tg-lap0" width="50%">Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>ASCII WRITE COMMAND</strong></th>
+            <td class="tg-5qt9"><code>
+              #LAMP LEVEL:&lt;LAMP&gt;=&lt;LEVEL&gt;&lt;CR&gt;<br>
+              #LAMP LEVEL:&lt;LAMP&gt;,&lt;LEVEL&gt;&lt;CR&gt;<br>
+              #LL:&lt;LAMP&gt;,&lt;LEVEL&gt;&lt;CR&gt;<br>
+              Result:<br>
+              #OK&lt;CR&gt;
+            </code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>   
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>TX</strong></th>
+            <td class="tg-5qt9"><code>
+              #LAMP LEVEL:2=254&lt;CR&gt;
+            </code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>   
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>RX</strong></th>
+            <td class="tg-5qt9"><code>
+              &nbsp;
+            </code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>        
+        </tbody>
+      </table>
+  </p>
+
+  
   <p>
       <h4>DALI 1.0 COMMAND FOR LAMP</h4>
         <table class="tg">
