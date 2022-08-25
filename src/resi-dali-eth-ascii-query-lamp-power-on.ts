@@ -40,6 +40,7 @@ module.exports = function (RED: nodered.NodeAPI) {
 
         const executeDALICommand = function( textCommand : string, msg : any ) : Promise<nodered.NodeMessage> {
             return new Promise( ( resolve, reject ) => {
+                console.log( JSON.stringify( msg ) ) ;
                 nodeServer.connection.send( textCommand ).then( ( response ) => {
                     var result = <RESIResponseInterface> Object.assign({}, msg)
                     result = objectRename( result, 'payload', 'daliRequest' ) ;
