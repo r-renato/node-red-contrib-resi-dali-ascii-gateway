@@ -171,16 +171,9 @@
           <tr>
             <th scope="row" class="tg-5qt9"><strong>ASCII WRITE COMMAND</strong></th>
             <td class="tg-5qt9"><code>
-              #GROUP LEVEL:<GROUP>=<LEVEL><CR>
-              #GROUP LEVEL:<GROUP>,<LEVEL><CR>
-              #GL:<GROUP>,<LEVEL><CR>
-              Result:<br>
-              #OK<CR>
-
-
-              #LAMP LEVEL:&lt;LAMP&gt;=&lt;LEVEL&gt;&lt;CR&gt;<br>
-              #LAMP LEVEL:&lt;LAMP&gt;,&lt;LEVEL&gt;&lt;CR&gt;<br>
-              #LL:&lt;LAMP&gt;,&lt;LEVEL&gt;&lt;CR&gt;<br>
+              #GROUP LEVEL:&lt;GROUP&gt;=&lt;LEVEL&gt;&lt;CR&gt;<br>
+              #GROUP LEVEL:&lt;GROUP&gt;,&lt;LEVEL&gt;&lt;CR&gt;<br>
+              #GL:&lt;GROUP&gt;,&lt;LEVEL&gt;&lt;CR&gt;<br>
               Result:<br>
               #OK&lt;CR&gt;
             </code>
@@ -190,7 +183,7 @@
           <tr>
             <th scope="row" class="tg-5qt9"><strong>TX</strong></th>
             <td class="tg-5qt9"><code>
-              #LAMP LEVEL:2=254&lt;CR&gt;
+              #GROUP LEVEL:8=254&lt;CR&gt;
             </code>
             </td>
             <td class="tg-5qt9">&nbsp;</td>
@@ -198,7 +191,7 @@
           <tr>
             <th scope="row" class="tg-5qt9"><strong>RX</strong></th>
             <td class="tg-5qt9"><code>
-              #OK&lt;CR&gt;
+              #255,OK&lt;CR&gt;
             </code>
             </td>
             <td class="tg-5qt9">&nbsp;</td>
@@ -206,6 +199,54 @@
         </tbody>
       </table>
   </p>
+
+  <br><!-- ALL LEVEL Session-->
+  <p>
+      <h4>ALL LEVEL</h4>
+      <p>
+        <h5>Description</h5>
+        Sets for all lamps a new brightness level between 0 and 254. 255 means MASK.
+      <table class="tg" width="100%">
+        <thead>
+          <tr>
+            <th class="tg-lap0" width="10%">&nbsp;</th>
+            <th class="tg-lap0" width="40%">Available DALI commands</th>
+            <th class="tg-lap0" width="50%">Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>ASCII WRITE COMMAND</strong></th>
+            <td class="tg-5qt9"><code>
+              #ALL LEVEL:&lt;LEVEL&gt;&lt;CR&gt;<br>
+              #ALL LEVEL:&lt;LEVEL&gt;&lt;CR&gt;<br>
+              #AL:&lt;LEVEL&gt;&lt;CR&gt;<br>
+              Result:<br>
+              #OK&lt;CR&gt;
+            </code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>   
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>TX</strong></th>
+            <td class="tg-5qt9"><code>
+              #ALL LEVEL:254&lt;CR&gt;
+            </code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>   
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>RX</strong></th>
+            <td class="tg-5qt9"><code>
+              #255,OK&lt;CR&gt;
+            </code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>        
+        </tbody>
+      </table>
+  </p>
+
 
   
   <p>
