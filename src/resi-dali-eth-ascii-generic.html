@@ -59,25 +59,25 @@
     <h4><strong>Index</strong></h4><hr>
     <dl>
       <dt>General commands</dt>
-      <dd>- Check DALI Bus Error</dd>
+      <dd><a href="#sess001">- Check DALI Bus Error</a></dd>
       <dt>General commands for Lamps</dt>
-      <dd>- Set Lamp level</dd>
-      <dd>- Set the Lamp level of a group</dd>
-      <dd>- Set All Lamp level</dd>
+      <dd><a href="#sess002">- Set Lamp level</a></dd>
+      <dd><a href="#sess003">- Set the Lamp level of a group</a></dd>
+      <dd><a href="#sess004">- Set All Lamp level</a></dd>
       <dt>DALI 1.0 commands for Lamps</dt>
-      <dd>- Execute a DALI 1.0 Command for a Lamp</dd>
-      <dd>- Execute a DALI 1.0 Command for a Group of Lamps</dd>
+      <dd><a href="#sess005">- Execute a DALI 1.0 Command for a Lamp</a></dd>
+      <dd><a href="#sess006">- Execute a DALI 1.0 Command for a Group of Lamps</a></dd>
       <dd>- Execute a DALI 1.0 Command for All Lamps</dd>
       <dt>DALI 1.0 Scene commands for Lamps</dt>
-      <dd>- Goto Scene for a Lamp</dd>
-      <dd>- Goto Scene for a Group of Lamp</dd>
-      <dd>- Goto Scene for All Lamp</dd>
+      <dd><a href="#sess007">- Goto Scene for a Lamp</a></dd>
+      <dd><a href="#sess008">- Goto Scene for a Group of Lamp</a></dd>
+      <dd><a href="#sess009">- Goto Scene for All Lamp</a></dd>
     </dl>
   </p>
   
   <br><!-- DALI BUS ERROR Session-->
   <p>
-      <h4><strong>1. DALI BUS ERROR</strong></h4><hr>
+      <h4 id="sess001"><strong>1. DALI BUS ERROR</strong></h4><hr>
       <p>
         <h5>Description</h5>
           Shows the status of the DALI bus.<br>
@@ -128,7 +128,7 @@
 
   <br><!-- LAMP LEVEL Session-->
   <p>
-      <h4><strong>2. LAMP LEVEL</strong></h4><hr>
+      <h4 id="sess002"><strong>2. LAMP LEVEL</strong></h4><hr>
       <p>
         <h5>Description</h5>
         Sets for a lamp short address a new brightness level between 0 and 254. 255 means MASK.
@@ -175,7 +175,7 @@
 
   <br><!-- GROUP LEVEL Session-->
   <p>
-      <h4><strong>3. GROUP LEVEL</strong></h4><hr>
+      <h4 id="sess003"><strong>3. GROUP LEVEL</strong></h4><hr>
       <p>
         <h5>Description</h5>
         Sets for a lamp group a new brightness level between 0 and 254. 255 means MASK.
@@ -222,7 +222,7 @@
 
   <br><!-- ALL LEVEL Session-->
   <p>
-      <h4><strong>4. ALL LEVEL</strong></h4><hr>
+      <h4 id="sess004"><strong>4. ALL LEVEL</strong></h4><hr>
       <p>
         <h5>Description</h5>
         Sets for all lamps a new brightness level between 0 and 254. 255 means MASK.
@@ -269,7 +269,7 @@
 
   <br><!-- DALI 1.0 COMMAND FOR LAMP Session-->
   <p>
-    <h4><strong>5. DALI 1.0 COMMAND FOR LAMP</strong></h4><hr>
+    <h4 id="sess005"><strong>5. DALI 1.0 COMMAND FOR LAMP</strong></h4><hr>
     <p>
       <h5>Description</h5>
       Sends the selected DALI1.0 command to the selected lamp.
@@ -605,7 +605,7 @@
 
   <br><!-- DALI 1.0 COMMAND FOR LAMP GROUP Session-->
   <p>
-    <h4><strong>6. DALI 1.0 COMMAND FOR LAMP GROUP</strong></h4><hr>
+    <h4 id="sess006"><strong>6. DALI 1.0 COMMAND FOR LAMP GROUP</strong></h4><hr>
     <p>
       <h5>Description</h5>
       Sends the selected DALI1.0 command to the selected group of lamps
@@ -662,7 +662,7 @@
 
   <br><!-- DALI 1.0 COMMAND FOR ALL LAMPS Session-->
   <p>
-    <h4><strong>7. DALI 1.0 COMMAND FOR ALL LAMPS</strong></h4><hr>
+    <h4 id="sess007"><strong>7. DALI 1.0 COMMAND FOR ALL LAMPS</strong></h4><hr>
     <p>
       <h5>Description</h5>
       Sends the selected DALI1.0 command to all lamps
@@ -718,7 +718,7 @@
 
     <br><!-- DALI 1.0 SCENE COMMAND FOR LAMP Session-->
     <p>
-      <h4><strong>8. DALI 1.0 SCENE COMMAND FOR LAMP</strong></h4><hr>
+      <h4 id="sess008"><strong>8. DALI 1.0 SCENE COMMAND FOR LAMP</strong></h4><hr>
       <p>
         <h5>Description</h5>
         Activates the choosen DALI 1.0 scene on the selected lamp
@@ -766,7 +766,7 @@
 
       <br><!-- DALI 1.0 SCENE COMMAND FOR LAMP GROUP Session-->
       <p>
-        <h4><strong>9. DALI 1.0 SCENE COMMAND FOR LAMP GROUP</strong></h4><hr>
+        <h4 id="sess009"><strong>9. DALI 1.0 SCENE COMMAND FOR LAMP GROUP</strong></h4><hr>
         <p>
           <h5>Description</h5>
           Activates the choosen DALI 1.0 scene on the selected lamp group
@@ -783,9 +783,9 @@
               <tr>
                 <th scope="row" class="tg-5qt9"><strong>ASCII WRITE COMMAND</strong></th>
                 <td class="tg-5qt9"><code>
-                  #LAMP GOTO SCENE:&lt;LAMP&gt;=&lt;SCENE&gt;&lt;CR&gt;<br>
-                  #LAMP GOTO SCENE:&lt;LAMP&gt;,&lt;SCENE&gt;&lt;CR&gt;<br>
-                  #LGS:&lt;LAMP&gt;,&lt;SCENE&gt;&lt;CR&gt;<br>
+                  #GROUP GOTO SCENE:&lt;GROUP&gt;=&lt;SCENE&gt;&lt;CR&gt;<br>
+                  #GROUP GOTO SCENE:&lt;GROUP&gt;,&lt;SCENE&gt;&lt;CR&gt;<br>
+                  #GGS:&lt;GROUP&gt;,&lt;SCENE&gt;&lt;CR&gt;<br>
                   Result:<br>
                   #OK&lt;CR&gt;
                 </code>
@@ -795,7 +795,7 @@
               <tr>
                 <th scope="row" class="tg-5qt9"><strong>TX</strong></th>
                 <td class="tg-5qt9"><code>
-                  #LAMP GOTO SCENE:5=7&lt;CR&gt;
+                  #GROUP GOTO SCENE:8=6&lt;CR&gt;
                 </code>
                 </td>
                 <td class="tg-5qt9">&nbsp;</td>
