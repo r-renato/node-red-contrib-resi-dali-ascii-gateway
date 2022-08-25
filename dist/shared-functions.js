@@ -106,7 +106,7 @@ function decodeDALIQueryStatusResp(prefix, suffix) {
 function prepareDALIResponse(msg, response) {
     let result = {};
     let repTokenized = response.split(':');
-    console.log(repTokenized);
+    //console.log( repTokenized ) ;
     switch (msg.payload.command) {
         case 'LAMP':
             switch (msg.payload.action) {

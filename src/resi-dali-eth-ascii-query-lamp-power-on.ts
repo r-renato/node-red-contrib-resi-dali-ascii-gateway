@@ -82,7 +82,8 @@ module.exports = function (RED: nodered.NodeAPI) {
                         return( result ) ;
                     })
                 ]).then( ( responses ) => {
-                    console.log( typeof responses + "" + responses ) ;
+                    console.log( JSON.stringify( responses ) ) ;
+                    
                 }).catch( ( e ) => {
                     console.log( 'erroreeee' + e ) ;
                 }) ;

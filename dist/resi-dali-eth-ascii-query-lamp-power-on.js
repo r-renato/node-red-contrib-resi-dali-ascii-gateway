@@ -78,7 +78,7 @@ module.exports = function (RED) {
                         return (result);
                     })
                 ]).then((responses) => {
-                    console.log(typeof responses + "" + responses);
+                    console.log(JSON.stringify(responses));
                 }).catch((e) => {
                     console.log('erroreeee' + e);
                 });
