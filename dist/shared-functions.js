@@ -67,12 +67,13 @@ function decodeDALIResp(prefix, suffix) {
         if ("#OK" == prefix && code == 9)
             result.timeout = ("#OK" == prefix && code == 9);
     }
+    return (result);
 }
 function decodeDALIQueryStatusResp(prefix, suffix) {
     let data = suffix.split(',');
     let code = parseInt(data[0]);
     let resp = parseInt(data[1]);
-    let exitCode = (code == 1);
+    let exitCode = ("#OK" == prefix && code == 1);
     let result = {};
     if (exitCode) {
         result = {
@@ -98,9 +99,9 @@ function decodeDALIQueryStatusResp(prefix, suffix) {
         };
     }
     ;
-    result.done = exitCode;
-    if (code == 9)
-        result.timeout = (code == 9);
+    result.done = ("#OK" == prefix);
+    if ("#OK" == prefix && code == 9)
+        result.timeout = ("#OK" == prefix && code == 9);
     return (result);
 }
 function prepareDALIResponse(msg, response) {
