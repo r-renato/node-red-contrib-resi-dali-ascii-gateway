@@ -53,6 +53,7 @@ module.exports = function (RED: nodered.NodeAPI) {
             if( invalidPayloadIn(msg) || !nodeServer) {
                 node.error( 'payload Not Found', msg ) ;
                 done() ;
+                return ;
             }
 
             if( isValidDALIMsg( msg ) ) {

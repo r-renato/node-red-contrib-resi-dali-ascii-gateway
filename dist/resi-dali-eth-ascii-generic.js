@@ -49,6 +49,7 @@ module.exports = function (RED) {
             if ((0, shared_functions_1.invalidPayloadIn)(msg) || !nodeServer) {
                 node.error('payload Not Found', msg);
                 done();
+                return;
             }
             if (isValidDALIMsg(msg)) {
                 //status.setStatus( true ) ;
