@@ -75,7 +75,7 @@ function decodeDALIQueryStatusResp( prefix : string, suffix : string ) {
   let data = suffix.split( ',' ) ; 
   let code = <number> parseInt( data[ 0 ] ) ;
   let resp = <number> parseInt( data[ 1 ] ) ;
-  let exitCode = ( "#OK" == prefix && code == 1) ;
+  let exitCode = (code == 1) ;
   let result : any = { } ;
 
   if( exitCode ) {
@@ -103,9 +103,9 @@ function decodeDALIQueryStatusResp( prefix : string, suffix : string ) {
     } ;
   } ;
 
-  result.done = ( "#OK" == prefix ) ;
-  if( "#OK" == prefix && code == 9 ) 
-    result.timeout = ( "#OK" == prefix && code == 9 ) ;
+  result.done = exitCode ;
+  if( code == 9 ) 
+    result.timeout = (code == 9 ) ;
 
   return( result ) ;
 }
@@ -130,6 +130,6 @@ function decodeDALIQueryStatusResp( prefix : string, suffix : string ) {
         result.done = ( "#OK" == repTokenized[ 0 ])
         break ;
     }
-
+    console.log( JSON.stringify( result ) )
     return( result ) ;
   }
