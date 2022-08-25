@@ -40,7 +40,7 @@ module.exports = function (RED: nodered.NodeAPI) {
 
         const executeDALICommand = function( textCommand : string, msg : any ) : Promise<nodered.NodeMessage> {
             return new Promise( ( resolve, reject ) => {
-                console.log( JSON.stringify( msg ) ) ;
+                console.log( ">>> " + JSON.stringify( msg ) ) ;
                 nodeServer.connection.send( textCommand ).then( ( response ) => {
                     var result = <RESIResponseInterface> Object.assign({}, msg)
                     result = objectRename( result, 'payload', 'daliRequest' ) ;
@@ -73,17 +73,14 @@ module.exports = function (RED: nodered.NodeAPI) {
                     node.log( "Try to sending command: " + queryActualLevel ) ;
                 }
 
+                let msg1 =  Object.assign({}, msg) ; msg1.payload = {} ;
+                msg1.payload.command = 'LAMP' ; msg1.payload.action = 'QUERY STATUS' ; msg1.payload.params = '' ;
+                let msg2 =  Object.assign({}, msg) ; msg2.payload = {} ;
+                msg2.payload.command = 'LAMP' ; msg2.payload.action = 'QUERY ACTUAL LEVEL' ; msg2.payload.params = '' ;
+
                 Promise.allSettled([
-                    executeDALICommand( queryStatusCmd, ( msg : any ) => {
-                        let result =  Object.assign({}, msg) ; result.payload = {} ;
-                        result.payload.command = 'LAMP' ; result.payload.action = 'QUERY STATUS' ; result.payload.params = '' ;
-                        return( result ) ;
-                    }),
-                    executeDALICommand( queryActualLevel, ( msg : any ) => {
-                        let result =  Object.assign({}, msg) ; result.payload = {} ;
-                        result.payload.command = 'LAMP' ; result.payload.action = 'QUERY ACTUAL LEVEL' ; result.payload.params = '' ;
-                        return( result ) ;
-                    })
+                    executeDALICommand( queryStatusCmd, msg1 ),
+                    executeDALICommand( queryActualLevel, msg2)
                 ]).then( ( responses ) => {
                     console.log( JSON.stringify( responses ) ) ;
                     
