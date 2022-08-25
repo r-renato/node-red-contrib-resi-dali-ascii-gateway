@@ -87,8 +87,8 @@ function decodeDALIQueryStatusResp(prefix, suffix) {
     }
     ;
     result.done = ("#OK" == prefix);
-    if (code !== 1)
-        result.error = (code !== 1);
+    if ("#OK" == prefix && code == 9)
+        result.timeout = ("#OK" == prefix && code == 9);
     return (result);
 }
 function prepareDALIResponse(msg, response) {

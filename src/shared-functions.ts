@@ -87,8 +87,8 @@ export function requestTimeout(ms: number, promise: Promise<any> ) {
     } ;
 
     result.done = ( "#OK" == prefix ) ;
-    if( code !== 1 ) 
-      result.error = ( code !== 1 ) ;
+    if( "#OK" == prefix && code == 9 ) 
+      result.timeout = ( "#OK" == prefix && code == 9 ) ;
 
     return( result ) ;
   }
