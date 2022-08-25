@@ -68,16 +68,18 @@ module.exports = function (RED) {
                 Promise.allSettled([
                     executeDALICommand(queryStatusCmd, (msg) => {
                         let result = Object.assign({}, msg);
-                        result.command = 'LAMP';
-                        result.action = 'QUERY STATUS';
-                        result.params = '';
+                        result.payload = {};
+                        result.payload.command = 'LAMP';
+                        result.payload.action = 'QUERY STATUS';
+                        result.payload.params = '';
                         return (result);
                     }),
                     executeDALICommand(queryActualLevel, (msg) => {
                         let result = Object.assign({}, msg);
-                        result.command = 'LAMP';
-                        result.action = 'QUERY ACTUAL LEVEL';
-                        result.params = '';
+                        result.payload = {};
+                        result.payload.command = 'LAMP';
+                        result.payload.action = 'QUERY ACTUAL LEVEL';
+                        result.payload.params = '';
                         return (result);
                     })
                 ]).then((responses) => {

@@ -75,13 +75,13 @@ module.exports = function (RED: nodered.NodeAPI) {
 
                 Promise.allSettled([
                     executeDALICommand( queryStatusCmd, ( msg : any ) => {
-                        let result =  Object.assign({}, msg) ;
-                        result.command = 'LAMP' ; result.action = 'QUERY STATUS' ; result.params = '' ;
+                        let result =  Object.assign({}, msg) ; result.payload = {} ;
+                        result.payload.command = 'LAMP' ; result.payload.action = 'QUERY STATUS' ; result.payload.params = '' ;
                         return( result ) ;
                     }),
                     executeDALICommand( queryActualLevel, ( msg : any ) => {
-                        let result =  Object.assign({}, msg) ;
-                        result.command = 'LAMP' ; result.action = 'QUERY ACTUAL LEVEL' ; result.params = '' ;
+                        let result =  Object.assign({}, msg) ; result.payload = {} ;
+                        result.payload.command = 'LAMP' ; result.payload.action = 'QUERY ACTUAL LEVEL' ; result.payload.params = '' ;
                         return( result ) ;
                     })
                 ]).then( ( responses ) => {
