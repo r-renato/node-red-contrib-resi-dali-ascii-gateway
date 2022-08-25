@@ -56,9 +56,8 @@
   <p>Connects to a RESI DALI ETH ASCII to manage DALI LAMP\Device at each incoming msg.</p>
   
   <br><!-- DALI BUS ERROR Session-->
-  <hr>
   <p>
-      <h4><strong>1. DALI BUS ERROR</strong></h4>
+      <h4><strong>1. DALI BUS ERROR</strong></h4><hr>
       <p>
         <h5>Description</h5>
           Shows the status of the DALI bus.<br>
@@ -109,7 +108,7 @@
 
   <br><!-- LAMP LEVEL Session-->
   <p>
-      <h4><strong>2. LAMP LEVEL</strong></h4>
+      <h4><strong>2. LAMP LEVEL</strong></h4><hr>
       <p>
         <h5>Description</h5>
         Sets for a lamp short address a new brightness level between 0 and 254. 255 means MASK.
@@ -156,7 +155,7 @@
 
   <br><!-- GROUP LEVEL Session-->
   <p>
-      <h4>GROUP LEVEL</h4>
+      <h4><strong>3. GROUP LEVEL</strong></h4><hr>
       <p>
         <h5>Description</h5>
         Sets for a lamp group a new brightness level between 0 and 254. 255 means MASK.
@@ -203,7 +202,7 @@
 
   <br><!-- ALL LEVEL Session-->
   <p>
-      <h4>ALL LEVEL</h4>
+      <h4><strong>4. ALL LEVEL</strong></h4><hr>
       <p>
         <h5>Description</h5>
         Sets for all lamps a new brightness level between 0 and 254. 255 means MASK.
@@ -250,7 +249,7 @@
 
   <br><!-- DALI 1.0 COMMAND FOR LAMP Session-->
   <p>
-    <h4>DALI 1.0 COMMAND FOR LAMP</h4>
+    <h4><strong>5. DALI 1.0 COMMAND FOR LAMP</strong></h4><hr>
     <p>
       <h5>Description</h5>
       Sends the selected DALI1.0 command to the selected lamp.
@@ -293,7 +292,7 @@
       </tbody>
     </table>
 
-    <h5>Available DALI commands:</h5>
+    <h5 id="id="5_available_dali_commands">Available DALI commands:</h5>
     <table class="tg" width="100%">
       <thead>
         <tr>
@@ -366,7 +365,7 @@
       </tbody>
     </table>  
 
-    <h5>Available DALI commands which are repeated twice within 100ms:</h5>
+    <h5 id="id="5_available_dali_commands_which">Available DALI commands which are repeated twice within 100ms:</h5>
     <table class="tg" width="100%">
       <thead>
         <tr>
@@ -434,7 +433,7 @@
       </tbody>
     </table>  
 
-    <h5>Available DALI commands for queries:</h5>
+    <h5 id="id="5_available_dali_commands_for_queries">Available DALI commands for queries:</h5>
     <table class="tg" width="100%">
       <thead>
         <tr>
@@ -479,46 +478,159 @@
           <td class="tg-5qt9">&nbsp;</td>
           <td class="tg-5qt9">&nbsp;</td>  
         </tr>
+        <tr>
+          <td class="tg-5qt9">QMSA QUERY VERSION NUMBER</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>  
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QVN QUERY CONTENT DTR</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>  
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QCD QUERY DEVICE TYPE</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>  
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QDT QUERY PHYSICAL MINIMUM LEVEL</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>  
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QPMINL QUERY POWER FAILURE</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>  
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QPF QUERY CONTENT DTR1</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td>  
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QCD1 QUERY CONTENT DTR2</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QCD2 QUERY ACTUAL LEVEL</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QAL QUERY MAX LEVEL</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QMAXL QUERY MIN LEVEL</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QMINL QUERY POWER ON LEVEL</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QPOL QUERY SYSTEM FAILURE LEVEL</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QSFL QUERY FADE TIME FADE RATE</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QFTFR QUERY GROUPS 0-7</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QG07 QUERY GROUPS 8-15</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QG815 QUERY RANDOM ADDRESS H</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QRAH QUERY RANDOM ADDRESS M</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QRAM QUERY RANDOM ADDRESS L</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
+        <tr>
+          <td class="tg-5qt9">QRAL READ MEMORY LOCATION</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
+        <tr>
+          <td class="tg-5qt9">RML QUERY EXTENDED VERSION NUMBER</td>
+          <td class="tg-5qt9">&nbsp;</td>
+          <td class="tg-5qt9">&nbsp;</td> 
+        </tr>
       </tbody>
     </table>  
+  </p>
 
-        <table class="tg">
-          <thead>
-            <tr>
-              <th class="tg-lap0" colspan="7">Available DALI commands for queries</th>
-            </tr>
-          </thead>
-          <tbody>
 
-            <tr>
-              <td class="tg-5qt9">QMSA QUERY VERSION NUMBER</td>
-              <td class="tg-5qt9">QVN QUERY CONTENT DTR</td>
-              <td class="tg-5qt9">QCD QUERY DEVICE TYPE</td>
-              <td class="tg-5qt9">QDT QUERY PHYSICAL MINIMUM LEVEL</td>
-              <td class="tg-5qt9">QPMINL QUERY POWER FAILURE</td>
-              <td class="tg-5qt9">QPF QUERY CONTENT DTR1</td>
-              <td class="tg-5qt9">QCD1 QUERY CONTENT DTR2</td>
-            </tr>
-            <tr>
-              <td class="tg-5qt9">QCD2 QUERY ACTUAL LEVEL</td>
-              <td class="tg-5qt9">QAL QUERY MAX LEVEL</td>
-              <td class="tg-5qt9">QMAXL QUERY MIN LEVEL</td>
-              <td class="tg-5qt9">QMINL QUERY POWER ON LEVEL</td>
-              <td class="tg-5qt9">QPOL QUERY SYSTEM FAILURE LEVEL</td>
-              <td class="tg-5qt9">QSFL QUERY FADE TIME FADE RATE</td>
-              <td class="tg-5qt9">QFTFR QUERY GROUPS 0-7</td>
-            </tr>
-            <tr>
-              <td class="tg-5qt9">QG07 QUERY GROUPS 8-15</td>
-              <td class="tg-5qt9">QG815 QUERY RANDOM ADDRESS H</td>
-              <td class="tg-5qt9">QRAH QUERY RANDOM ADDRESS M</td>
-              <td class="tg-5qt9">QRAM QUERY RANDOM ADDRESS L</td>
-              <td class="tg-5qt9">QRAL READ MEMORY LOCATION</td>
-              <td class="tg-5qt9">RML QUERY EXTENDED VERSION NUMBER</td>
-              <td class="tg-5qt9">QEVN</td>
-            </tr>
-          </tbody>
-        </table>
+  <br><!-- DALI 1.0 COMMAND FOR LAMP GROUP Session-->
+  <p>
+    <h4><strong>6. DALI 1.0 COMMAND FOR LAMP GROUP</strong></h4><hr>
+    <p>
+      <h5>Description</h5>
+      Sends the selected DALI1.0 command to the selected group of lamps
+
+      <table class="tg" width="100%">
+        <thead>
+          <tr>
+            <th class="tg-lap0" width="10%">&nbsp;</th>
+            <th class="tg-lap0" width="40%">Sample DALI commands</th>
+            <th class="tg-lap0" width="50%">Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>ASCII WRITE COMMAND</strong></th>
+            <td class="tg-5qt9"><code>
+              #GROUP RESET:&lt;GROUP&gt;&lt;CR&gt;<br>
+              #GRESET:&lt;GROUP&gt;&lt;CR&gt;<br>
+              Result:<br>
+              #OK&lt;CR&gt;
+            </code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>   
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>TX</strong></th>
+            <td class="tg-5qt9"><code>
+              #GROUP RESET:8&lt;CR&gt;
+            </code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>   
+          <tr>
+            <th scope="row" class="tg-5qt9"><strong>RX</strong></th>
+            <td class="tg-5qt9"><code>
+              #OK&lt;CR&gt;
+            </code>
+            </td>
+            <td class="tg-5qt9">&nbsp;</td>
+          </tr>        
+        </tbody>
+      </table>
+
+      <h5>Available DALI commands:</h5>
+      <p>For the available commands refer to <a href="#id="5_available_dali_commands">5. DALI 1.0 COMMAND FOR LAMP session</a></p>
   </p>
 
 </script>
