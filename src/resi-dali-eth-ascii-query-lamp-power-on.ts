@@ -93,6 +93,9 @@ module.exports = function (RED: nodered.NodeAPI) {
                     result1 = objectRename( result1, 'daliResponse1', 'payload' ) ;
                     result1.daliResponse2 = Object.assign({}, result2.payload) ;
 
+                    console.log( "result1 => " + JSON.stringify( result1 ) ) ;
+                    console.log( "result2 => " + JSON.stringify( result2 ) ) ;
+                    
                     result1.payload = {
                         done : true,
                         powerOn : result1.daliResponse1.lampArcPowerOn,
@@ -100,8 +103,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                         isPowerOn : ( result1.daliResponse1.lampArcPowerOn || result1.daliResponse2.value > 0 )
                     } ;
 
-                    console.log( "result1 => " + JSON.stringify( result1 ) ) ;
-                    console.log( "result2 => " + JSON.stringify( result2 ) ) ;
+
                     send( <nodered.NodeMessage> result1 ) ;
                 }).catch( ( e ) => {
                     console.log( 'erroreeee' + e ) ;
