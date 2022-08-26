@@ -109,7 +109,9 @@ function decodeDALIResp(prefix, suffix) {
 function prepareDALIResponse(msg, response) {
     let result = {};
     let repTokenized = response.split(':');
-    console.log("prepareDALIResponse: " + JSON.stringify(msg) + " / " + repTokenized);
+    console.log("prepareDALIResponse: " + JSON.stringify(msg) + " / " + repTokenized
+        + "[" + msg.payload.command.replace('#', '') + "]"
+        + "[" + msg.payload.action.replace(':', '') + "]");
     switch (msg.payload.command.replace('#', '')) {
         case shared_interfaces_1.RESICMD.LAMP.name:
             switch (msg.payload.action.replace(':', '')) {

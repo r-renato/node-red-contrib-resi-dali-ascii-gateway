@@ -115,7 +115,9 @@ function decodeDALIResp( prefix : string, suffix : string ) {
 export function prepareDALIResponse( msg:any, response: string ) : any {
   let result : any = {} ;
   let repTokenized = response.split( ':' ) ;
-  console.log( "prepareDALIResponse: " + JSON.stringify( msg ) + " / " + repTokenized ) ;
+  console.log( "prepareDALIResponse: " + JSON.stringify( msg ) + " / " + repTokenized
+    + "[" + msg.payload.command.replace('#', '') + "]" 
+    + "[" + msg.payload.action.replace(':', '') + "]" ) ;
 
   switch( <string> msg.payload.command.replace('#', '') ) {
     case RESICMD.LAMP.name:
