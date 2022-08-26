@@ -79,7 +79,8 @@ module.exports = function (RED) {
                     executeDALICommand(queryStatusCmd, msg1),
                     executeDALICommand(queryActualLevel, msg2)
                 ]).then((responses) => {
-                    console.log(JSON.stringify(responses));
+                    console.log(JSON.stringify(responses[0]));
+                    console.log(JSON.stringify(responses[1]));
                 }).catch((e) => {
                     console.log('erroreeee' + e);
                 });

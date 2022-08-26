@@ -40,7 +40,6 @@ module.exports = function (RED: nodered.NodeAPI) {
 
         const executeDALICommand = function( textCommand : string, msg : any ) : Promise<nodered.NodeMessage> {
             return new Promise( ( resolve, reject ) => {
-                
                 nodeServer.connection.send( textCommand ).then( ( response ) => {
                     console.log( ">>> " + JSON.stringify( response ) ) ;
                     var result = <RESIResponseInterface> Object.assign({}, msg)
@@ -83,7 +82,9 @@ module.exports = function (RED: nodered.NodeAPI) {
                     executeDALICommand( queryStatusCmd, msg1 ),
                     executeDALICommand( queryActualLevel, msg2)
                 ]).then( ( responses ) => {
-                    console.log( JSON.stringify( responses ) ) ;
+
+                    console.log( JSON.stringify( responses[ 0 ] ) ) ;
+                    console.log( JSON.stringify( responses[ 1 ] ) ) ;
                     
                 }).catch( ( e ) => {
                     console.log( 'erroreeee' + e ) ;
