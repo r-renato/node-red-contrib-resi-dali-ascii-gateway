@@ -82,9 +82,13 @@ module.exports = function (RED: nodered.NodeAPI) {
                     executeDALICommand( queryStatusCmd, msg1 ),
                     executeDALICommand( queryActualLevel, msg2)
                 ]).then( ( responses ) => {
+                    let result1 = (<any> responses[ 0 ]).value.daliRequest.action == 'QUERY STATUS' 
+                        ? (<any> responses[ 0 ]).value : (<any> responses[ 1 ]).value ;
+                    let result2 = (<any> responses[ 0 ]).value.daliRequest.action == 'QUERY ACTUAL LEVEL' 
+                        ? (<any> responses[ 0 ]).value : (<any> responses[ 1 ]).value ;
 
-                    console.log( JSON.stringify( responses[ 0 ] ) ) ;
-                    console.log( JSON.stringify( responses[ 1 ] ) ) ;
+                    console.log( "result1 => " + JSON.stringify( result1 ) ) ;
+                    console.log( "result2 => " + JSON.stringify( result2 ) ) ;
                     
                 }).catch( ( e ) => {
                     console.log( 'erroreeee' + e ) ;
