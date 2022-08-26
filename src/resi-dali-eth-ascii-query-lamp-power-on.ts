@@ -41,7 +41,7 @@ module.exports = function (RED: nodered.NodeAPI) {
         const executeDALICommand = function( textCommand : string, msg : any ) : Promise<nodered.NodeMessage> {
             return new Promise( ( resolve, reject ) => {
                 nodeServer.connection.send( textCommand ).then( ( response ) => {
-                    console.log( ">>> " + JSON.stringify( response ) ) ;
+                    //console.log( ">>> " + JSON.stringify( response ) ) ;
                     var result = <RESIResponseInterface> Object.assign({}, msg)
                     result = objectRename( result, 'payload', 'daliRequest' ) ;
                     result.payload = prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
@@ -93,8 +93,8 @@ module.exports = function (RED: nodered.NodeAPI) {
                     result1 = objectRename( result1, 'payload', 'daliResponse1' ) ;
                     result1.daliResponse2 = Object.assign({}, result2.payload) ;
 
-                    console.log( "result1 => " + JSON.stringify( result1 ) ) ;
-                    console.log( "result2 => " + JSON.stringify( result2 ) ) ;
+                    // console.log( "result1 => " + JSON.stringify( result1 ) ) ;
+                    // console.log( "result2 => " + JSON.stringify( result2 ) ) ;
 
                     result1.payload = {
                         done : true

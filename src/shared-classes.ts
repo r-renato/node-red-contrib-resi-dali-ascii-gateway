@@ -197,7 +197,7 @@ export class RESIClient {
                 reject() ;
             } else if( this.connectionState == 'connected' ) {
                 this.client.send( command, {ors: '\r', negotiationMandatory: false}, (err:any, response:any) => {
-                    if( this.systemConsole ) this.logger( "commad: " + command + " => response: " + response ) ;
+                    if( this.systemConsole ) this.logger( "dali client :: sendcommand - " + command + " => response: " + response ) ;
                     return response ;
                 }).then(( response: any ) => {
                     resolve( response );

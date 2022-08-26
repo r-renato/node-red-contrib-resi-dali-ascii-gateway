@@ -37,7 +37,7 @@ module.exports = function (RED) {
         const executeDALICommand = function (textCommand, msg) {
             return new Promise((resolve, reject) => {
                 nodeServer.connection.send(textCommand).then((response) => {
-                    console.log(">>> " + JSON.stringify(response));
+                    //console.log( ">>> " + JSON.stringify( response ) ) ;
                     var result = Object.assign({}, msg);
                     result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
                     result.payload = (0, shared_functions_1.prepareDALIResponse)(msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, ''));
@@ -87,8 +87,8 @@ module.exports = function (RED) {
                     result1.daliRequest2 = Object.assign({}, result2.daliRequest);
                     result1 = (0, shared_functions_1.objectRename)(result1, 'payload', 'daliResponse1');
                     result1.daliResponse2 = Object.assign({}, result2.payload);
-                    console.log("result1 => " + JSON.stringify(result1));
-                    console.log("result2 => " + JSON.stringify(result2));
+                    // console.log( "result1 => " + JSON.stringify( result1 ) ) ;
+                    // console.log( "result2 => " + JSON.stringify( result2 ) ) ;
                     result1.payload = {
                         done: true
                     };
