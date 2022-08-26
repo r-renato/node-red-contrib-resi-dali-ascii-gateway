@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const shared_interfaces_1 = require("./shared-interfaces");
 const shared_classes_1 = require("./shared-classes");
 const shared_functions_1 = require("./shared-functions");
 const daliLampLevelNodeName = "dali-retrieve-lamp-data";
@@ -71,7 +72,7 @@ module.exports = function (RED) {
                 var queryStatusCmd = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0x90';
                 var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0xA0';
                 var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0x99';
-                executeDALICommand(shared_classes_1.RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + shared_classes_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, prepareNodeMessage(msg, shared_classes_1.RESICMD.LAMP.name, shared_classes_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.name))
+                executeDALICommand(shared_interfaces_1.RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + shared_interfaces_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, prepareNodeMessage(msg, shared_interfaces_1.RESICMD.LAMP.name, shared_interfaces_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.name))
                     .then((response) => {
                     console.log("response: " + JSON.stringify(response));
                     done();

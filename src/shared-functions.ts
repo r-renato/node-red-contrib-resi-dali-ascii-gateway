@@ -1,4 +1,4 @@
-
+import { DALICMD, RESICMD, RESIRESP } from './shared-interfaces' ;
 /**
  * 
  * @param obj 
@@ -58,7 +58,7 @@ function decodeDALIQueryStatusResp( prefix : string, suffix : string ) {
   let data = suffix.split( ',' ) ; 
   let code = <number> parseInt( data[ 0 ] ) ;
   let resp = <number> parseInt( data[ 1 ] ) ;
-  let exitCode = ( "#OK" == prefix && code == 1) ;
+  let exitCode = ( RESIRESP.OK.name == prefix && code == 1) ;
   let result : any = { } ;
 
   if( exitCode ) {
@@ -86,9 +86,9 @@ function decodeDALIQueryStatusResp( prefix : string, suffix : string ) {
     } ;
   } ;
 
-  result.done = ( "#OK" == prefix ) ;
-  if( "#OK" == prefix && code == 9 ) 
-    result.timeout = ( "#OK" == prefix && code == 9 ) ;
+  result.done = ( RESIRESP.OK.name == prefix ) ;
+  if( RESIRESP.OK.name == prefix && code == 9 ) 
+    result.timeout = ( RESIRESP.OK.name == prefix && code == 9 ) ;
 
   return( result ) ;
 }
@@ -97,7 +97,7 @@ function decodeDALIResp( prefix : string, suffix : string ) {
   let data = suffix.split( ',' ) ; 
   let result : any = { } ;
 
-  result.done = ( "#OK" == prefix ) ;
+  result.done = ( RESIRESP.OK.name == prefix ) ;
 
   if( data.length > 1 ) {
     let code = <number> parseInt( data[ 0 ] ) ;
@@ -105,8 +105,8 @@ function decodeDALIResp( prefix : string, suffix : string ) {
     
     result.value = resp ;
 
-    if( "#OK" == prefix && code == 9 ) 
-      result.timeout = ( "#OK" == prefix && code == 9 ) ;
+    if( RESIRESP.OK.name == prefix && code == 9 ) 
+      result.timeout = ( RESIRESP.OK.name == prefix && code == 9 ) ;
   } 
   console.log( "decodeDALIResp: " + result ) ;
   return( result ) ;
@@ -117,20 +117,20 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
   let repTokenized = response.split( ':' ) ;
   console.log( "prepareDALIResponse: " + JSON.stringify( msg ) + " / " + repTokenized ) ;
 
-  switch( msg.payload.command ) {
-    case 'LAMP':
-      switch( msg.payload.action ) {
-        case 'QUERY STATUS':
+  switch( <string> msg.payload.command.replace('#', '') ) {
+    case RESICMD.LAMP.name:
+      switch( msg.payload.action.replace(':', '') ) {
+        case DALICMD.QUERY_STATUS.name:
           result = decodeDALIQueryStatusResp( repTokenized[ 0 ], repTokenized[ 1 ] ) ;
           break ;
-        case 'QUERY CONTROL GEAR PRESENT':
-        case 'QUERY ACTUAL LEVEL':
+        case DALICMD.QUERY_CONTROL_GEAR_PRESENT.name:
+        case DALICMD.QUERY_ACTUAL_LEVEL.name:
           result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ] ) ;
           break ;
       }
       break ;
     default:
-      result.done = ( "#OK" == repTokenized[ 0 ])
+      result.done = ( RESIRESP.OK.name == repTokenized[ 0 ])
       break ;
   }
 //    console.log( JSON.stringify( result ) )

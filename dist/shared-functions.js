@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.prepareDALIResponse = exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
+const shared_interfaces_1 = require("./shared-interfaces");
 /**
  *
  * @param obj
@@ -60,7 +61,7 @@ function decodeDALIQueryStatusResp(prefix, suffix) {
     let data = suffix.split(',');
     let code = parseInt(data[0]);
     let resp = parseInt(data[1]);
-    let exitCode = ("#OK" == prefix && code == 1);
+    let exitCode = (shared_interfaces_1.RESIRESP.OK.name == prefix && code == 1);
     let result = {};
     if (exitCode) {
         result = {
@@ -86,21 +87,21 @@ function decodeDALIQueryStatusResp(prefix, suffix) {
         };
     }
     ;
-    result.done = ("#OK" == prefix);
-    if ("#OK" == prefix && code == 9)
-        result.timeout = ("#OK" == prefix && code == 9);
+    result.done = (shared_interfaces_1.RESIRESP.OK.name == prefix);
+    if (shared_interfaces_1.RESIRESP.OK.name == prefix && code == 9)
+        result.timeout = (shared_interfaces_1.RESIRESP.OK.name == prefix && code == 9);
     return (result);
 }
 function decodeDALIResp(prefix, suffix) {
     let data = suffix.split(',');
     let result = {};
-    result.done = ("#OK" == prefix);
+    result.done = (shared_interfaces_1.RESIRESP.OK.name == prefix);
     if (data.length > 1) {
         let code = parseInt(data[0]);
         let resp = parseInt(data[1]);
         result.value = resp;
-        if ("#OK" == prefix && code == 9)
-            result.timeout = ("#OK" == prefix && code == 9);
+        if (shared_interfaces_1.RESIRESP.OK.name == prefix && code == 9)
+            result.timeout = (shared_interfaces_1.RESIRESP.OK.name == prefix && code == 9);
     }
     console.log("decodeDALIResp: " + result);
     return (result);
@@ -109,20 +110,20 @@ function prepareDALIResponse(msg, response) {
     let result = {};
     let repTokenized = response.split(':');
     console.log("prepareDALIResponse: " + JSON.stringify(msg) + " / " + repTokenized);
-    switch (msg.payload.command) {
-        case 'LAMP':
-            switch (msg.payload.action) {
-                case 'QUERY STATUS':
+    switch (msg.payload.command.replace('#', '')) {
+        case shared_interfaces_1.RESICMD.LAMP.name:
+            switch (msg.payload.action.replace(':', '')) {
+                case shared_interfaces_1.DALICMD.QUERY_STATUS.name:
                     result = decodeDALIQueryStatusResp(repTokenized[0], repTokenized[1]);
                     break;
-                case 'QUERY CONTROL GEAR PRESENT':
-                case 'QUERY ACTUAL LEVEL':
+                case shared_interfaces_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.name:
+                case shared_interfaces_1.DALICMD.QUERY_ACTUAL_LEVEL.name:
                     result = decodeDALIResp(repTokenized[0], repTokenized[1]);
                     break;
             }
             break;
         default:
-            result.done = ("#OK" == repTokenized[0]);
+            result.done = (shared_interfaces_1.RESIRESP.OK.name == repTokenized[0]);
             break;
     }
     //    console.log( JSON.stringify( result ) )

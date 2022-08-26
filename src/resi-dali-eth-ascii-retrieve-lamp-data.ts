@@ -1,6 +1,6 @@
 import * as nodered from "node-red" ;
-import { NodeExtendedInterface, RESIResponseInterface } from './shared-interfaces' ;
-import { Status, StatusInterface, NodeRESIClientInterface, DALICMD, RESICMD } from './shared-classes' ;
+import { NodeExtendedInterface, RESIResponseInterface, DALICMD, RESICMD } from './shared-interfaces' ;
+import { Status, StatusInterface, NodeRESIClientInterface } from './shared-classes' ;
 import { objectRename, invalidPayloadIn, prepareDALIResponse } from './shared-functions' ;
 import { doesNotMatch } from "assert";
 
