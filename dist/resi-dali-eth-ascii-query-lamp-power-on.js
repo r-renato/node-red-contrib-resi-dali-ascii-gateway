@@ -85,7 +85,7 @@ module.exports = function (RED) {
                         ? responses[0].value : responses[1].value;
                     result1 = (0, shared_functions_1.objectRename)(result1, 'daliRequest', 'daliRequest1');
                     result1.daliRequest2 = Object.assign({}, result2.daliRequest);
-                    result1 = (0, shared_functions_1.objectRename)(result1, 'daliResponse1', 'payload');
+                    result1 = (0, shared_functions_1.objectRename)(result1, 'payload', 'daliResponse1');
                     result1.daliResponse2 = Object.assign({}, result2.payload);
                     console.log("result1 => " + JSON.stringify(result1));
                     console.log("result2 => " + JSON.stringify(result2));

@@ -90,12 +90,12 @@ module.exports = function (RED: nodered.NodeAPI) {
                     result1 = objectRename( result1, 'daliRequest', 'daliRequest1' ) ;
                     result1.daliRequest2 = Object.assign({}, result2.daliRequest) ;
 
-                    result1 = objectRename( result1, 'daliResponse1', 'payload' ) ;
+                    result1 = objectRename( result1, 'payload', 'daliResponse1' ) ;
                     result1.daliResponse2 = Object.assign({}, result2.payload) ;
 
                     console.log( "result1 => " + JSON.stringify( result1 ) ) ;
                     console.log( "result2 => " + JSON.stringify( result2 ) ) ;
-                    
+
                     result1.payload = {
                         done : true,
                         powerOn : result1.daliResponse1.lampArcPowerOn,
