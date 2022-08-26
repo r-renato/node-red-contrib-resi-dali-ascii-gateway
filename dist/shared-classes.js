@@ -54,7 +54,7 @@ exports.DALICMD = {
         description: 'Determines the control gear\'s status based on a combination of gear properties'
     },
     QUERY_CONTROL_GEAR_PRESENT: {
-        name: 'QUERY STATUS',
+        name: 'QUERY CONTROL GEAR PRESENT',
         opcode: '0x91',
         description: 'Determines the control gear\'s status based on a combination of gear properties'
     },
