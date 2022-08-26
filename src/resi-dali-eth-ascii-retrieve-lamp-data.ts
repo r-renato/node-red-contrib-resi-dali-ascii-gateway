@@ -78,7 +78,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                 executeDALICommand( RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, 
                     prepareNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_CONTROL_GEAR_PRESENT.name ) )
                 .then( ( response ) => {
-                    console.log( JSON.stringify( response ) ) ;
+                    console.log( "response: " + JSON.stringify( response ) ) ;
                     done() ;
                 }).catch( () => {
 

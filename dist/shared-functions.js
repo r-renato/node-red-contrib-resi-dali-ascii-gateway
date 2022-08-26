@@ -56,19 +56,6 @@ function isSet(value, bitPos) {
     var result = Math.floor(value / Math.pow(2, bitPos)) % 2;
     return result == 1;
 }
-function decodeDALIResp(prefix, suffix) {
-    let data = suffix.split(',');
-    let result = {};
-    result.done = ("#OK" == prefix);
-    if (data.length > 1) {
-        let code = parseInt(data[0]);
-        let resp = parseInt(data[1]);
-        result.value = resp;
-        if ("#OK" == prefix && code == 9)
-            result.timeout = ("#OK" == prefix && code == 9);
-    }
-    return (result);
-}
 function decodeDALIQueryStatusResp(prefix, suffix) {
     let data = suffix.split(',');
     let code = parseInt(data[0]);
@@ -102,6 +89,20 @@ function decodeDALIQueryStatusResp(prefix, suffix) {
     result.done = ("#OK" == prefix);
     if ("#OK" == prefix && code == 9)
         result.timeout = ("#OK" == prefix && code == 9);
+    return (result);
+}
+function decodeDALIResp(prefix, suffix) {
+    let data = suffix.split(',');
+    let result = {};
+    result.done = ("#OK" == prefix);
+    if (data.length > 1) {
+        let code = parseInt(data[0]);
+        let resp = parseInt(data[1]);
+        result.value = resp;
+        if ("#OK" == prefix && code == 9)
+            result.timeout = ("#OK" == prefix && code == 9);
+    }
+    console.log("decodeDALIResp: " + result);
     return (result);
 }
 function prepareDALIResponse(msg, response) {

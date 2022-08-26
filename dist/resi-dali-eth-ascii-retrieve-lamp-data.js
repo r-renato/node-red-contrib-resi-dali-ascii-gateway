@@ -73,7 +73,7 @@ module.exports = function (RED) {
                 var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0x99';
                 executeDALICommand(shared_classes_1.RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + shared_classes_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, prepareNodeMessage(msg, shared_classes_1.RESICMD.LAMP.name, shared_classes_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.name))
                     .then((response) => {
-                    console.log(JSON.stringify(response));
+                    console.log("response: " + JSON.stringify(response));
                     done();
                 }).catch(() => {
                 });

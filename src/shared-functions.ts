@@ -54,25 +54,6 @@ export function requestTimeout(ms: number, promise: Promise<any> ) {
     return result == 1;
  }
 
-function decodeDALIResp( prefix : string, suffix : string ) {
-  let data = suffix.split( ',' ) ; 
-  let result : any = { } ;
-
-  result.done = ( "#OK" == prefix ) ;
-
-  if( data.length > 1 ) {
-    let code = <number> parseInt( data[ 0 ] ) ;
-    let resp = <number> parseInt( data[ 1 ] ) ;
-    
-    result.value = resp ;
-
-    if( "#OK" == prefix && code == 9 ) 
-      result.timeout = ( "#OK" == prefix && code == 9 ) ;
-  } 
-
-  return( result ) ;
-}
-
 function decodeDALIQueryStatusResp( prefix : string, suffix : string ) {
   let data = suffix.split( ',' ) ; 
   let code = <number> parseInt( data[ 0 ] ) ;
@@ -112,27 +93,46 @@ function decodeDALIQueryStatusResp( prefix : string, suffix : string ) {
   return( result ) ;
 }
 
-  export function prepareDALIResponse( msg:any, response: string ) : any {
-    let result : any = {} ;
-    let repTokenized = response.split( ':' ) ;
-    console.log( "prepareDALIResponse: " + JSON.stringify( msg ) + " / " + repTokenized ) ;
+function decodeDALIResp( prefix : string, suffix : string ) {
+  let data = suffix.split( ',' ) ; 
+  let result : any = { } ;
 
-    switch( msg.payload.command ) {
-      case 'LAMP':
-        switch( msg.payload.action ) {
-          case 'QUERY STATUS':
-            result = decodeDALIQueryStatusResp( repTokenized[ 0 ], repTokenized[ 1 ] ) ;
-            break ;
-          case 'QUERY CONTROL GEAR PRESENT':
-          case 'QUERY ACTUAL LEVEL':
-            result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ] ) ;
-            break ;
-        }
-        break ;
-      default:
-        result.done = ( "#OK" == repTokenized[ 0 ])
-        break ;
-    }
-//    console.log( JSON.stringify( result ) )
-    return( result ) ;
+  result.done = ( "#OK" == prefix ) ;
+
+  if( data.length > 1 ) {
+    let code = <number> parseInt( data[ 0 ] ) ;
+    let resp = <number> parseInt( data[ 1 ] ) ;
+    
+    result.value = resp ;
+
+    if( "#OK" == prefix && code == 9 ) 
+      result.timeout = ( "#OK" == prefix && code == 9 ) ;
+  } 
+  console.log( "decodeDALIResp: " + result ) ;
+  return( result ) ;
+}
+
+export function prepareDALIResponse( msg:any, response: string ) : any {
+  let result : any = {} ;
+  let repTokenized = response.split( ':' ) ;
+  console.log( "prepareDALIResponse: " + JSON.stringify( msg ) + " / " + repTokenized ) ;
+
+  switch( msg.payload.command ) {
+    case 'LAMP':
+      switch( msg.payload.action ) {
+        case 'QUERY STATUS':
+          result = decodeDALIQueryStatusResp( repTokenized[ 0 ], repTokenized[ 1 ] ) ;
+          break ;
+        case 'QUERY CONTROL GEAR PRESENT':
+        case 'QUERY ACTUAL LEVEL':
+          result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ] ) ;
+          break ;
+      }
+      break ;
+    default:
+      result.done = ( "#OK" == repTokenized[ 0 ])
+      break ;
   }
+//    console.log( JSON.stringify( result ) )
+  return( result ) ;
+}
