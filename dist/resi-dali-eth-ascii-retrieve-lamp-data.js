@@ -34,29 +34,25 @@ module.exports = function (RED) {
             resiClient = nodeServer.connection;
             status.setStatus(false);
         }
-        const executeDALICommand = function (textCommand, msg) {
-            return new Promise((resolve, reject) => {
-                if (resiClient.isSystemConsole())
-                    node.log("Try to sending command: " + textCommand);
-                nodeServer.connection.send(textCommand).then((response) => {
-                    //console.log( ">>> " + JSON.stringify( response ) ) ;
-                    var result = Object.assign({}, msg);
-                    result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
-                    result.payload = (0, shared_functions_1.prepareDALIResponse)(msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, ''));
-                    result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '');
-                    //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
-                    resolve(result);
-                });
-            });
-        };
-        const prepareNodeMessage = function (srcmsg, command, action) {
-            let msg = Object.assign({}, srcmsg);
-            msg.payload = {};
-            msg.payload.command = command;
-            msg.payload.action = action;
-            msg.payload.params = ':' + srcmsg.payload.lamp;
-            return (msg);
-        };
+        // const executeDALICommand = function( textCommand : string, msg : any ) : Promise<nodered.NodeMessage> {
+        //     return new Promise( ( resolve, reject ) => {
+        //         if( resiClient.isSystemConsole() ) node.log( "Try to sending command: " + textCommand ) ;
+        //         nodeServer.connection.send( textCommand ).then( ( response ) => {
+        //             //console.log( ">>> " + JSON.stringify( response ) ) ;
+        //             var result = <RESIResponseInterface> Object.assign({}, msg)
+        //             result = objectRename( result, 'payload', 'daliRequest' ) ;
+        //             result.payload = prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
+        //             result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
+        //             //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
+        //             resolve(<nodered.NodeMessage> result) ;
+        //         })
+        //     }) ;
+        // }
+        // const prepareNodeMessage = function( srcmsg : any, command : string, action: string ) : any {
+        //     let msg =  Object.assign({}, srcmsg) ; msg.payload = {} ;
+        //     msg.payload.command = command ; msg.payload.action = action ; msg.payload.params = ':' + srcmsg.payload.lamp ;
+        //     return( msg ) ;
+        // }
         /**
          *
          */
@@ -72,7 +68,7 @@ module.exports = function (RED) {
                 var queryStatusCmd = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0x90';
                 var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0xA0';
                 var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0x99';
-                executeDALICommand(shared_interfaces_1.RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + shared_interfaces_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, prepareNodeMessage(msg, shared_interfaces_1.RESICMD.LAMP.name, shared_interfaces_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.name))
+                (0, shared_functions_1.executeDALICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + shared_interfaces_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, (0, shared_functions_1.buildNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP.name, shared_interfaces_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.name))
                     .then((response) => {
                     console.log("response: " + JSON.stringify(response));
                     done();

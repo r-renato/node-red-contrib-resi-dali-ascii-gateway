@@ -1,7 +1,7 @@
 import * as nodered from "node-red" ;
 import { NodeExtendedInterface, RESIResponseInterface, DALICMD, RESICMD } from './shared-interfaces' ;
 import { Status, StatusInterface, NodeRESIClientInterface } from './shared-classes' ;
-import { objectRename, invalidPayloadIn, prepareDALIResponse } from './shared-functions' ;
+import { objectRename, invalidPayloadIn, executeDALICommand, buildNodeMessage } from './shared-functions' ;
 import { doesNotMatch } from "assert";
 
 const daliLampLevelNodeName:string = "dali-retrieve-lamp-data" ;
@@ -36,27 +36,27 @@ module.exports = function (RED: nodered.NodeAPI) {
             status.setStatus( false ) ;
         }
 
-        const executeDALICommand = function( textCommand : string, msg : any ) : Promise<nodered.NodeMessage> {
-            return new Promise( ( resolve, reject ) => {
-                if( resiClient.isSystemConsole() ) node.log( "Try to sending command: " + textCommand ) ;
+        // const executeDALICommand = function( textCommand : string, msg : any ) : Promise<nodered.NodeMessage> {
+        //     return new Promise( ( resolve, reject ) => {
+        //         if( resiClient.isSystemConsole() ) node.log( "Try to sending command: " + textCommand ) ;
 
-                nodeServer.connection.send( textCommand ).then( ( response ) => {
-                    //console.log( ">>> " + JSON.stringify( response ) ) ;
-                    var result = <RESIResponseInterface> Object.assign({}, msg)
-                    result = objectRename( result, 'payload', 'daliRequest' ) ;
-                    result.payload = prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
-                    result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
-                    //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
-                    resolve(<nodered.NodeMessage> result) ;
-                })
-            }) ;
-        }
+        //         nodeServer.connection.send( textCommand ).then( ( response ) => {
+        //             //console.log( ">>> " + JSON.stringify( response ) ) ;
+        //             var result = <RESIResponseInterface> Object.assign({}, msg)
+        //             result = objectRename( result, 'payload', 'daliRequest' ) ;
+        //             result.payload = prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
+        //             result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
+        //             //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
+        //             resolve(<nodered.NodeMessage> result) ;
+        //         })
+        //     }) ;
+        // }
 
-        const prepareNodeMessage = function( srcmsg : any, command : string, action: string ) : any {
-            let msg =  Object.assign({}, srcmsg) ; msg.payload = {} ;
-            msg.payload.command = command ; msg.payload.action = action ; msg.payload.params = ':' + srcmsg.payload.lamp ;
-            return( msg ) ;
-        }
+        // const prepareNodeMessage = function( srcmsg : any, command : string, action: string ) : any {
+        //     let msg =  Object.assign({}, srcmsg) ; msg.payload = {} ;
+        //     msg.payload.command = command ; msg.payload.action = action ; msg.payload.params = ':' + srcmsg.payload.lamp ;
+        //     return( msg ) ;
+        // }
 
         /**
          * 
@@ -75,8 +75,8 @@ module.exports = function (RED: nodered.NodeAPI) {
                 var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0xA0' ;
                 var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0x99' ;
 
-                executeDALICommand( RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, 
-                    prepareNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_CONTROL_GEAR_PRESENT.name ) )
+                executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, 
+                    buildNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_CONTROL_GEAR_PRESENT.name ) )
                 .then( ( response ) => {
                     console.log( "response: " + JSON.stringify( response ) ) ;
                     done() ;

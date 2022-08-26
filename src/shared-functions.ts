@@ -1,4 +1,6 @@
-import { DALICMD, RESICMD, RESIRESP } from './shared-interfaces' ;
+import * as nodered from "node-red" ;
+import { NodeExtendedInterface, RESIResponseInterface, DALICMD, RESICMD, RESIRESP } from './shared-interfaces' ;
+
 /**
  * 
  * @param obj 
@@ -140,4 +142,44 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
   }
 //    console.log( JSON.stringify( result ) )
   return( result ) ;
+}
+
+/**
+ * 
+ * @param nodeClient 
+ * @param textCommand 
+ * @param msg 
+ * @returns Promise<nodered.NodeMessage>
+ */
+ export function executeDALICommand( nodeClient : NodeExtendedInterface, textCommand : string, msg : any ) : Promise<nodered.NodeMessage> {
+  return new Promise( ( resolve, reject ) => {
+      if( nodeClient.connection.isSystemConsole() ) nodeClient.log( "Try to sending command: " + textCommand ) ;
+
+      nodeClient.connection.send( textCommand ).then( ( response ) => {
+          //console.log( ">>> " + JSON.stringify( response ) ) ;
+          
+          var result = <RESIResponseInterface> Object.assign({}, msg)
+          result = objectRename( result, 'payload', 'daliRequest' ) ;
+          result.payload = prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
+          result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
+          //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
+          
+          resolve( <nodered.NodeMessage> result ) ;
+      }).catch( ( error ) => {
+          reject( error ) ;
+      }) ;
+  }) ;
+}
+
+/**
+ * 
+ * @param msg 
+ * @param command 
+ * @param action 
+ * @returns 
+ */
+export function buildNodeMessage( msg : any, command : string, action: string ) : any {
+  let newMsg =  Object.assign({}, msg) ; newMsg.payload = {} ;
+  newMsg.payload.command = command ; newMsg.payload.action = action ; newMsg.payload.params = ':' + msg.payload.lamp ;
+  return( newMsg ) ;
 }

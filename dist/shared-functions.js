@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.prepareDALIResponse = exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
+exports.buildNodeMessage = exports.executeDALICommand = exports.prepareDALIResponse = exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
 const shared_interfaces_1 = require("./shared-interfaces");
 /**
  *
@@ -135,4 +135,45 @@ function prepareDALIResponse(msg, response) {
     return (result);
 }
 exports.prepareDALIResponse = prepareDALIResponse;
+/**
+ *
+ * @param nodeClient
+ * @param textCommand
+ * @param msg
+ * @returns Promise<nodered.NodeMessage>
+ */
+function executeDALICommand(nodeClient, textCommand, msg) {
+    return new Promise((resolve, reject) => {
+        if (nodeClient.connection.isSystemConsole())
+            nodeClient.log("Try to sending command: " + textCommand);
+        nodeClient.connection.send(textCommand).then((response) => {
+            //console.log( ">>> " + JSON.stringify( response ) ) ;
+            var result = Object.assign({}, msg);
+            result = objectRename(result, 'payload', 'daliRequest');
+            result.payload = prepareDALIResponse(msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, ''));
+            result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '');
+            //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
+            resolve(result);
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+}
+exports.executeDALICommand = executeDALICommand;
+/**
+ *
+ * @param msg
+ * @param command
+ * @param action
+ * @returns
+ */
+function buildNodeMessage(msg, command, action) {
+    let newMsg = Object.assign({}, msg);
+    newMsg.payload = {};
+    newMsg.payload.command = command;
+    newMsg.payload.action = action;
+    newMsg.payload.params = ':' + msg.payload.lamp;
+    return (newMsg);
+}
+exports.buildNodeMessage = buildNodeMessage;
 //# sourceMappingURL=shared-functions.js.map

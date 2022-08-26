@@ -1,7 +1,7 @@
 import * as nodered from "node-red" ;
-import { NodeExtendedInterface, RESIResponseInterface } from './shared-interfaces' ;
+import { NodeExtendedInterface, RESIResponseInterface, DALICMD, RESICMD  } from './shared-interfaces' ;
 import { Status, StatusInterface, NodeRESIClientInterface } from './shared-classes' ;
-import { objectRename, invalidPayloadIn, prepareDALIResponse } from './shared-functions' ;
+import { objectRename, invalidPayloadIn, executeDALICommand, buildNodeMessage } from './shared-functions' ;
 import { doesNotMatch } from "assert";
 
 const daliLampLevelNodeName:string = "dali-query-lamp-power-on" ;
@@ -38,19 +38,19 @@ module.exports = function (RED: nodered.NodeAPI) {
             status.setStatus( false ) ;
         }
 
-        const executeDALICommand = function( textCommand : string, msg : any ) : Promise<nodered.NodeMessage> {
-            return new Promise( ( resolve, reject ) => {
-                nodeServer.connection.send( textCommand ).then( ( response ) => {
-                    //console.log( ">>> " + JSON.stringify( response ) ) ;
-                    var result = <RESIResponseInterface> Object.assign({}, msg)
-                    result = objectRename( result, 'payload', 'daliRequest' ) ;
-                    result.payload = prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
-                    result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
-                    //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
-                    resolve(<nodered.NodeMessage> result) ;
-                })
-            }) ;
-        }
+        // const executeDALICommand = function( textCommand : string, msg : any ) : Promise<nodered.NodeMessage> {
+        //     return new Promise( ( resolve, reject ) => {
+        //         nodeServer.connection.send( textCommand ).then( ( response ) => {
+        //             //console.log( ">>> " + JSON.stringify( response ) ) ;
+        //             var result = <RESIResponseInterface> Object.assign({}, msg)
+        //             result = objectRename( result, 'payload', 'daliRequest' ) ;
+        //             result.payload = prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
+        //             result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
+        //             //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
+        //             resolve(<nodered.NodeMessage> result) ;
+        //         })
+        //     }) ;
+        // }
 
         /**
          * 
@@ -65,26 +65,28 @@ module.exports = function (RED: nodered.NodeAPI) {
             }
 
             if( isValidDALIMsg( msg ) ) {
-                var queryStatusCmd = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0x90' ;
-                var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0xA0' ;
+                // var queryStatusCmd = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0x90' ;
+                // var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0xA0' ;
 
-                if( resiClient.isSystemConsole() ) {
-                    node.log( "Try to sending command: " + queryStatusCmd ) ;
-                    node.log( "Try to sending command: " + queryActualLevel ) ;
-                }
+                // if( resiClient.isSystemConsole() ) {
+                //     node.log( "Try to sending command: " + queryStatusCmd ) ;
+                //     node.log( "Try to sending command: " + queryActualLevel ) ;
+                // }
 
-                let msg1 =  Object.assign({}, msg) ; msg1.payload = {} ;
-                msg1.payload.command = 'LAMP' ; msg1.payload.action = 'QUERY STATUS' ; msg1.payload.params = ':' + msg.payload.lamp ;
-                let msg2 =  Object.assign({}, msg) ; msg2.payload = {} ;
-                msg2.payload.command = 'LAMP' ; msg2.payload.action = 'QUERY ACTUAL LEVEL' ; msg2.payload.params = ':' + msg.payload.lamp ;
+                // let msg1 =  Object.assign({}, msg) ; msg1.payload = {} ;
+                // msg1.payload.command = 'LAMP' ; msg1.payload.action = 'QUERY STATUS' ; msg1.payload.params = ':' + msg.payload.lamp ;
+                // let msg2 =  Object.assign({}, msg) ; msg2.payload = {} ;
+                // msg2.payload.command = 'LAMP' ; msg2.payload.action = 'QUERY ACTUAL LEVEL' ; msg2.payload.params = ':' + msg.payload.lamp ;
 
                 Promise.allSettled([
-                    executeDALICommand( queryStatusCmd, msg1 ),
-                    executeDALICommand( queryActualLevel, msg2)
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_STATUS.opcode, 
+                        buildNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_STATUS.name ) ),
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_ACTUAL_LEVEL.opcode, 
+                        buildNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) ),
                 ]).then( ( responses ) => {
-                    let result1 = (<any> responses[ 0 ]).value.daliRequest.action == 'QUERY STATUS' 
+                    let result1 = (<any> responses[ 0 ]).value.daliRequest.action == DALICMD.QUERY_STATUS.name 
                         ? (<any> responses[ 0 ]).value : (<any> responses[ 1 ]).value ;
-                    let result2 = (<any> responses[ 0 ]).value.daliRequest.action == 'QUERY ACTUAL LEVEL' 
+                    let result2 = (<any> responses[ 0 ]).value.daliRequest.action == DALICMD.QUERY_ACTUAL_LEVEL.name 
                         ? (<any> responses[ 0 ]).value : (<any> responses[ 1 ]).value ;
 
                     result1 = objectRename( result1, 'daliRequest', 'daliRequest1' ) ;
