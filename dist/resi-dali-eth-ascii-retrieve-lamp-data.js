@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_classes_1 = require("./shared-classes");
 const shared_functions_1 = require("./shared-functions");
-const daliLampLevelNodeName = "dali-query-lamp-power-on";
+const daliLampLevelNodeName = "dali-retrieve-lamp-data";
 module.exports = function (RED) {
     RED.nodes.registerType(daliLampLevelNodeName, function (config) {
         RED.nodes.createNode(this, config);
