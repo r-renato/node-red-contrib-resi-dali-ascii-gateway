@@ -87,6 +87,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                     let result2 = (<any> responses[ 0 ]).value.daliRequest.action == 'QUERY ACTUAL LEVEL' 
                         ? (<any> responses[ 0 ]).value : (<any> responses[ 1 ]).value ;
 
+                    result1 = objectRename( result1, '_msgid', 'messageId' ) ;
                     result1 = objectRename( result1, 'daliRequest', 'daliRequest1' ) ;
                     result1.daliRequest2 = Object.assign({}, result2.daliRequest) ;
 
@@ -100,6 +101,8 @@ module.exports = function (RED: nodered.NodeAPI) {
                         done : true
                     } ;
 
+                    console.log( "timeou1 => " + (typeof result1.daliResponse1.timeout !== 'undefined') ) ;
+                    console.log( "timeou2 => " + (typeof result1.daliResponse2.timeout !== 'undefined') ) ;
                     if( typeof result1.daliResponse1.timeout !== 'undefined' && typeof result1.daliResponse2.timeout !== 'undefined' ) {
                         result1.payload.powerOn = result1.daliResponse1.lampArcPowerOn ;
                         result1.payload.level = result1.daliResponse2.value ;
@@ -107,7 +110,6 @@ module.exports = function (RED: nodered.NodeAPI) {
                     } else {
                         result1.payload.timeout = true ;
                     }
-
 
                     send( <nodered.NodeMessage> result1 ) ;
                 }).catch( ( e ) => {

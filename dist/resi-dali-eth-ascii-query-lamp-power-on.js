@@ -83,6 +83,7 @@ module.exports = function (RED) {
                         ? responses[0].value : responses[1].value;
                     let result2 = responses[0].value.daliRequest.action == 'QUERY ACTUAL LEVEL'
                         ? responses[0].value : responses[1].value;
+                    result1 = (0, shared_functions_1.objectRename)(result1, '_msgid', 'messageId');
                     result1 = (0, shared_functions_1.objectRename)(result1, 'daliRequest', 'daliRequest1');
                     result1.daliRequest2 = Object.assign({}, result2.daliRequest);
                     result1 = (0, shared_functions_1.objectRename)(result1, 'payload', 'daliResponse1');
@@ -92,6 +93,8 @@ module.exports = function (RED) {
                     result1.payload = {
                         done: true
                     };
+                    console.log("timeou1 => " + (typeof result1.daliResponse1.timeout !== 'undefined'));
+                    console.log("timeou2 => " + (typeof result1.daliResponse2.timeout !== 'undefined'));
                     if (typeof result1.daliResponse1.timeout !== 'undefined' && typeof result1.daliResponse2.timeout !== 'undefined') {
                         result1.payload.powerOn = result1.daliResponse1.lampArcPowerOn;
                         result1.payload.level = result1.daliResponse2.value;
