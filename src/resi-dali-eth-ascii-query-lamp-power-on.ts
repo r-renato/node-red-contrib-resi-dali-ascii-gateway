@@ -97,11 +97,16 @@ module.exports = function (RED: nodered.NodeAPI) {
                     console.log( "result2 => " + JSON.stringify( result2 ) ) ;
 
                     result1.payload = {
-                        done : true,
-                        powerOn : result1.daliResponse1.lampArcPowerOn,
-                        level : result1.daliResponse2.value,
-                        isPowerOn : ( result1.daliResponse1.lampArcPowerOn && result1.daliResponse2.value > 0 )
+                        done : true
                     } ;
+
+                    if( typeof result1.daliResponse1.timeout !== 'undefined' && typeof result1.daliResponse2.timeout !== 'undefined' ) {
+                        result1.payload.powerOn = result1.daliResponse1.lampArcPowerOn ;
+                        result1.payload.level = result1.daliResponse2.value ;
+                        result1.payload.isPowerOn = ( result1.daliResponse1.lampArcPowerOn && result1.daliResponse2.value > 0 ) ;
+                    } else {
+                        result1.payload.timeout = true ;
+                    }
 
 
                     send( <nodered.NodeMessage> result1 ) ;
