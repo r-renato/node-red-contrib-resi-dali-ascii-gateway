@@ -55,6 +55,39 @@ export class Status implements StatusInterface {
     }
 } ;
 
+
+export const DALICMD:any = {
+    QUERY_STATUS : { 
+        name : <string> 'QUERY STATUS',
+        opcode : <string> '0x90',
+        description : <string> 'Determines the control gear\'s status based on a combination of gear properties'
+    },
+    QUERY_CONTROL_GEAR_PRESENT : { 
+        name : <string> 'QUERY STATUS',
+        opcode : <string> '0x90',
+        description : <string> 'Determines the control gear\'s status based on a combination of gear properties'
+    },
+    QUERY_DEVICE_TYPE : { 
+        name : <string> 'QUERY CONTROL GEAR PRESENT',
+        opcode : <string> '0x91',
+        description : <string> 'Determines if a control gear is present'
+    },
+    QUERY_ACTUAL_LEVEL : { 
+        name : <string> 'QUERY ACTUAL LEVEL',
+        opcode : <string> '0xA0',
+        description : <string> 'Returns the control gear\'s actual power output level'
+    },
+}
+export const RESICMD:any = {
+    LAMP : {
+        name : <string> '#LAMP '
+    },
+    LAMP_COMMAND_ANSWER : {
+        name : <string> '#LAMP COMMAND ANSWER:'
+    }
+}
+
+
 /**
  * 
  */

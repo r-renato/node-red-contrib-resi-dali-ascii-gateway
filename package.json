@@ -38,7 +38,8 @@
       "resi-dali-eth-ascii-client" : "dist/resi-dali-eth-ascii-client.js",
       "resi-dali-eth-ascii-lamp-level" : "dist/resi-dali-eth-ascii-lamp-level.js",
       "resi-dali-eth-ascii-generic" : "dist/resi-dali-eth-ascii-generic.js",
-      "resi-dali-eth-ascii-query-lamp-power-on" : "dist/resi-dali-eth-ascii-query-lamp-power-on.js"
+      "resi-dali-eth-ascii-query-lamp-power-on" : "dist/resi-dali-eth-ascii-query-lamp-power-on.js",
+      "resi-dali-eth-ascii-retrieve-lamp-data" : "dist/resi-dali-eth-ascii-retrieve-lamp-data.js"
     }
   },
   "scripts": {
