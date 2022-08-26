@@ -77,9 +77,25 @@ module.exports = function (RED: nodered.NodeAPI) {
 
                 executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, 
                     buildNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_CONTROL_GEAR_PRESENT.name ) )
-                .then( ( response ) => {
+                .then( ( response : any ) => {
                     console.log( "response: " + JSON.stringify( response ) ) ;
-                    done() ;
+                    if( response.payload.done && typeof response.payload.timeout == 'undefined' ) {
+                        // ok
+                        Promise.allSettled([
+                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_STATUS.opcode, 
+                                buildNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_STATUS.name ) ),
+                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_ACTUAL_LEVEL.opcode, 
+                                buildNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) ),
+                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_DEVICE_TYPE.opcode, 
+                                buildNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_DEVICE_TYPE.name ) ),
+
+                        ])
+                        done() ;
+                    } else {
+                        // Timeout
+                        send(<nodered.NodeMessage> response) ;
+                        done() ;
+                    }
                 }).catch( () => {
 
                 }) ;

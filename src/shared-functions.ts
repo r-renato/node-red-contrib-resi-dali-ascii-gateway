@@ -110,33 +110,33 @@ function decodeDALIResp( prefix : string, suffix : string ) {
     if( RESIRESP.OK.name == prefix && code == 9 ) 
       result.timeout = ( RESIRESP.OK.name == prefix && code == 9 ) ;
   } 
-  console.log( "decodeDALIResp: " + result ) ;
+  //console.log( "decodeDALIResp: " + result ) ;
   return( result ) ;
 }
 
 export function prepareDALIResponse( msg:any, response: string ) : any {
   let result : any = {} ;
   let repTokenized = response.split( ':' ) ;
-  console.log( "prepareDALIResponse: " + JSON.stringify( msg ) + " / " + repTokenized
-    + "[" + msg.payload.command + "]" 
-    + "[" + msg.payload.action.replace(':', '') + "]" ) ;
+  // console.log( "prepareDALIResponse: " + JSON.stringify( msg ) + " / " + repTokenized
+  //   + "[" + msg.payload.command + "]" 
+  //   + "[" + msg.payload.action.replace(':', '') + "]" ) ;
 
   switch( <string> msg.payload.command ) {
     case RESICMD.LAMP.name:
-      console.log( '>>LAMP<<') ;
+      // console.log( '>>LAMP<<') ;
       switch( msg.payload.action.replace(':', '') ) {
         case DALICMD.QUERY_STATUS.name:
           result = decodeDALIQueryStatusResp( repTokenized[ 0 ], repTokenized[ 1 ] ) ;
           break ;
         case DALICMD.QUERY_CONTROL_GEAR_PRESENT.name:
         case DALICMD.QUERY_ACTUAL_LEVEL.name:
-          console.log( '>>QUERY_CONTROL_GEAR_PRESENT<<') ;
+          // console.log( '>>QUERY_CONTROL_GEAR_PRESENT<<') ;
           result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ] ) ;
           break ;
       }
       break ;
     default:
-      console.log( '>>default<<') ;
+      // console.log( '>>default<<') ;
       result.done = ( RESIRESP.OK.name == repTokenized[ 0 ])
       break ;
   }
