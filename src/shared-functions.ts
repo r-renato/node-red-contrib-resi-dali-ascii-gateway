@@ -123,6 +123,7 @@ function decodeDALIQueryStatusResp( prefix : string, suffix : string ) {
           case 'QUERY STATUS':
             result = decodeDALIQueryStatusResp( repTokenized[ 0 ], repTokenized[ 1 ] ) ;
             break ;
+          case 'QUERY CONTROL GEAR PRESENT':
           case 'QUERY ACTUAL LEVEL':
             result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ] ) ;
             break ;

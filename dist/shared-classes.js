@@ -56,12 +56,17 @@ exports.DALICMD = {
     QUERY_CONTROL_GEAR_PRESENT: {
         name: 'QUERY CONTROL GEAR PRESENT',
         opcode: '0x91',
-        description: 'Determines the control gear\'s status based on a combination of gear properties'
+        description: 'Determines if a control gear is present'
+    },
+    QUERY_VERSION_NUMBER: {
+        name: 'QUERY VERSION NUMBER',
+        opcode: '0x97',
+        description: 'Returns the device\'s version number located in memory bank 0, location 0x16'
     },
     QUERY_DEVICE_TYPE: {
-        name: 'QUERY CONTROL GEAR PRESENT',
-        opcode: '0x91',
-        description: 'Determines if a control gear is present'
+        name: 'QUERY DEVICE TYPE',
+        opcode: '0x99',
+        description: 'Determines the device type supported by the control gear'
     },
     QUERY_ACTUAL_LEVEL: {
         name: 'QUERY ACTUAL LEVEL',
