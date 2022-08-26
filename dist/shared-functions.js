@@ -112,7 +112,7 @@ function prepareDALIResponse(msg, response) {
     console.log("prepareDALIResponse: " + JSON.stringify(msg) + " / " + repTokenized
         + "[" + msg.payload.command.replace('#', '') + "]"
         + "[" + msg.payload.action.replace(':', '') + "]");
-    switch (msg.payload.command.replace('#', '')) {
+    switch (msg.payload.command.replace(/^#/g, '').replace(/\s/g, '')) {
         case shared_interfaces_1.RESICMD.LAMP.name:
             switch (msg.payload.action.replace(':', '')) {
                 case shared_interfaces_1.DALICMD.QUERY_STATUS.name:

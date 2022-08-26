@@ -119,7 +119,7 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
     + "[" + msg.payload.command.replace('#', '') + "]" 
     + "[" + msg.payload.action.replace(':', '') + "]" ) ;
 
-  switch( <string> msg.payload.command.replace('#', '') ) {
+  switch( <string> msg.payload.command.replace(/^#/g, '').replace(/\s/g, '') ) {
     case RESICMD.LAMP.name:
       switch( msg.payload.action.replace(':', '') ) {
         case DALICMD.QUERY_STATUS.name:
