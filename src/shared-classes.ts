@@ -64,7 +64,7 @@ export const DALICMD:any = {
     },
     QUERY_CONTROL_GEAR_PRESENT : { 
         name : <string> 'QUERY STATUS',
-        opcode : <string> '0x90',
+        opcode : <string> '0x91',
         description : <string> 'Determines the control gear\'s status based on a combination of gear properties'
     },
     QUERY_DEVICE_TYPE : { 
