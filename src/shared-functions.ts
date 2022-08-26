@@ -116,10 +116,10 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
   let result : any = {} ;
   let repTokenized = response.split( ':' ) ;
   console.log( "prepareDALIResponse: " + JSON.stringify( msg ) + " / " + repTokenized
-    + "[" + msg.payload.command.replace(/^#/g, '').replace(/\s/g, '') + "]" 
+    + "[" + msg.payload.command + "]" 
     + "[" + msg.payload.action.replace(':', '') + "]" ) ;
 
-  switch( <string> msg.payload.command.replace(/^#/g, '').replace(/\s/g, '') ) {
+  switch( <string> msg.payload.command ) {
     case RESICMD.LAMP.name:
       console.log( '>>LAMP<<') ;
       switch( msg.payload.action.replace(':', '') ) {
