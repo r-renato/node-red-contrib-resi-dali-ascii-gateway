@@ -100,7 +100,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                         done : true,
                         powerOn : result1.daliResponse1.lampArcPowerOn,
                         level : result1.daliResponse2.value,
-                        isPowerOn : ( result1.daliResponse1.lampArcPowerOn || result1.daliResponse2.value > 0 )
+                        isPowerOn : ( result1.daliResponse1.lampArcPowerOn && result1.daliResponse2.value > 0 )
                     } ;
 
 
