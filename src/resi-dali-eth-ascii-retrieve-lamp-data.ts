@@ -75,7 +75,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                 var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0xA0' ;
                 var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0x99' ;
 
-                executeDALICommand( RESICMD.LAMP_COMMAND_ANSWER + msg.payload.lamp + '=' + DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, 
+                executeDALICommand( RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, 
                     prepareNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_CONTROL_GEAR_PRESENT.name ) )
                 .then( ( response ) => {
                     console.log( JSON.stringify( response ) ) ;
