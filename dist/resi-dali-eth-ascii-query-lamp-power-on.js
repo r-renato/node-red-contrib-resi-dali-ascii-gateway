@@ -69,12 +69,12 @@ module.exports = function (RED) {
                 msg1.payload = {};
                 msg1.payload.command = 'LAMP';
                 msg1.payload.action = 'QUERY STATUS';
-                msg1.payload.params = '';
+                msg1.payload.params = ':' + msg.payload.lamp;
                 let msg2 = Object.assign({}, msg);
                 msg2.payload = {};
                 msg2.payload.command = 'LAMP';
                 msg2.payload.action = 'QUERY ACTUAL LEVEL';
-                msg2.payload.params = '';
+                msg2.payload.params = ':' + msg.payload.lamp;
                 Promise.allSettled([
                     executeDALICommand(queryStatusCmd, msg1),
                     executeDALICommand(queryActualLevel, msg2)
@@ -83,8 +83,19 @@ module.exports = function (RED) {
                         ? responses[0].value : responses[1].value;
                     let result2 = responses[0].value.daliRequest.action == 'QUERY ACTUAL LEVEL'
                         ? responses[0].value : responses[1].value;
+                    result1 = (0, shared_functions_1.objectRename)(result1, 'daliRequest', 'daliRequest1');
+                    result1.daliRequest2 = Object.assign({}, result2.daliRequest);
+                    result1 = (0, shared_functions_1.objectRename)(result1, 'daliResponse1', 'payload');
+                    result1.daliResponse2 = Object.assign({}, result2.payload);
+                    result1.payload = {
+                        done: true,
+                        powerOn: result1.daliResponse1.lampArcPowerOn,
+                        level: result1.daliResponse2.value,
+                        isPowerOn: (result1.daliResponse1.lampArcPowerOn || result1.daliResponse2.value > 0)
+                    };
                     console.log("result1 => " + JSON.stringify(result1));
                     console.log("result2 => " + JSON.stringify(result2));
+                    send(result1);
                 }).catch((e) => {
                     console.log('erroreeee' + e);
                 });
