@@ -121,17 +121,20 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
 
   switch( <string> msg.payload.command.replace(/^#/g, '').replace(/\s/g, '') ) {
     case RESICMD.LAMP.name:
+      console.log( '>>LAMP<<') ;
       switch( msg.payload.action.replace(':', '') ) {
         case DALICMD.QUERY_STATUS.name:
           result = decodeDALIQueryStatusResp( repTokenized[ 0 ], repTokenized[ 1 ] ) ;
           break ;
         case DALICMD.QUERY_CONTROL_GEAR_PRESENT.name:
         case DALICMD.QUERY_ACTUAL_LEVEL.name:
+          console.log( '>>QUERY_CONTROL_GEAR_PRESENT<<') ;
           result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ] ) ;
           break ;
       }
       break ;
     default:
+      console.log( '>>default<<') ;
       result.done = ( RESIRESP.OK.name == repTokenized[ 0 ])
       break ;
   }
