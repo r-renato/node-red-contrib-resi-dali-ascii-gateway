@@ -194,8 +194,11 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
           result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ], 'maxLevel' ) ;
           break ;
         case DALICMD.QUERY_GROUPS_0_7.name:
+          console.log( DALICMD.QUERY_GROUPS_0_7.name + " " + repTokenized[ 0 ] + " " + repTokenized[ 1 ] ) ;
           result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ], 'groups' ) ;
+          console.log( DALICMD.QUERY_GROUPS_0_7.name + " / " + JSON.stringify( result ) ) ;
           result.payload.groups = decodeDALIGroup( result.payload.groups, -1 ) ;
+          console.log( DALICMD.QUERY_GROUPS_0_7.name + " / " + JSON.stringify( result ) ) ;
           break;
       }
       break ;
