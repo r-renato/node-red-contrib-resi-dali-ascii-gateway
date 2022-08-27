@@ -112,9 +112,15 @@ module.exports = function (RED: nodered.NodeAPI) {
                             var result = <RESIResponseInterface> Object.assign({}, msg) ;
                              result = objectRename( result, 'payload', 'daliRequest' ) ;
                             let payload = {
-                                status : responses[ 0 ].value.payload
+                                status : responses[ 0 ].value.payload,
+                                actualLampLevel : responses[ 1 ].value.payload.actualLampLevel,
+                                deviceType : responses[ 1 ].value.payload
+
                             } ;
                             
+                            delete payload.status[ 'done' ] ; delete payload.status[ 'raw' ] ;
+                            delete payload.deviceType[ 'done' ] ; delete payload.deviceType[ 'raw' ] ;
+
                             result.payload = payload ;
 
                             console.log( "responses: " + JSON.stringify( responses ) ) ;

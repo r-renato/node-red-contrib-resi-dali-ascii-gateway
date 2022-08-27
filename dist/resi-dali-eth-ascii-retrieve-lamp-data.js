@@ -89,8 +89,14 @@ module.exports = function (RED) {
                             var result = Object.assign({}, msg);
                             result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
                             let payload = {
-                                status: responses[0].value.payload
+                                status: responses[0].value.payload,
+                                actualLampLevel: responses[1].value.payload.actualLampLevel,
+                                deviceType: responses[1].value.payload
                             };
+                            delete payload.status['done'];
+                            delete payload.status['raw'];
+                            delete payload.deviceType['done'];
+                            delete payload.deviceType['raw'];
                             result.payload = payload;
                             console.log("responses: " + JSON.stringify(responses));
                             send(result);
