@@ -120,6 +120,7 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
     i++ ; result[ 'group' + i ] = isSet( value, i ) ;
     i++ ; result[ 'group' + i ] = isSet( value, i ) ;
 
+    console.log( "result>> " + JSON.stringify( result) ) ;
     return( result ) ;
   }
 
