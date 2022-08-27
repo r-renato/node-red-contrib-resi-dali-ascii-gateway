@@ -157,6 +157,18 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
         case DALICMD.QUERY_ACTUAL_LEVEL.name:
           result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ], 'actualLampLevel' ) ;
           break ;
+        case DALICMD.QUERY_POWER_ON_LEVEL.name:
+          result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ], 'powerOnLevel' ) ;
+          break ;
+        case DALICMD.QUERY_SYSTEM_FAILURE_LEVEL.name:
+          result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ], 'systemFailureLevel' ) ;
+          break;
+        case DALICMD.QUERY_FADE_TIME_FADE_RATE.name:
+          result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ], 'fadeTimeFadeRate' ) ;
+          break ;
+        case DALICMD.QUERY_GROUPS_0_7.name:
+          result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ], 'fadeTimeFadeRate' ) ;
+          break ;
       }
       break ;
     default:

@@ -144,6 +144,18 @@ function prepareDALIResponse(msg, response) {
                 case shared_interfaces_1.DALICMD.QUERY_ACTUAL_LEVEL.name:
                     result = decodeDALIResp(repTokenized[0], repTokenized[1], 'actualLampLevel');
                     break;
+                case shared_interfaces_1.DALICMD.QUERY_POWER_ON_LEVEL.name:
+                    result = decodeDALIResp(repTokenized[0], repTokenized[1], 'powerOnLevel');
+                    break;
+                case shared_interfaces_1.DALICMD.QUERY_SYSTEM_FAILURE_LEVEL.name:
+                    result = decodeDALIResp(repTokenized[0], repTokenized[1], 'systemFailureLevel');
+                    break;
+                case shared_interfaces_1.DALICMD.QUERY_FADE_TIME_FADE_RATE.name:
+                    result = decodeDALIResp(repTokenized[0], repTokenized[1], 'fadeTimeFadeRate');
+                    break;
+                case shared_interfaces_1.DALICMD.QUERY_GROUPS_0_7.name:
+                    result = decodeDALIResp(repTokenized[0], repTokenized[1], 'fadeTimeFadeRate');
+                    break;
             }
             break;
         default:
