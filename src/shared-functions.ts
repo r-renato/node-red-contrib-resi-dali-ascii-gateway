@@ -51,14 +51,16 @@ export function requestTimeout(ms: number, promise: Promise<any> ) {
     return !( msg && Object.prototype.hasOwnProperty.call( msg, 'payload' ) ) ;
   }
 
+  /**
+   * 
+   * @param value 
+   * @param bitPos 
+   * @returns 
+   */
   function isSet(value: number, bitPos: number) : boolean {
     var result = Math.floor(value / Math.pow(2, bitPos)) % 2;
     return result == 1;
  }
-
-
-
-
 
 export function prepareDALIResponse( msg:any, response: string ) : any {
   /**
@@ -103,6 +105,21 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
     if( RESIRESP.OK.name == prefix && code == 9 ) 
       result.timeout = ( RESIRESP.OK.name == prefix && code == 9 ) ;
   
+    return( result ) ;
+  }
+
+  function decodeDALIGroup( value : number, start : number ) {
+    let result : any = {} ; let i : number = start -1 ;
+
+    i++ ; result[ 'group' + i ] = isSet( value, i ) ;
+    i++ ; result[ 'group' + i ] = isSet( value, i ) ;
+    i++ ; result[ 'group' + i ] = isSet( value, i ) ;
+    i++ ; result[ 'group' + i ] = isSet( value, i ) ;
+    i++ ; result[ 'group' + i ] = isSet( value, i ) ;
+    i++ ; result[ 'group' + i ] = isSet( value, i ) ;
+    i++ ; result[ 'group' + i ] = isSet( value, i ) ;
+    i++ ; result[ 'group' + i ] = isSet( value, i ) ;
+
     return( result ) ;
   }
 
@@ -178,6 +195,10 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
         case DALICMD.QUERY_MAX_LEVEL.name:
           result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ], 'maxLevel' ) ;
           break ;
+        case DALICMD.QUERY_GROUPS_0_7.name:
+          result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ], 'groups' ) ;
+          result.payload.groups = decodeDALIGroup( result.payload.groups, -1 ) ;
+          break;
       }
       break ;
     default:

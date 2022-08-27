@@ -53,6 +53,12 @@ function invalidPayloadIn(msg) {
     return !(msg && Object.prototype.hasOwnProperty.call(msg, 'payload'));
 }
 exports.invalidPayloadIn = invalidPayloadIn;
+/**
+ *
+ * @param value
+ * @param bitPos
+ * @returns
+ */
 function isSet(value, bitPos) {
     var result = Math.floor(value / Math.pow(2, bitPos)) % 2;
     return result == 1;
@@ -97,6 +103,27 @@ function prepareDALIResponse(msg, response) {
         result.done = (shared_interfaces_1.RESIRESP.OK.name == prefix);
         if (shared_interfaces_1.RESIRESP.OK.name == prefix && code == 9)
             result.timeout = (shared_interfaces_1.RESIRESP.OK.name == prefix && code == 9);
+        return (result);
+    }
+    function decodeDALIGroup(value, start) {
+        let result = {};
+        let i = start - 1;
+        i++;
+        result['group' + i] = isSet(value, i);
+        i++;
+        result['group' + i] = isSet(value, i);
+        i++;
+        result['group' + i] = isSet(value, i);
+        i++;
+        result['group' + i] = isSet(value, i);
+        i++;
+        result['group' + i] = isSet(value, i);
+        i++;
+        result['group' + i] = isSet(value, i);
+        i++;
+        result['group' + i] = isSet(value, i);
+        i++;
+        result['group' + i] = isSet(value, i);
         return (result);
     }
     /**
@@ -164,6 +191,10 @@ function prepareDALIResponse(msg, response) {
                     break;
                 case shared_interfaces_1.DALICMD.QUERY_MAX_LEVEL.name:
                     result = decodeDALIResp(repTokenized[0], repTokenized[1], 'maxLevel');
+                    break;
+                case shared_interfaces_1.DALICMD.QUERY_GROUPS_0_7.name:
+                    result = decodeDALIResp(repTokenized[0], repTokenized[1], 'groups');
+                    result.payload.groups = decodeDALIGroup(result.payload.groups, -1);
                     break;
             }
             break;
