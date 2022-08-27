@@ -67,6 +67,9 @@ export class RESIClient {
         host : '', port : -1, timeout : 1000
     } ;
 
+    private operationsTimeout : number = 60000 ;
+    private lockWaitTimeout : number = 200 ;
+
     private connectionState : ConnectionState = null ;
 
     private requestQueue : any ;
@@ -145,9 +148,12 @@ export class RESIClient {
         if( this.systemConsole ) this.logger( "Client initialized..." ) ;
     } ;
 
-    public constructor( address : string, port : number, systemConsole : boolean ) {
+    public constructor( address : string, port : number, operationsTimeout : number, lockWaitTimeout : number, systemConsole : boolean ) {
         this.uid = uuid.v4() ;
         this.systemConsole = systemConsole ;
+
+        this.operationsTimeout = operationsTimeout ;
+        this.lockWaitTimeout = lockWaitTimeout ;
 
         this.requestQueue = new openpromiseLib.Queue() ;
 
@@ -177,7 +183,7 @@ export class RESIClient {
                     this.connectionState = null ;
                 }
 
-                this.waitFor( () => { console.log( this.connectionState ) ; return ( this.connectionState == null ) ; }, 200 )
+                this.waitFor( () => { console.log( this.connectionState ) ; return ( this.connectionState == null ) ; }, this.lockWaitTimeout )
                 .then( () => { 
                     this.connect( lock ).then( resolve ).catch( reject ) ; 
                 }).catch( () => {
@@ -207,7 +213,7 @@ export class RESIClient {
                     reject( err );
                 });
             } else {
-                this.waitFor( () => { return ( this.connectionState == 'connected' ) ; }, 200 )
+                this.waitFor( () => { return ( this.connectionState == 'connected' ) ; }, this.lockWaitTimeout )
                 .then( () => { 
                     this.sendcommand( command ).then( resolve ).catch( reject ) ; 
                 }).catch( () => {
@@ -221,7 +227,7 @@ export class RESIClient {
 
     public async send( command : string ) : Promise<any> {
         var promise = new Promise<void>( (resolve, reject) => {
-            var lock = new openpromiseLib.Delay( 60000 ) ;
+            var lock = new openpromiseLib.Delay( this.operationsTimeout ) ;
             var sema = new openpromiseLib.Defer() ;
             this.requestQueue.enQueue(() => {
                 sema.resolve() ;
@@ -265,9 +271,10 @@ export interface NodeRESIClientInterface {
 
 export class NodeRESIClient extends RESIClient implements NodeRESIClientInterface{
     private nodeStatusBroadcaster : any ;
+    private logEnabled : boolean = false ;
 
-    public constructor( address : string, port : number, nodeConnection : nodered.Node, systemConsole : boolean ) {
-        super( address, port, systemConsole ) ;
+    public constructor( address : string, port : number, operationsTimeout : number, lockWaitTimeout : number, systemConsole : boolean, logEnabled : boolean ) {
+        super( address, port, operationsTimeout, lockWaitTimeout, systemConsole ) ;
 
         this.nodeStatusBroadcaster = new openpromiseLib.Cycle() ;
     }

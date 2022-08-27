@@ -88,7 +88,26 @@ module.exports = function (RED: nodered.NodeAPI) {
                                 buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) ),
                             executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_DEVICE_TYPE.opcode, 
                                 buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_DEVICE_TYPE.name ) ),
+                            
+                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_PHYSICAL_MINIMUM.opcode, 
+                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_PHYSICAL_MINIMUM.name ) ),
+                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_MIN_LEVEL.opcode, 
+                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_MIN_LEVEL.name ) ),
+                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_MAX_LEVEL.opcode, 
+                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_MAX_LEVEL.name ) ),
+                            
+                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_POWER_ON_LEVEL.opcode, 
+                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_POWER_ON_LEVEL.name ) ),
+                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_SYSTEM_FAILURE_LEVEL.opcode, 
+                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_SYSTEM_FAILURE_LEVEL.name ) ),
 
+                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_FADE_TIME_FADE_RATE.opcode, 
+                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_FADE_TIME_FADE_RATE.name ) ),      
+                                
+                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_GROUPS_0_7.opcode, 
+                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_GROUPS_0_7.name ) ),      
+                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_GROUPS_8_15.opcode, 
+                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_GROUPS_8_15.name ) ),     
                         ]).then( ( responses ) => {
                             console.log( "responses: " + JSON.stringify( responses ) ) ;
                         }).catch( () => {

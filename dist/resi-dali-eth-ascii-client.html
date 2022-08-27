@@ -25,10 +25,12 @@
                 value: "127.0.0.1",
                 validate: is_URL_or_IP
             },
-            port: { value: 502 },
-            timeOut: { value: 1500 },
-            systemConsole: { value: false },
-            logEnabled: { value: false }
+            port : { value: 502 },
+            timeout : { value: 1500 }, // client connection timeout
+            operationsTimeout : { value : 60000 }, // Queue operation timeout
+            lockWaitTimeout : { value : 200 },
+            systemConsole : { value: false }, // console log
+            logEnabled : { value: false } // node log
         },
         inputs: 1,
         outputs: 1,
@@ -68,8 +70,16 @@
         </h2>
     </div -->
     <div class="form-row">
-        <label for="node-config-input-timeOut"><i class="fa fa-clock-o"></i> Timeout</label>
-        <input type="number" id="node-config-input-timeOut" placeholder="1500">
+        <label for="node-config-input-timeout"><i class="fa fa-clock-o"></i> <span data-i18n="dali-contrib.label.timeout"></span></label>
+        <input type="number" id="node-config-input-timeout" placeholder="1500">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-operationsTimeout"><i class="fa fa-clock-o"></i> <span data-i18n="dali-contrib.label.operationsTimeout"></span></label>
+        <input type="number" id="node-config-input-operationsTimeout" placeholder="1500">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-lockWaitTimeout"><i class="fa fa-clock-o"></i> <span data-i18n="dali-contrib.label.lockWaitTimeout"></span></label>
+        <input type="number" id="node-config-input-lockWaitTimeout" placeholder="1500">
     </div>
     <div class="form-row">
         <label style="min-width:160px" for="node-config-input-logEnabled"><i class="fa fa-th"></i> <span data-i18n="dali-contrib.label.logEnabled"></span></label>

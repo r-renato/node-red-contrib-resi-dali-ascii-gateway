@@ -2,7 +2,10 @@
     "dali-contrib" : {
         "label": {
             "logEnabled": "Logging",
-            "systemConsole" : "system console"
+            "systemConsole" : "system console",
+            "timeout" : "Client connection timeout",
+            "operationsTimeout" : "Queue operations timeout",
+            "lockWaitTimeout" : "Operation lock timeout"
         }
     }
 }
