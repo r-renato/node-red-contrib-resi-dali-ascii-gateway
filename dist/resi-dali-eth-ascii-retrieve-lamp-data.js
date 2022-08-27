@@ -108,7 +108,8 @@ module.exports = function (RED) {
                             console.log("responses: " + JSON.stringify(responses));
                             send(result);
                             done();
-                        }).catch(() => {
+                        }).catch((error) => {
+                            console.log(error);
                             done();
                         });
                     }
