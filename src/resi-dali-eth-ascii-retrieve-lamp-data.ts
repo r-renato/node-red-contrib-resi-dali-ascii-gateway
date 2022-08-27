@@ -115,15 +115,13 @@ module.exports = function (RED: nodered.NodeAPI) {
                                 status : responses[ 0 ].value.payload,
                                 actualLampLevel : responses[ 1 ].value.payload.actualLampLevel,
                                 deviceType : responses[ 2 ].value.payload,
-                                powerOnLevel : responses[ 3 ].value.payload,
-                                systemFailureLevel : responses[ 4 ].value.payload,
-                                fadeTimeFadeRate : responses[ 5 ].value.payload,
+                                powerOnLevel : responses[ 3 ].value.payload.powerOnLevel,
+                                systemFailureLevel : responses[ 4 ].value.payload.systemFailureLevel,
+                                fadeTimeFadeRate : responses[ 5 ].value.payload.fadeTimeFadeRate,
                             } ;
                             
                             delete payload.status[ 'done' ] ; delete payload.status[ 'raw' ] ;
                             delete payload.deviceType[ 'done' ] ; delete payload.deviceType[ 'raw' ] ;
-                            delete payload.powerOnLevel[ 'done' ] ; delete payload.powerOnLevel[ 'raw' ] ;
-                            delete payload.systemFailureLevel[ 'done' ] ; delete payload.systemFailureLevel[ 'raw' ] ;
 
                             result.payload = payload ;
 
