@@ -195,7 +195,7 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
           break ;
         case DALICMD.QUERY_GROUPS_0_7.name:
           result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ], 'groups' ) ;
-          result.payload.groups = decodeDALIGroup( result.payload.groups, -1 ) ;
+          var g = decodeDALIGroup( result.payload.groups, -1 ) ;
           break;
       }
       break ;

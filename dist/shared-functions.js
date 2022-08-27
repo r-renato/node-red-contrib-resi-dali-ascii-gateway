@@ -192,7 +192,7 @@ function prepareDALIResponse(msg, response) {
                     break;
                 case shared_interfaces_1.DALICMD.QUERY_GROUPS_0_7.name:
                     result = decodeDALIResp(repTokenized[0], repTokenized[1], 'groups');
-                    result.payload.groups = decodeDALIGroup(result.payload.groups, -1);
+                    var g = decodeDALIGroup(result.payload.groups, -1);
                     break;
             }
             break;
