@@ -78,7 +78,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                 executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, 
                     buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_CONTROL_GEAR_PRESENT.name ) )
                 .then( ( response : any ) => {
-                    console.log( "response: " + JSON.stringify( response ) ) ;
+                    //console.log( "response: " + JSON.stringify( response ) ) ;
                     if( response.payload.done && typeof response.payload.timeout == 'undefined' ) {
                         // ok
                         Promise.allSettled([
@@ -108,12 +108,22 @@ module.exports = function (RED: nodered.NodeAPI) {
                                 buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_GROUPS_0_7.name ) ),      
                             executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_GROUPS_8_15.opcode, 
                                 buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_GROUPS_8_15.name ) ),     
-                        ]).then( ( responses ) => {
-                            console.log( "responses: " + JSON.stringify( responses ) ) ;
-                        }).catch( () => {
+                        ]).then( ( responses : any[] ) => {
+                            var result = <RESIResponseInterface> Object.assign({}, msg) ;
+                             result = objectRename( result, 'payload', 'daliRequest' ) ;
+                            let payload = {
+                                status : responses[ 0 ].value.payload
+                            } ;
+                            
+                            result.payload = payload ;
 
+                            console.log( "responses: " + JSON.stringify( responses ) ) ;
+                            send( result ) ;
+                            done() ;
+                        }).catch( () => {
+                            done() ;
                         });
-                        done() ;
+                        
                     } else {
                         // Timeout
                         send(<nodered.NodeMessage> response) ;

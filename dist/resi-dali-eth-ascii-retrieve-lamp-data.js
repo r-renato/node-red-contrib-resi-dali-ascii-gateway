@@ -70,7 +70,7 @@ module.exports = function (RED) {
                 var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0x99';
                 (0, shared_functions_1.executeDALICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + shared_interfaces_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP.name, shared_interfaces_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.name))
                     .then((response) => {
-                    console.log("response: " + JSON.stringify(response));
+                    //console.log( "response: " + JSON.stringify( response ) ) ;
                     if (response.payload.done && typeof response.payload.timeout == 'undefined') {
                         // ok
                         Promise.allSettled([
@@ -86,10 +86,18 @@ module.exports = function (RED) {
                             (0, shared_functions_1.executeDALICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + shared_interfaces_1.DALICMD.QUERY_GROUPS_0_7.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP.name, shared_interfaces_1.DALICMD.QUERY_GROUPS_0_7.name)),
                             (0, shared_functions_1.executeDALICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + shared_interfaces_1.DALICMD.QUERY_GROUPS_8_15.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP.name, shared_interfaces_1.DALICMD.QUERY_GROUPS_8_15.name)),
                         ]).then((responses) => {
+                            var result = Object.assign({}, msg);
+                            result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
+                            let payload = {
+                                status: responses[0].value.payload
+                            };
+                            result.payload = payload;
                             console.log("responses: " + JSON.stringify(responses));
+                            send(result);
+                            done();
                         }).catch(() => {
+                            done();
                         });
-                        done();
                     }
                     else {
                         // Timeout
