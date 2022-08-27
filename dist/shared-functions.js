@@ -181,9 +181,6 @@ function prepareDALIResponse(msg, response) {
                 case shared_interfaces_1.DALICMD.QUERY_FADE_TIME_FADE_RATE.name:
                     result = decodeDALIResp(repTokenized[0], repTokenized[1], 'fadeTimeFadeRate');
                     break;
-                case shared_interfaces_1.DALICMD.QUERY_GROUPS_0_7.name:
-                    result = decodeDALIResp(repTokenized[0], repTokenized[1], 'fadeTimeFadeRate');
-                    break;
                 case shared_interfaces_1.DALICMD.QUERY_PHYSICAL_MINIMUM.name:
                     result = decodeDALIResp(repTokenized[0], repTokenized[1], 'physicalMinimumLevel');
                     break;
