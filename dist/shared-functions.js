@@ -107,7 +107,7 @@ function prepareDALIResponse(msg, response) {
     }
     function decodeDALIGroup(value, start) {
         let result = {};
-        let i = start - 1;
+        let i = start;
         i++;
         result['group' + i] = isSet(value, i);
         i++;

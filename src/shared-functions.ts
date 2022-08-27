@@ -109,7 +109,7 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
   }
 
   function decodeDALIGroup( value : number, start : number ) {
-    let result : any = {} ; let i : number = start -1 ;
+    let result : any = {} ; let i : number = start ;
 
     i++ ; result[ 'group' + i ] = isSet( value, i ) ;
     i++ ; result[ 'group' + i ] = isSet( value, i ) ;
