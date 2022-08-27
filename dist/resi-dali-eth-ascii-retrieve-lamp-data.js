@@ -98,7 +98,7 @@ module.exports = function (RED) {
                                 powerOnLevel: responses[6].value.payload.powerOnLevel,
                                 systemFailureLevel: responses[7].value.payload.systemFailureLevel,
                                 fadeTimeFadeRate: responses[8].value.payload.fadeTimeFadeRate,
-                                //groups : responses[ 9 ].value.payload.groups
+                                groups: responses[9].value.payload.groups
                             };
                             delete payload.status['done'];
                             delete payload.status['raw'];
