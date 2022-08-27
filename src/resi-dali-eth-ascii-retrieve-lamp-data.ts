@@ -1,7 +1,7 @@
 import * as nodered from "node-red" ;
 import { NodeExtendedInterface, RESIResponseInterface, DALICMD, RESICMD } from './shared-interfaces' ;
 import { Status, StatusInterface, NodeRESIClientInterface } from './shared-classes' ;
-import { objectRename, invalidPayloadIn, executeDALICommand, buildNodeMessage } from './shared-functions' ;
+import { objectRename, invalidPayloadIn, executeDALICommand, buildRequestNodeMessage } from './shared-functions' ;
 import { doesNotMatch } from "assert";
 
 const daliLampLevelNodeName:string = "dali-retrieve-lamp-data" ;
@@ -76,20 +76,24 @@ module.exports = function (RED: nodered.NodeAPI) {
                 var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0x99' ;
 
                 executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, 
-                    buildNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_CONTROL_GEAR_PRESENT.name ) )
+                    buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_CONTROL_GEAR_PRESENT.name ) )
                 .then( ( response : any ) => {
                     console.log( "response: " + JSON.stringify( response ) ) ;
                     if( response.payload.done && typeof response.payload.timeout == 'undefined' ) {
                         // ok
                         Promise.allSettled([
                             executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_STATUS.opcode, 
-                                buildNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_STATUS.name ) ),
+                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_STATUS.name ) ),
                             executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_ACTUAL_LEVEL.opcode, 
-                                buildNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) ),
+                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) ),
                             executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_DEVICE_TYPE.opcode, 
-                                buildNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_DEVICE_TYPE.name ) ),
+                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_DEVICE_TYPE.name ) ),
 
-                        ])
+                        ]).then( ( responses ) => {
+                            console.log( "responses: " + JSON.stringify( responses ) ) ;
+                        }).catch( () => {
+
+                        });
                         done() ;
                     } else {
                         // Timeout

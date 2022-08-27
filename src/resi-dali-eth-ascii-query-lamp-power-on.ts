@@ -1,7 +1,7 @@
 import * as nodered from "node-red" ;
 import { NodeExtendedInterface, RESIResponseInterface, DALICMD, RESICMD  } from './shared-interfaces' ;
 import { Status, StatusInterface, NodeRESIClientInterface } from './shared-classes' ;
-import { objectRename, invalidPayloadIn, executeDALICommand, buildNodeMessage } from './shared-functions' ;
+import { objectRename, invalidPayloadIn, executeDALICommand, buildRequestNodeMessage } from './shared-functions' ;
 import { doesNotMatch } from "assert";
 
 const daliLampLevelNodeName:string = "dali-query-lamp-power-on" ;
@@ -80,9 +80,9 @@ module.exports = function (RED: nodered.NodeAPI) {
 
                 Promise.allSettled([
                     executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_STATUS.opcode, 
-                        buildNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_STATUS.name ) ),
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_STATUS.name ) ),
                     executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_ACTUAL_LEVEL.opcode, 
-                        buildNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) ),
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) ),
                 ]).then( ( responses ) => {
                     let result1 = (<any> responses[ 0 ]).value.daliRequest.action == DALICMD.QUERY_STATUS.name 
                         ? (<any> responses[ 0 ]).value : (<any> responses[ 1 ]).value ;
