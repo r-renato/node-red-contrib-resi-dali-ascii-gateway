@@ -107,7 +107,7 @@ function prepareDALIResponse(msg, response) {
     }
     function decodeDALIGroup(value, start) {
         let result = {};
-        let i = start;
+        let i = start - 1;
         i++;
         result['group' + i] = isSet(value, i);
         i++;
@@ -191,11 +191,12 @@ function prepareDALIResponse(msg, response) {
                     result = decodeDALIResp(repTokenized[0], repTokenized[1], 'maxLevel');
                     break;
                 case shared_interfaces_1.DALICMD.QUERY_GROUPS_0_7.name:
-                    console.log(shared_interfaces_1.DALICMD.QUERY_GROUPS_0_7.name + " " + repTokenized[0] + " " + repTokenized[1]);
                     result = decodeDALIResp(repTokenized[0], repTokenized[1], 'groups');
-                    console.log(shared_interfaces_1.DALICMD.QUERY_GROUPS_0_7.name + " / " + JSON.stringify(result));
-                    result.groups = decodeDALIGroup(result.groups, -1);
-                    console.log(shared_interfaces_1.DALICMD.QUERY_GROUPS_0_7.name + " / " + JSON.stringify(result));
+                    result.groups = decodeDALIGroup(result.groups, 0);
+                    break;
+                case shared_interfaces_1.DALICMD.QUERY_GROUPS_8_15.name:
+                    result = decodeDALIResp(repTokenized[0], repTokenized[1], 'groups');
+                    result.groups = decodeDALIGroup(result.groups, 8);
                     break;
             }
             break;
