@@ -42,6 +42,28 @@ export interface RESIResponseInterface extends nodered.NodeMessage {
 // }
 
 
+
+export const DALI_DEVICE_TYPES : { [key: number]: string } =  {
+     0 : 'Fluorescent lamp control gear',
+     1 : 'Self-contained emergency lamp control gear',
+     2 : 'Discharge (HID) lamp control gear',
+     3 : 'Low-voltage halogen lamp control gear',
+     4 : 'Incandescent lamp dimmer',
+     5 : 'DC voltage lamp dimmer (0/1-10V)',
+     6 : 'LED lamp control gear',
+     7 : 'witching (relay) control gear',
+     8 : 'Color lamp control gear',
+    15 : 'Load referencing',
+    16 : 'Thermal gear protection',
+    17 : 'Dimming curve selection',
+    18 : 'Under consideration',
+    19 : 'Centrally supplied emergency operation',
+    20 : 'Demand response',
+    21 : 'Thermal lamp protection',
+    22 : 'Under consideration',
+    23 : 'Non-replaceable light source'
+} ;
+
 export const DALICMD:any = {
     // Source: https://onlinedocs.microchip.com/pr/GUID-0CDBB4BA-5972-4F58-98B2-3F0408F3E10B-en-US-1/index.html?GUID-DA5EBBA5-6A56-4135-AF78-FB1F780EF475
     OFF : { 

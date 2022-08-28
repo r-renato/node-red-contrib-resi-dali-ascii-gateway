@@ -1,5 +1,5 @@
 import * as nodered from "node-red" ;
-import { NodeExtendedInterface, RESIResponseInterface, DALICMD, RESICMD, RESIRESP } from './shared-interfaces' ;
+import { NodeExtendedInterface, RESIResponseInterface, DALICMD, RESICMD, RESIRESP, DALI_DEVICE_TYPES } from './shared-interfaces' ;
 
 /**
  * 
@@ -90,12 +90,12 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
             bit 7 Query POWER FAILURE :<0>=No
           */
   
-        statusControlGear : isSet( resp, 0 ),
-        lampFailure : isSet( resp, 1 ),
+        statusControlGear : !isSet( resp, 0 ),
+        lampFailure : !isSet( resp, 1 ),
         lampArcPowerOn : isSet( resp, 2 ),
         queryLimitError : isSet( resp, 3 ),
         fadeRunning : isSet( resp, 4 ),
-        queryResetState : isSet( resp, 5 ),
+        queryResetState : !isSet( resp, 5 ),
         queryMissingShortAddress : isSet( resp, 6 ),
         queryPowerFailure  : isSet( resp, 7 )
       } ;
@@ -167,10 +167,11 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
           break ;
         case DALICMD.QUERY_DEVICE_TYPE.name:
           result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ], 'deviceType' ) ;
-          result[ 'deviceTypeName' ] = 'TBD' ;
+          result[ 'deviceTypeName' ] = DALI_DEVICE_TYPES[ result.deviceType ] ;
           break ;
         case DALICMD.QUERY_CONTROL_GEAR_PRESENT.name:
           result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ], 'isControlGearPresent' ) ;
+          result.isControlGearPresent = (result.isControlGearPresent == 255) ;
           break;
         case DALICMD.QUERY_ACTUAL_LEVEL.name:
           result = decodeDALIResp( repTokenized[ 0 ], repTokenized[ 1 ], 'actualLampLevel' ) ;

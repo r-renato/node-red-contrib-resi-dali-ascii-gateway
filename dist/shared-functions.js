@@ -89,12 +89,12 @@ function prepareDALIResponse(msg, response) {
                     bit 6 Query Missing short address :<0>=No
                     bit 7 Query POWER FAILURE :<0>=No
                   */
-                statusControlGear: isSet(resp, 0),
-                lampFailure: isSet(resp, 1),
+                statusControlGear: !isSet(resp, 0),
+                lampFailure: !isSet(resp, 1),
                 lampArcPowerOn: isSet(resp, 2),
                 queryLimitError: isSet(resp, 3),
                 fadeRunning: isSet(resp, 4),
-                queryResetState: isSet(resp, 5),
+                queryResetState: !isSet(resp, 5),
                 queryMissingShortAddress: isSet(resp, 6),
                 queryPowerFailure: isSet(resp, 7)
             };
@@ -164,10 +164,11 @@ function prepareDALIResponse(msg, response) {
                     break;
                 case shared_interfaces_1.DALICMD.QUERY_DEVICE_TYPE.name:
                     result = decodeDALIResp(repTokenized[0], repTokenized[1], 'deviceType');
-                    result['deviceTypeName'] = 'TBD';
+                    result['deviceTypeName'] = shared_interfaces_1.DALI_DEVICE_TYPES[result.deviceType];
                     break;
                 case shared_interfaces_1.DALICMD.QUERY_CONTROL_GEAR_PRESENT.name:
                     result = decodeDALIResp(repTokenized[0], repTokenized[1], 'isControlGearPresent');
+                    result.isControlGearPresent = (result.isControlGearPresent == 255);
                     break;
                 case shared_interfaces_1.DALICMD.QUERY_ACTUAL_LEVEL.name:
                     result = decodeDALIResp(repTokenized[0], repTokenized[1], 'actualLampLevel');
