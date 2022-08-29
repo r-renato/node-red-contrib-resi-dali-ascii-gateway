@@ -171,11 +171,15 @@ class RESIClient {
                         this.initializeClient();
                         this.connectionState = null;
                     }
-                    this.waitFor(() => { console.log(this.connectionState); return (this.connectionState == null); }, this.lockWaitTimeout)
+                    this.waitFor(() => {
+                        console.log("RESIClient:connect => " + this.connectionState);
+                        return (this.connectionState == null);
+                    }, this.lockWaitTimeout)
                         .then(() => {
                         this.connect(lock).then(resolve).catch(reject);
                     }).catch(() => {
                         this.logger('-- connection failed --');
+                        reject(new Error('Failed to connect to the DALI gateway.'));
                     });
                 }
             });
