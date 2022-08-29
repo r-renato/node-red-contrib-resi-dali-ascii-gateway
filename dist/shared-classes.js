@@ -231,8 +231,10 @@ class RESIClient {
                             lock.resolve();
                             resolve(response);
                         }).catch((error) => {
-                            if (this.client)
+                            try {
                                 this.client.end().finally();
+                            }
+                            catch (e) { }
                             lock.resolve();
                             reject(error);
                         });

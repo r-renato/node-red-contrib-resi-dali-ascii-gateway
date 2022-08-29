@@ -245,7 +245,10 @@ export class RESIClient {
                         lock.resolve() ;
                         resolve( response ) ;
                     }).catch(( error ) => {
-                        if( this.client ) this.client.end().finally() ;
+                        try {
+                            this.client.end().finally() ;
+                        } catch( e ) {}
+                        
                         lock.resolve() ;
                         reject( error ) ;
                     }) ;
