@@ -119,60 +119,15 @@ module.exports = function (RED) {
                         done();
                     }
                 }).catch(() => {
+                    done();
                 });
-                // Promise.allSettled([
-                //     executeDALICommand( RESICMD.LAMP_COMMAND_ANSWER + msg.payload.lamp + '=' + DALICMD.QUERY_STATUS.opcode, 
-                //         prepareNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_STATUS.name ) ),
-                //     executeDALICommand( lampCommandAnswerCommandConst + msg.payload.lamp + '=0xA0', 
-                //         prepareNodeMessage( msg, defaultCommandConst, queryActualLevelCommandConst) ),
-                //     executeDALICommand( queryStatusCmd, msg1 ),
-                //     executeDALICommand( queryActualLevel, msg2)
-                // ]).then( ( responses ) => {
-                //     let result1 = (<any> responses[ 0 ]).value.daliRequest.action == 'QUERY STATUS' 
-                //         ? (<any> responses[ 0 ]).value : (<any> responses[ 1 ]).value ;
-                //     let result2 = (<any> responses[ 0 ]).value.daliRequest.action == 'QUERY ACTUAL LEVEL' 
-                //         ? (<any> responses[ 0 ]).value : (<any> responses[ 1 ]).value ;
-                //     result1 = objectRename( result1, 'daliRequest', 'daliRequest1' ) ;
-                //     result1.daliRequest2 = Object.assign({}, result2.daliRequest) ;
-                //     result1 = objectRename( result1, 'payload', 'daliResponse1' ) ;
-                //     result1.daliResponse2 = Object.assign({}, result2.payload) ;
-                //     // console.log( "result1 => " + JSON.stringify( result1 ) ) ;
-                //     // console.log( "result2 => " + JSON.stringify( result2 ) ) ;
-                //     result1.payload = {
-                //         done : true
-                //     } ;
-                //     if( typeof result1.daliResponse1.timeout == 'undefined' && typeof result1.daliResponse2.timeout == 'undefined' ) {
-                //         result1.payload.powerOn = result1.daliResponse1.lampArcPowerOn ;
-                //         result1.payload.level = result1.daliResponse2.value ;
-                //         result1.payload.isPowerOn = ( result1.daliResponse1.lampArcPowerOn && result1.daliResponse2.value > 0 ) ;
-                //     } else {
-                //         result1.payload.timeout = true ;
-                //     }
-                //     send( <nodered.NodeMessage> result1 ) ;
-                // }).catch( ( e ) => {
-                //     console.log( 'erroreeee' + e ) ;
-                // }) ;
-                //status.setStatus( true ) ;
-                // nodeServer.connection.send( textCommand ).then( ( response ) => {
-                //     var result = <RESIResponseInterface> Object.assign({}, msg) ;
-                //     result = objectRename( result, 'payload', 'daliRequest' ) ;
-                //     result.payload = prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
-                //     result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
-                //     //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
-                //     send(<nodered.NodeMessage> result) ;
-                // }).catch( ( error ) => {
-                //     var result : any = Object.assign({}, msg) ;
-                //     result.error = {
-                //         message : error,
-                //         source : {
-                //             id : nodeServer.id,
-                //             type : nodeServer.type,
-                //             name : nodeServer.name
-                //         }
-                //     } ;
-                //     send([result, ,])
-                // }) ;
+            }
+            else {
+                node.error('payload Not Found', msg);
+                //TODO
+                // Va restituito un errore
                 done();
+                return;
             }
         }));
         /**
