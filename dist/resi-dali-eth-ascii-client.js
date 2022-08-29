@@ -63,8 +63,8 @@ module.exports = function (RED) {
             done();
         }));
         this.on("close", (done) => __awaiter(this, void 0, void 0, function* () {
-            // Nothing to do
-            node.log('dali-client [close]');
+            RESIConnectionPool.getInstance().discardConnecion(config.name);
+            node.log('dali-client [close] discard connection: ' + config.name);
             done();
         }));
     });

@@ -74,8 +74,8 @@ module.exports = function (RED: nodered.NodeAPI) {
         }) ;
         
         this.on("close", async (done:any) => {
-            // Nothing to do
-            node.log( 'dali-client [close]' ) ;
+            RESIConnectionPool.getInstance().discardConnecion( config.name ) ;
+            node.log( 'dali-client [close] discard connection: ' + config.name ) ;
             done() ;
         }) ;
     }) ;
