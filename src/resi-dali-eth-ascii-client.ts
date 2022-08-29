@@ -1,10 +1,10 @@
 import * as nodered from "node-red" ;
 import { NodeExtendedInterface } from './shared-interfaces' ;
-import { NodeRESIClientInterface, NodeRESIClient, RESIClient } from './shared-classes' ;
+import { NodeRESIClientInterface, NodeRESIClient } from './shared-classes' ;
 
 class RESIConnectionPool {
     private static instance: RESIConnectionPool;
-    private connectionMap : {[key: string]: RESIClient } = {} ;
+    private connectionMap : {[key: string]: NodeRESIClientInterface } = {} ;
 
     /**
      * The Singleton's constructor should always be private to prevent direct
@@ -27,25 +27,24 @@ class RESIConnectionPool {
     }
 
     public getConnection( name: string, node?: nodered.Node, config?: any ) : NodeRESIClientInterface {
-        let result: RESIClient = this.connectionMap[ name ] ;
+        let result: NodeRESIClientInterface = this.connectionMap[ name ] ;
         
         if( typeof config !== 'undefined' && typeof node !== 'undefined' && typeof result === 'undefined' ) {
             if( config.systemConsole ) console.log( "systemConsole: " + config.systemConsole ) ;
-            result = new RESIClient(
+            result = new NodeRESIClient( 
                 config.address, 
                 config.port ? config.port : 502, 
                 config.operationsTimeout ? config.operationsTimeout : 60000,
                 config.lockWaitTimeout ? config.lockWaitTimeout : 200,
                 config.systemConsole,
                 config.logEnabled
-            ) ;
-
-            if( config.systemConsole ) console.log( "RESIConnectionPool:getConnection => RESIClient created." ) ;
+                ) ;
+            if( config.systemConsole ) console.log( "RESIConnectionPool:getConnection => NodeRESIClient created." ) ;
             this.connectionMap[ name ] = result ;
-            if( config.systemConsole ) console.log( "RESIConnectionPool:getConnection => RESIClient cached." ) ;
+            if( config.systemConsole ) console.log( "RESIConnectionPool:getConnection => NodeRESIClient cached." ) ;
         }
 
-        return( new NodeRESIClient( result ) ) ;
+        return( result ) ;
     }
 }
 
