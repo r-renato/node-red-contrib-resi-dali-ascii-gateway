@@ -30,6 +30,9 @@ class RESIConnectionPool {
         }
         return RESIConnectionPool.instance;
     }
+    discardConnecion(name) {
+        delete this.connectionMap[name];
+    }
     getConnection(name, node, config) {
         let result = this.connectionMap[name];
         if (typeof config !== 'undefined' && typeof node !== 'undefined' && typeof result === 'undefined') {
@@ -61,6 +64,7 @@ module.exports = function (RED) {
         }));
         this.on("close", (done) => __awaiter(this, void 0, void 0, function* () {
             // Nothing to do
+            node.log('dali-client [close]');
             done();
         }));
     });

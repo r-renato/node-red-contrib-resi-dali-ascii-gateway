@@ -26,6 +26,10 @@ class RESIConnectionPool {
         return RESIConnectionPool.instance;
     }
 
+    public discardConnecion( name: string ) {
+        delete this.connectionMap[ name ] ;
+    }
+
     public getConnection( name: string, node?: nodered.Node, config?: any ) : NodeRESIClientInterface {
         let result: NodeRESIClientInterface = this.connectionMap[ name ] ;
         
@@ -71,6 +75,7 @@ module.exports = function (RED: nodered.NodeAPI) {
         
         this.on("close", async (done:any) => {
             // Nothing to do
+            node.log( 'dali-client [close]' ) ;
             done() ;
         }) ;
     }) ;
