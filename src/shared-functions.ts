@@ -79,25 +79,24 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
     if( exitCode ) {
       result = {
         /* Note STATUS INFORMATION: 8-bit data indicating the status of a slave.
-            The meanings of the bits are as follows:
-            bit 0 Status of control gear :<0>=OK 
-            bit 1 Lamp failure :<0>=OK
-            bit 2 Lamp arc power on :<0>=OFF
-            bit 3 Query Limit Error :<0>=No
-            bit 4 Fade running:<0>=fade is ready, <1>=fade is running
-            bit 5 Query RESET STATE :<0>=No
-            bit 6 Query Missing short address :<0>=No
-            bit 7 Query POWER FAILURE :<0>=No
-          */
-  
-        statusControlGear : !isSet( resp, 0 ),
-        lampFailure : !isSet( resp, 1 ),
-        lampArcPowerOn : isSet( resp, 2 ),
-        queryLimitError : isSet( resp, 3 ),
-        fadeRunning : isSet( resp, 4 ),
-        queryResetState : !isSet( resp, 5 ),
-        queryMissingShortAddress : isSet( resp, 6 ),
-        queryPowerFailure  : isSet( resp, 7 )
+           The meanings of the bits are as follows:
+              Bit 0: Status of control gear 0=OK
+              Bit 1: Lamp failure 0=OK
+              Bit 2: Lamp arc power on 0=OFF 1=ON
+              Bit 3: Limit Error 0=Actual level is between MIN and MAX or OFF
+              Bit 4: Fade running 0=Fading is finished 1=Fading is active
+              Bit 5: RESET STATE 0=OK
+              Bit 6: Missing short address 0=No 1=Yes
+              Bit 7: POWER FAILURE 0=No
+        */
+        statusControlGear : ! isSet( resp, 0 ),       // Bit 0: Status of control gear 0=OK
+        lampFailure : ! isSet( resp, 1 ),             // Bit 1: Lamp failure 0=OK
+        lampArcPowerOn : isSet( resp, 2 ),            // Bit 2: Lamp arc power on 0=OFF 1=ON
+        queryLimitError : isSet( resp, 3 ),           // Bit 3: Limit Error 0=Actual level is between MIN and MAX or OFF
+        fadeRunning : isSet( resp, 4 ),               // Bit 4: Fade running 0=Fading is finished 1=Fading is active
+        queryResetState : ! isSet( resp, 5 ),         // Bit 5: RESET STATE 0=OK
+        queryMissingShortAddress : isSet( resp, 6 ),  // Bit 6: Missing short address 0=No 1=Yes
+        queryPowerFailure  : isSet( resp, 7 )         // Bit 7: POWER FAILURE 0=No
       } ;
     } ;
   
