@@ -99,8 +99,12 @@ module.exports = function (RED) {
                                 powerOnLevel: responses[6].value.payload.powerOnLevel,
                                 systemFailureLevel: responses[7].value.payload.systemFailureLevel,
                                 fadeTimeFadeRate: responses[8].value.payload.fadeTimeFadeRate,
-                                groups: Object.assign(Object.assign({}, responses[9].value.payload.groups), responses[10].value.payload.groups)
+                                groups: Object.assign(Object.assign({}, responses[9].value.payload.groups), responses[10].value.payload.groups),
                             };
+                            if (typeof responses[11].value.payload.timeout === 'undefined') {
+                                payload.arcPowerLevel = responses[11].value.payload.arcPowerLevel;
+                                payload.color = responses[11].value.payload.color;
+                            }
                             delete payload.status['done'];
                             delete payload.status['raw'];
                             delete payload.deviceType['done'];

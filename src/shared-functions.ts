@@ -216,12 +216,14 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
             result.done = true ;
             result.lamp = data[ 0 ] ;
             result.arcPowerLevel = data[ 1 ] ;
-            result.red = data[ 2 ] ;
-            result.green = data[ 3 ] ;
-            result.blu = data[ 4 ] ;
-            result.white = data[ 5 ] ;
-            result.amber = data[ 6 ] ;
-            result.freeColor = data[ 7 ] ;
+            result.color = {
+              red : data[ 2 ],
+              green : data[ 3 ],
+              blu : data[ 4 ],
+              white : data[ 5 ],
+              amber : data[ 6 ],
+              freeColor : data[ 7 ]
+            }
           }
         }
       }

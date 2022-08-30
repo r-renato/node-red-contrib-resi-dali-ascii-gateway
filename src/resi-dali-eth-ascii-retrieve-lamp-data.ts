@@ -113,7 +113,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                         ]).then( ( responses : any[] ) => {
                             var result = <RESIResponseInterface> Object.assign({}, msg) ;
                              result = objectRename( result, 'payload', 'daliRequest' ) ;
-                            let payload = {
+                            let payload : any = {
                                 status : responses[ 0 ].value.payload,
                                 actualLampLevel : responses[ 1 ].value.payload.actualLampLevel,
                                 deviceType : responses[ 2 ].value.payload,
@@ -124,10 +124,14 @@ module.exports = function (RED: nodered.NodeAPI) {
                                 powerOnLevel : responses[ 6 ].value.payload.powerOnLevel,
                                 systemFailureLevel : responses[ 7 ].value.payload.systemFailureLevel,
                                 fadeTimeFadeRate : responses[ 8 ].value.payload.fadeTimeFadeRate,
-                                groups : { ...responses[ 9 ].value.payload.groups, ...responses[ 10 ].value.payload.groups }
-                                
+                                groups : { ...responses[ 9 ].value.payload.groups, ...responses[ 10 ].value.payload.groups },
                             } ;
                             
+                            if( typeof responses[ 11 ].value.payload.timeout === 'undefined' ) {
+                                payload.arcPowerLevel = responses[ 11 ].value.payload.arcPowerLevel ;
+                                payload.color = responses[ 11 ].value.payload.color ;
+                            }
+
                             delete payload.status[ 'done' ] ; delete payload.status[ 'raw' ] ;
                             delete payload.deviceType[ 'done' ] ; delete payload.deviceType[ 'raw' ] ;
 
