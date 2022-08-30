@@ -204,30 +204,26 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
       }
       break ;
     case RESICMD.LAMP_QUERY_RGBWAF.name:
-      console.log( 'msg for: ' + RESICMD.LAMP_QUERY_RGBWAF.name ) ;
       if( '#LQRGBWAF' == repTokenized[ 0 ] ) {
         if( 'ERR' == repTokenized[ 1 ] ) {
           result.timeout = true ;
-          console.log( 'msg for: ' + RESICMD.LAMP_QUERY_RGBWAF.name + " / Error") ;
         } else {
           let data = repTokenized[ 1 ].split( ',' ) ;
-          console.log( 'msg for: ' + RESICMD.LAMP_QUERY_RGBWAF.name + " / " + data.length) ;
           if( data.length == 8 ) {
             result.done = true ;
             result.lamp = parseInt( data[ 0 ] ) ;
             result.arcPowerLevel = parseInt( data[ 1 ] ) ;
             result.color = {
-              red : parseInt( data[ 2 ] ),
-              green : parseInt( data[ 3 ] ),
-              blu : parseInt( data[ 4 ] ),
-              white : parseInt( data[ 5 ] ),
-              amber : parseInt( data[ 6 ] ),
+              r : parseInt( data[ 2 ] ),
+              g : parseInt( data[ 3 ] ),
+              b : parseInt( data[ 4 ] ),
+              c : parseInt( data[ 5 ] ),
+              w : parseInt( data[ 6 ] ),
               freeColor : parseInt( data[ 7 ] )
             }
           }
         }
       }
-      console.log( 'msg for: ' + RESICMD.LAMP_QUERY_RGBWAF.name + " / " + JSON.stringify( result ) ) ;
       break ;
     default:
       // console.log( '>>default<<') ;

@@ -202,15 +202,12 @@ function prepareDALIResponse(msg, response) {
             }
             break;
         case shared_interfaces_1.RESICMD.LAMP_QUERY_RGBWAF.name:
-            console.log('msg for: ' + shared_interfaces_1.RESICMD.LAMP_QUERY_RGBWAF.name);
             if ('#LQRGBWAF' == repTokenized[0]) {
                 if ('ERR' == repTokenized[1]) {
                     result.timeout = true;
-                    console.log('msg for: ' + shared_interfaces_1.RESICMD.LAMP_QUERY_RGBWAF.name + " / Error");
                 }
                 else {
                     let data = repTokenized[1].split(',');
-                    console.log('msg for: ' + shared_interfaces_1.RESICMD.LAMP_QUERY_RGBWAF.name + " / " + data.length);
                     if (data.length == 8) {
                         result.done = true;
                         result.lamp = parseInt(data[0]);
@@ -226,7 +223,6 @@ function prepareDALIResponse(msg, response) {
                     }
                 }
             }
-            console.log('msg for: ' + shared_interfaces_1.RESICMD.LAMP_QUERY_RGBWAF.name + " / " + JSON.stringify(result));
             break;
         default:
             // console.log( '>>default<<') ;

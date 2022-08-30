@@ -176,6 +176,15 @@ export const RESICMD:any = {
     },
     LAMP_QUERY_RGBWAF : {
         name : <string> '#LAMP QUERY RGBWAF:'
+    }, 
+    LAMP_XY : {
+        name : <string> '#LAMP XY:'
+    },
+    LAMP_XY_DIGITS : {
+        name : <string> '#LAMP XY DIGITS:'
+    },
+    LAMP_QUERY_XY : {
+        name : <string> '#LAMP QUERY XY:'
     }
 }
 
