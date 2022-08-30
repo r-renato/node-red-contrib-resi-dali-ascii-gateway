@@ -213,11 +213,11 @@ function prepareDALIResponse(msg, response) {
                         result.lamp = parseInt(data[0]);
                         result.arcPowerLevel = parseInt(data[1]);
                         result.color = {
-                            red: parseInt(data[2]),
-                            green: parseInt(data[3]),
-                            blu: parseInt(data[4]),
-                            white: parseInt(data[5]),
-                            amber: parseInt(data[6]),
+                            r: parseInt(data[2]),
+                            g: parseInt(data[3]),
+                            b: parseInt(data[4]),
+                            c: parseInt(data[5]),
+                            w: parseInt(data[6]),
                             freeColor: parseInt(data[7])
                         };
                     }

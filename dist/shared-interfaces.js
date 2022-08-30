@@ -141,6 +141,15 @@ exports.RESICMD = {
     },
     LAMP_QUERY_RGBWAF: {
         name: '#LAMP QUERY RGBWAF:'
+    },
+    LAMP_XY: {
+        name: '#LAMP XY:'
+    },
+    LAMP_XY_DIGITS: {
+        name: '#LAMP XY DIGITS:'
+    },
+    LAMP_QUERY_XY: {
+        name: '#LAMP QUERY XY:'
     }
 };
 exports.RESIRESP = {
