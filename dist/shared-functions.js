@@ -211,7 +211,7 @@ function prepareDALIResponse(msg, response) {
                 else {
                     let data = repTokenized[1].split(',');
                     console.log('msg for: ' + shared_interfaces_1.RESICMD.LAMP_QUERY_RGBWAF.name + " / " + data.length);
-                    if (data.length == 6) {
+                    if (data.length == 8) {
                         result.done = true;
                         result.lamp = data[0];
                         result.arcPowerLevel = data[1];
