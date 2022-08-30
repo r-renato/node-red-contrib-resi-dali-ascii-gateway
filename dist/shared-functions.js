@@ -213,15 +213,15 @@ function prepareDALIResponse(msg, response) {
                     console.log('msg for: ' + shared_interfaces_1.RESICMD.LAMP_QUERY_RGBWAF.name + " / " + data.length);
                     if (data.length == 8) {
                         result.done = true;
-                        result.lamp = data[0];
-                        result.arcPowerLevel = data[1];
+                        result.lamp = parseInt(data[0]);
+                        result.arcPowerLevel = parseInt(data[1]);
                         result.color = {
-                            red: data[2],
-                            green: data[3],
-                            blu: data[4],
-                            white: data[5],
-                            amber: data[6],
-                            freeColor: data[7]
+                            red: parseInt(data[2]),
+                            green: parseInt(data[3]),
+                            blu: parseInt(data[4]),
+                            white: parseInt(data[5]),
+                            amber: parseInt(data[6]),
+                            freeColor: parseInt(data[7])
                         };
                     }
                 }
