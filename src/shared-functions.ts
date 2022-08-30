@@ -203,6 +203,25 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
           break
       }
       break ;
+    case RESICMD.LAMP_QUERY_RGBWAF.name:
+      if( '#LQRGBWAF' == repTokenized[ 0 ] ) {
+        if( '' == repTokenized[ 1 ] ) {
+          result.timeout = true ;
+        } else {
+          let data = repTokenized[ 1 ].split( ',' ) ;
+          if( data.length == 6 ) {
+            result.lamp = data[ 0 ] ;
+            result.arcPowerLevel = data[ 1 ] ;
+            result.red = data[ 2 ] ;
+            result.green = data[ 3 ] ;
+            result.blu = data[ 4 ] ;
+            result.white = data[ 5 ] ;
+            result.amber = data[ 6 ] ;
+            result.freeColor = data[ 7 ] ;
+          }
+        }
+      }
+      break ;
     default:
       // console.log( '>>default<<') ;
       result.done = ( RESIRESP.OK.name == repTokenized[ 0 ])
