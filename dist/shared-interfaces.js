@@ -135,6 +135,12 @@ exports.RESICMD = {
     },
     LAMP_COMMAND_ANSWER: {
         name: '#LAMP COMMAND ANSWER:'
+    },
+    LAMP_RGBWAF: {
+        name: '#LAMP RGBWAF:'
+    },
+    LAMP_QUERY_RGBWAF: {
+        name: '#LAMP QUERY RGBWAF:'
     }
 };
 exports.RESIRESP = {

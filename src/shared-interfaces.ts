@@ -170,6 +170,12 @@ export const RESICMD:any = {
     },
     LAMP_COMMAND_ANSWER : {
         name : <string> '#LAMP COMMAND ANSWER:'
+    },
+    LAMP_RGBWAF : {
+        name : <string> '#LAMP RGBWAF:'
+    },
+    LAMP_QUERY_RGBWAF : {
+        name : <string> '#LAMP QUERY RGBWAF:'
     }
 }
 

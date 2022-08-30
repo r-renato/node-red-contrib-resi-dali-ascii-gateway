@@ -107,7 +107,9 @@ module.exports = function (RED: nodered.NodeAPI) {
                             executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_GROUPS_0_7.opcode, 
                                 buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_GROUPS_0_7.name ) ),      
                             executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_GROUPS_8_15.opcode, 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_GROUPS_8_15.name ) ),     
+                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_GROUPS_8_15.name ) ),  
+                            executeDALICommand( nodeServer, RESICMD.LAMP_QUERY_RGBWAF.name + msg.payload.lamp + ',6', 
+                                buildRequestNodeMessage( msg, RESICMD.LAMP_QUERY_RGBWAF.name, '' ) ),  
                         ]).then( ( responses : any[] ) => {
                             var result = <RESIResponseInterface> Object.assign({}, msg) ;
                              result = objectRename( result, 'payload', 'daliRequest' ) ;
