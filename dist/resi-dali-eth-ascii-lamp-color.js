@@ -49,8 +49,8 @@ module.exports = function (RED) {
                     if (typeof lampLevelResponse.payload.timeout === 'undefined') {
                         var cmd = shared_interfaces_1.RESICMD.LAMP_RGBWAF.name
                             + msg.payload.lamp + ','
-                            + lampLevelResponse.value.payload.actualLampLevel + ','
-                            + msg.payload.actualLampLevel;
+                            + lampLevelResponse.payload.actualLampLevel + ','
+                            + msg.payload.color;
                         console.log("in: " + cmd);
                         (0, shared_functions_1.executeDALICommand)(nodeServer, cmd, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_RGBWAF.name, ''))
                             .then((response) => {

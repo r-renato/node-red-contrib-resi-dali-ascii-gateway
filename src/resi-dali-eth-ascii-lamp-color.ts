@@ -52,8 +52,8 @@ module.exports = function (RED: nodered.NodeAPI) {
 
                         var cmd = RESICMD.LAMP_RGBWAF.name
                         + msg.payload.lamp + ',' 
-                        + (<any> lampLevelResponse).value.payload.actualLampLevel + ',' 
-                        + msg.payload.actualLampLevel ;
+                        + (<any> lampLevelResponse).payload.actualLampLevel + ',' 
+                        + msg.payload.color ;
                         console.log( "in: " + cmd ) ;
                         executeDALICommand( nodeServer, cmd, 
                             buildRequestNodeMessage( msg, RESICMD.LAMP_RGBWAF.name, '' ) )
