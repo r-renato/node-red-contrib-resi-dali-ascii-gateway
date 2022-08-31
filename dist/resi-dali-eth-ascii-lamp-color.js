@@ -102,7 +102,7 @@ module.exports = function (RED) {
          *
          */
         this.on("close", (done) => __awaiter(this, void 0, void 0, function* () {
-            if (nodeServer) {
+            if (nodeServer && resiClient) {
                 if (resiClient.isSystemConsole()) {
                     node.log("close");
                 }

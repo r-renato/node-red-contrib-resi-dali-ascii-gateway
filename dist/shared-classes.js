@@ -294,7 +294,7 @@ class NodeRESIClient {
             this.nodeStatusBroadcaster.repeat({ fill: "red", text: "Error" });
     }
     isSystemConsole() {
-        return (this.resiClient.isSystemConsole());
+        return (this.resiClient ? this.resiClient.isSystemConsole() : false);
     }
     getNodeStatusBroadcaster() {
         return (this.nodeStatusBroadcaster);

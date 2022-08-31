@@ -272,7 +272,7 @@ export class RESIClient {
 }
 
 export interface NodeRESIClientInterface {
-    isSystemConsole () : boolean ;
+    isSystemConsole() : boolean ;
     getNodeStatusBroadcaster() : any ;
     send( command : string ) : Promise<any> ;
 
@@ -325,7 +325,7 @@ export class NodeRESIClient implements NodeRESIClientInterface {
         if( this.nodeStatusBroadcaster ) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "Error" } ) ; 
     }
     isSystemConsole(): boolean {
-        return( this.resiClient.isSystemConsole() ) ;
+        return( this.resiClient ? this.resiClient.isSystemConsole() : false ) ;
     }
     getNodeStatusBroadcaster() {
         return( this.nodeStatusBroadcaster ) ;

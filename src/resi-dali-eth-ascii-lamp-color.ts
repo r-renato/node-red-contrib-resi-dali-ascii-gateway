@@ -115,7 +115,7 @@ module.exports = function (RED: nodered.NodeAPI) {
          * 
          */
         this.on( "close", async (done:any) => {
-            if( nodeServer ) {
+            if( nodeServer && resiClient ) {
                 if( resiClient.isSystemConsole() ) {
                     node.log( "close" ) ;
                 }
