@@ -45,8 +45,7 @@ module.exports = function (RED) {
             if (isValidDALIMsg(msg)) {
                 (0, shared_functions_1.executeDALICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + shared_interfaces_1.DALICMD.QUERY_ACTUAL_LEVEL.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP.name, shared_interfaces_1.DALICMD.QUERY_ACTUAL_LEVEL.name))
                     .then((lampLevelResponse) => {
-                    console.log("lampLevelResponse: " + JSON.stringify(lampLevelResponse)
-                        + (typeof lampLevelResponse.payload.timeout === 'undefined'));
+                    console.log("lampLevelResponse: " + JSON.stringify(lampLevelResponse));
                     if (typeof lampLevelResponse.payload.timeout === 'undefined') {
                         console.log("in");
                         (0, shared_functions_1.executeDALICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_RGBWAF.name
@@ -54,7 +53,7 @@ module.exports = function (RED) {
                             + lampLevelResponse.value.payload.actualLampLevel + ','
                             + msg.payload.actualLampLevel, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_RGBWAF.name, ''))
                             .then((response) => {
-                            console.log("response: " + JSON.stringify(lampLevelResponse));
+                            console.log("response: " + JSON.stringify(response));
                         }).catch((error) => {
                             console.log("in: " + error);
                         });

@@ -47,8 +47,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                 executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_ACTUAL_LEVEL.opcode, 
                     buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) )
                 .then( ( lampLevelResponse ) => {
-                    console.log( "lampLevelResponse: " + JSON.stringify( lampLevelResponse ) 
-                    + (typeof (<any> lampLevelResponse).payload.timeout === 'undefined') ) ;
+                    console.log( "lampLevelResponse: " + JSON.stringify( lampLevelResponse ) ) ;
                     if( typeof (<any> lampLevelResponse).payload.timeout === 'undefined' ) {
                         console.log( "in" ) ;
                         executeDALICommand( nodeServer, 
@@ -58,7 +57,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                             + msg.payload.actualLampLevel, 
                             buildRequestNodeMessage( msg, RESICMD.LAMP_RGBWAF.name, '' ) )
                         .then( ( response ) => {
-                            console.log( "response: " + JSON.stringify( lampLevelResponse ) ) ;
+                            console.log( "response: " + JSON.stringify( response ) ) ;
                         }).catch( ( error ) => {
                             console.log( "in: " + error ) ;
                         }) ;                       
