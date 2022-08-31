@@ -63,52 +63,35 @@ module.exports = function (RED) {
                                 send(result);
                                 done();
                             }).catch((error) => {
-                                console.log("in: " + error);
+                                // Error timeout
+                                var result = Object.assign({}, msg);
+                                result = (0, shared_functions_1.objectRename)(msg, 'payload', 'daliRequest');
+                                result.payload = lampLevelResponse.payload;
+                                send((0, shared_functions_1.buildErrorNodeMessage)(result, ' '));
                             });
                         }
                         else {
+                            var result = Object.assign({}, msg);
+                            result = (0, shared_functions_1.objectRename)(msg, 'payload', 'daliRequest');
+                            result.payload = lampLevelResponse.payload;
                             send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Actual Lamp Level is zero (0)'));
                             done();
                         }
                     }
                     else {
-                        // Error
-                        console.log("ou: ");
+                        // Error timeout
+                        var result = Object.assign({}, msg);
+                        result = (0, shared_functions_1.objectRename)(msg, 'payload', 'daliRequest');
+                        result.payload = lampLevelResponse.payload;
+                        send((0, shared_functions_1.buildErrorNodeMessage)(result, ' '));
                     }
                 }).catch((error) => {
-                    console.log("no>>> : " + error);
+                    if (nodeServer && resiClient) {
+                        if (resiClient.isSystemConsole())
+                            console.log(error);
+                    }
+                    send((0, shared_functions_1.buildErrorNodeMessage)(msg, '', error));
                 });
-                // Promise.allSettled([
-                //     executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_STATUS.opcode, 
-                //         buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_STATUS.name ) ),
-                //     executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_ACTUAL_LEVEL.opcode, 
-                //         buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) ),
-                // ]).then( ( responses ) => {
-                //     let result1 = (<any> responses[ 0 ]).value.daliRequest.action == DALICMD.QUERY_STATUS.name 
-                //         ? (<any> responses[ 0 ]).value : (<any> responses[ 1 ]).value ;
-                //     let result2 = (<any> responses[ 0 ]).value.daliRequest.action == DALICMD.QUERY_ACTUAL_LEVEL.name 
-                //         ? (<any> responses[ 0 ]).value : (<any> responses[ 1 ]).value ;
-                //     result1 = objectRename( result1, 'daliRequest', 'daliRequest1' ) ;
-                //     result1.daliRequest2 = Object.assign({}, result2.daliRequest) ;
-                //     result1 = objectRename( result1, 'payload', 'daliResponse1' ) ;
-                //     result1.daliResponse2 = Object.assign({}, result2.payload) ;
-                //     // console.log( "result1 => " + JSON.stringify( result1 ) ) ;
-                //     // console.log( "result2 => " + JSON.stringify( result2 ) ) ;
-                //     result1.payload = {
-                //         done : true
-                //     } ;
-                //     if( typeof result1.daliResponse1.timeout == 'undefined' && typeof result1.daliResponse2.timeout == 'undefined' ) {
-                //         result1.payload.powerOn = result1.daliResponse1.lampArcPowerOn ;
-                //         result1.payload.level = result1.daliResponse2.value ;
-                //         result1.payload.isPowerOn = ( result1.daliResponse1.lampArcPowerOn && result1.daliResponse2.value > 0 ) ;
-                //     } else {
-                //         result1.payload.timeout = true ;
-                //     }
-                //     send( <nodered.NodeMessage> result1 ) ;
-                // }).catch( ( e ) => {
-                //     console.log( 'erroreeee' + e ) ;
-                // }) ;
-                done();
             }
         }));
         /**
