@@ -47,7 +47,8 @@ module.exports = function (RED: nodered.NodeAPI) {
                 executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_ACTUAL_LEVEL.opcode, 
                     buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) )
                 .then( ( lampLevelResponse ) => {
-                    console.log( "lampLevelResponse: " + JSON.stringify( lampLevelResponse ) ) ;
+                    console.log( "lampLevelResponse: " + JSON.stringify( lampLevelResponse ) 
+                    + (typeof (<any> lampLevelResponse).payload.timeout === 'undefined') ) ;
                     if( typeof (<any> lampLevelResponse).payload.timeout === 'undefined' ) {
                         executeDALICommand( nodeServer, 
                             RESICMD.LAMP_RGBWAF.name
