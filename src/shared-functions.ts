@@ -276,3 +276,7 @@ export function buildRequestNodeMessage( msg : any, command : string, action: st
   newMsg.payload.command = command ; newMsg.payload.action = action ; newMsg.payload.params = ':' + msg.payload.lamp ;
   return( newMsg ) ;
 }
+
+export function buildErrorNodeMessage( msg : any, command : string, action: string ) : any {
+
+}

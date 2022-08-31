@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buildRequestNodeMessage = exports.executeDALICommand = exports.prepareDALIResponse = exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
+exports.buildErrorNodeMessage = exports.buildRequestNodeMessage = exports.executeDALICommand = exports.prepareDALIResponse = exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
 const shared_interfaces_1 = require("./shared-interfaces");
 /**
  *
@@ -277,4 +277,7 @@ function buildRequestNodeMessage(msg, command, action) {
     return (newMsg);
 }
 exports.buildRequestNodeMessage = buildRequestNodeMessage;
+function buildErrorNodeMessage(msg, command, action) {
+}
+exports.buildErrorNodeMessage = buildErrorNodeMessage;
 //# sourceMappingURL=shared-functions.js.map

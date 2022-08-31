@@ -1,0 +1,61 @@
+<!--
+ Copyright (c) 2022 Renato Rossi
+ All rights reserved.
+ node-red-contrib-resi-dali-ascii-gateway - MIT License
+
+ @author <a href="mailto:renatrossi@google.com">Renato Rossi</a>
+-->
+<script type="text/javascript">
+    RED.nodes.registerType('dali-lamp-color', {
+      category: 'RESI DALI ETH ASCII Gateway',
+      color: '#E9967A',
+      defaults: {
+        name: {value: ''},
+        server: {type: 'resi-dali-eth-ascii-client', required: true}
+      },
+      inputs: 1,
+      outputs: 1,
+      align: "right",
+      icon: 'modbus.png',
+      align: 'right',
+      paletteLabel: 'dali-lamp-color',
+      label: function () {
+        return this.name || 'DALI Lamp RGBWAF'
+      }
+    })
+</script>
+
+<script type="text/html" data-template-name="dali-lamp-color">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-server"><i class="icon-bookmark"></i> <span data-i18n="dali-contrib.label.server"></span></label>
+        <input type="text" id="node-input-server">
+    </div>
+    <hr>
+</script>
+
+<script type="text/x-red" data-help-name="dali-lamp-color">
+  <style type="text/css">
+    .tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0;}
+    .tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+      font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+      font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-lap0{font-size:100%;text-align:center;vertical-align:top}
+    .tg .tg-5qt9{font-size:small;text-align:left;vertical-align:top}
+    .tg .tg-0lax{text-align:left;vertical-align:top}
+    </style>
+
+  <p>
+    DALI Lamp set RGBWAF
+  </p>
+
+  <p>RESI DALI ETH ASCII node triggered with <strong>msg.payload</strong> to write.</p>
+  <p>Connects to a RESI DALI ETH ASCII to manage DALI LAMP\Device at each incoming msg.</p>
+
+</script>
+
+
