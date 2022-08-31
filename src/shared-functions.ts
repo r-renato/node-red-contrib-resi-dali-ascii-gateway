@@ -277,6 +277,14 @@ export function buildRequestNodeMessage( msg : any, command : string, action: st
   return( newMsg ) ;
 }
 
-export function buildErrorNodeMessage( msg : any, command : string, action: string ) : any {
+export function buildErrorNodeMessage( msg : any, message : string, error ?: Error ) : nodered.NodeMessage {
+  var result = Object.assign({}, msg) ;
+  result.error = {} ;
 
+  if( typeof error === 'undefined' )
+    result.error.message = message ;
+  else
+    result.error.message = error ;
+    
+  return( result ) ;
 }

@@ -49,19 +49,31 @@ module.exports = function (RED: nodered.NodeAPI) {
                 .then( ( lampLevelResponse ) => {
                     console.log( "lampLevelResponse: " + JSON.stringify( lampLevelResponse ) ) ;
                     if( typeof (<any> lampLevelResponse).payload.timeout === 'undefined' ) {
+                        if( (<any> lampLevelResponse).payload.actualLampLevel == 0 ) {
+                            executeDALICommand( nodeServer, RESICMD.LAMP_RGBWAF.name
+                                + msg.payload.lamp + ',' 
+                                + (<any> lampLevelResponse).payload.actualLampLevel + ',' 
+                                + msg.payload.color, 
+                                buildRequestNodeMessage( msg, RESICMD.LAMP_RGBWAF.name, '' ) )
+                            .then( ( response ) => {
+                                console.log( "response: " + JSON.stringify( response ) ) ;
 
-                        var cmd = RESICMD.LAMP_RGBWAF.name
-                        + msg.payload.lamp + ',' 
-                        + (<any> lampLevelResponse).payload.actualLampLevel + ',' 
-                        + msg.payload.color ;
-                        console.log( "in: " + cmd ) ;
-                        executeDALICommand( nodeServer, cmd, 
-                            buildRequestNodeMessage( msg, RESICMD.LAMP_RGBWAF.name, '' ) )
-                        .then( ( response ) => {
-                            console.log( "response: " + JSON.stringify( response ) ) ;
-                        }).catch( ( error ) => {
-                            console.log( "in: " + error ) ;
-                        }) ;                       
+                                var result = Object.assign({}, msg) ;
+                                result = objectRename( msg, 'payload', 'daliRequest' ) ;
+                                result.payload = {
+                                    done : true,
+                                    raw : response.payload
+                                }
+
+                                send( <nodered.NodeMessage> result ) ;
+                                done() ;
+                            }).catch( ( error ) => {
+                                console.log( "in: " + error ) ;
+                            }) ;  
+                        } else {
+                            send( buildErrorNodeMessage( msg, 'Actual Lamp Level is zero (0)' ) ) ;
+                            done() ;
+                        }            
                     } else {
                         // Error
                         console.log( "ou: " ) ;

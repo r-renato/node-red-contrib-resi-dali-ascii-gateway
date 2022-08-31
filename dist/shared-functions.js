@@ -277,7 +277,14 @@ function buildRequestNodeMessage(msg, command, action) {
     return (newMsg);
 }
 exports.buildRequestNodeMessage = buildRequestNodeMessage;
-function buildErrorNodeMessage(msg, command, action) {
+function buildErrorNodeMessage(msg, message, error) {
+    var result = Object.assign({}, msg);
+    result.error = {};
+    if (typeof error === 'undefined')
+        result.error.message = message;
+    else
+        result.error.message = error;
+    return (result);
 }
 exports.buildErrorNodeMessage = buildErrorNodeMessage;
 //# sourceMappingURL=shared-functions.js.map

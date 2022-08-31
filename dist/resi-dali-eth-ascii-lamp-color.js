@@ -47,17 +47,29 @@ module.exports = function (RED) {
                     .then((lampLevelResponse) => {
                     console.log("lampLevelResponse: " + JSON.stringify(lampLevelResponse));
                     if (typeof lampLevelResponse.payload.timeout === 'undefined') {
-                        var cmd = shared_interfaces_1.RESICMD.LAMP_RGBWAF.name
-                            + msg.payload.lamp + ','
-                            + lampLevelResponse.payload.actualLampLevel + ','
-                            + msg.payload.color;
-                        console.log("in: " + cmd);
-                        (0, shared_functions_1.executeDALICommand)(nodeServer, cmd, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_RGBWAF.name, ''))
-                            .then((response) => {
-                            console.log("response: " + JSON.stringify(response));
-                        }).catch((error) => {
-                            console.log("in: " + error);
-                        });
+                        if (lampLevelResponse.payload.actualLampLevel == 0) {
+                            (0, shared_functions_1.executeDALICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_RGBWAF.name
+                                + msg.payload.lamp + ','
+                                + lampLevelResponse.payload.actualLampLevel + ','
+                                + msg.payload.color, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_RGBWAF.name, ''))
+                                .then((response) => {
+                                console.log("response: " + JSON.stringify(response));
+                                var result = Object.assign({}, msg);
+                                result = (0, shared_functions_1.objectRename)(msg, 'payload', 'daliRequest');
+                                result.payload = {
+                                    done: true,
+                                    raw: response.payload
+                                };
+                                send(result);
+                                done();
+                            }).catch((error) => {
+                                console.log("in: " + error);
+                            });
+                        }
+                        else {
+                            send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Actual Lamp Level is zero (0)'));
+                            done();
+                        }
                     }
                     else {
                         // Error
