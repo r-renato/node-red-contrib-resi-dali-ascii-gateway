@@ -47,11 +47,12 @@ module.exports = function (RED) {
                     .then((lampLevelResponse) => {
                     console.log("lampLevelResponse: " + JSON.stringify(lampLevelResponse));
                     if (typeof lampLevelResponse.payload.timeout === 'undefined') {
-                        console.log("in");
-                        (0, shared_functions_1.executeDALICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_RGBWAF.name
+                        var cmd = shared_interfaces_1.RESICMD.LAMP_RGBWAF.name
                             + msg.payload.lamp + ','
                             + lampLevelResponse.value.payload.actualLampLevel + ','
-                            + msg.payload.actualLampLevel, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_RGBWAF.name, ''))
+                            + msg.payload.actualLampLevel;
+                        console.log("in: " + cmd);
+                        (0, shared_functions_1.executeDALICommand)(nodeServer, cmd, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_RGBWAF.name, ''))
                             .then((response) => {
                             console.log("response: " + JSON.stringify(response));
                         }).catch((error) => {

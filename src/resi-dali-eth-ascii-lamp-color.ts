@@ -49,12 +49,13 @@ module.exports = function (RED: nodered.NodeAPI) {
                 .then( ( lampLevelResponse ) => {
                     console.log( "lampLevelResponse: " + JSON.stringify( lampLevelResponse ) ) ;
                     if( typeof (<any> lampLevelResponse).payload.timeout === 'undefined' ) {
-                        console.log( "in" ) ;
-                        executeDALICommand( nodeServer, 
-                            RESICMD.LAMP_RGBWAF.name
-                            + msg.payload.lamp + ',' 
-                            + (<any> lampLevelResponse).value.payload.actualLampLevel + ',' 
-                            + msg.payload.actualLampLevel, 
+
+                        var cmd = RESICMD.LAMP_RGBWAF.name
+                        + msg.payload.lamp + ',' 
+                        + (<any> lampLevelResponse).value.payload.actualLampLevel + ',' 
+                        + msg.payload.actualLampLevel ;
+                        console.log( "in: " + cmd ) ;
+                        executeDALICommand( nodeServer, cmd, 
                             buildRequestNodeMessage( msg, RESICMD.LAMP_RGBWAF.name, '' ) )
                         .then( ( response ) => {
                             console.log( "response: " + JSON.stringify( response ) ) ;
