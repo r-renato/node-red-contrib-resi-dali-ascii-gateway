@@ -61,7 +61,7 @@ export class Status implements StatusInterface {
 export class RESIClient {
     private uid : string ;
     private systemConsole : boolean ;
-    //private logEnabled : boolean ;
+    private logEnabled : boolean ;
 
     private client : any ;
     private paramiters : { host : string, port : number, timeout : number } =  { 
@@ -152,7 +152,7 @@ export class RESIClient {
     public constructor( address : string, port : number, operationsTimeout : number, lockWaitTimeout : number, systemConsole : boolean ) {
         this.uid = uuid.v4() ;
         this.systemConsole = systemConsole ;
-        //this.logEnabled = logEnabled ;
+        this.logEnabled = false ;
 
         this.operationsTimeout = operationsTimeout ;
         this.lockWaitTimeout = lockWaitTimeout ;
@@ -282,76 +282,69 @@ export interface NodeRESIClientInterface {
 }
 
 
-export class NodeRESIClient extends RESIClient implements NodeRESIClientInterface{
-    private nodeStatusBroadcaster : any ;
-    private logEnabled : boolean = false ;
-
-    public constructor( address : string, port : number, operationsTimeout : number, lockWaitTimeout : number, systemConsole : boolean, logEnabled : boolean ) {
-        super( address, port, operationsTimeout, lockWaitTimeout, systemConsole ) ;
-
-        this.nodeStatusBroadcaster = new openpromiseLib.Cycle() ;
-        this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "Idle" } ) ;
-    }
-
-    public getNodeStatusBroadcaster() : any { return this.nodeStatusBroadcaster } ;
-
-    public changeStateToConnect() {
-        if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "Connected" } ) ;
-    }
-    public changeStateToIdle() {
-        if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "Idle" } ) ;
-    }
-    public changeStateToError() {
-        if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "Error" } ) ;
-    }
-
-    // protected onClientConnect(): void {
-    //     if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "Connected" } ) ;
-    // }
-    // protected onClientIdle() { 
-    //     if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "Idle" } ) ; 
-    // } ;
-    // protected onClientConnected() { 
-    //     if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "Connected" } ) ;
-    // } ;
-    // protected onClientConnectionEnd() {
-    //     if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "Closed" } ) ;
-    // } ;
-    // protected onClientConnectionError() {
-    //     if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "Connection error" } ) ;
-    // } ;
-}
-
-// export class NodeRESIClient implements NodeRESIClientInterface {
+// export class NodeRESIClient extends RESIClient implements NodeRESIClientInterface {
 //     private nodeStatusBroadcaster : any ;
-//     private resiClient : RESIClient ;
+//     private logEnabled : boolean = false ;
 
-//     public constructor( resiClient : RESIClient ) {
-//         this.resiClient = resiClient ;
+//     public constructor( address : string, port : number, operationsTimeout : number, lockWaitTimeout : number, systemConsole : boolean, logEnabled : boolean ) {
+//         super( address, port, operationsTimeout, lockWaitTimeout, systemConsole ) ;
 
 //         this.nodeStatusBroadcaster = new openpromiseLib.Cycle() ;
+//         this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "Idle" } ) ;
 //     }
-//     isSystemConsole(): boolean {
-//         return( this.resiClient.isSystemConsole() ) ;
+
+//     public getNodeStatusBroadcaster() : any { return this.nodeStatusBroadcaster } ;
+
+//     public changeStateToConnect() {
+//         if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "Connected" } ) ;
 //     }
-//     getNodeStatusBroadcaster() {
-//         return( this.nodeStatusBroadcaster ) ;
+//     public changeStateToIdle() {
+//         if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "Idle" } ) ;
 //     }
-//     send(command: string): Promise<any> {
-//         return new Promise<any>(( resolve, reject ) => {
-//             if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "Connected" } ) ;
-
-//             this.resiClient.send( command )
-//                 .then( ( result ) => {
-//                     if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "Idle" } ) ; 
-
-//                     resolve( result ) ;
-//                 }).catch( ( error ) => {
-//                     if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "Error" } ) ;
-
-//                     reject( error ) 
-//                 });
-
-//         }) ;
-//         if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "Idle" } ) ; 
+//     public changeStateToError() {
+//         if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "Error" } ) ;
 //     }
+// }
+
+export class NodeRESIClient implements NodeRESIClientInterface {
+    private nodeStatusBroadcaster : any ;
+    private resiClient : RESIClient ;
+
+    public constructor( resiClient : RESIClient ) {
+        this.resiClient = resiClient ;
+
+        this.nodeStatusBroadcaster = new openpromiseLib.Cycle() ;
+    }
+    changeStateToConnect(): void {
+        this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "Connect" } ) ; 
+    }
+    changeStateToIdle(): void {
+        this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "Idle" } ) ; 
+    }
+    changeStateToError(): void {
+        this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "Error" } ) ; 
+    }
+    isSystemConsole(): boolean {
+        return( this.resiClient.isSystemConsole() ) ;
+    }
+    getNodeStatusBroadcaster() {
+        return( this.nodeStatusBroadcaster ) ;
+    }
+    send(command: string): Promise<any> {
+        return new Promise<any>(( resolve, reject ) => {
+            if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "Connected" } ) ;
+
+            this.resiClient.send( command )
+                .then( ( result ) => {
+                    if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "Idle" } ) ; 
+
+                    resolve( result ) ;
+                }).catch( ( error ) => {
+                    if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "Error" } ) ;
+
+                    reject( error ) 
+                });
+        }) ;
+        
+    }
+}

@@ -1,10 +1,10 @@
 import * as nodered from "node-red" ;
 import { NodeExtendedInterface } from './shared-interfaces' ;
-import { NodeRESIClientInterface, NodeRESIClient } from './shared-classes' ;
+import { NodeRESIClientInterface, NodeRESIClient, RESIClient } from './shared-classes' ;
 
 class RESIConnectionPool {
     private static instance: RESIConnectionPool;
-    private connectionMap : {[key: string]: NodeRESIClientInterface } = {} ;
+    private connectionMap : {[key: string]: RESIClient } = {} ;
 
     /**
      * The Singleton's constructor should always be private to prevent direct
@@ -30,25 +30,41 @@ class RESIConnectionPool {
         delete this.connectionMap[ name ] ;
     }
 
+    // public getConnection( name: string, node?: nodered.Node, config?: any ) : NodeRESIClientInterface {
+    //     let result: NodeRESIClientInterface = this.connectionMap[ name ] ;
+        
+    //     if( typeof config !== 'undefined' && typeof node !== 'undefined' && typeof result === 'undefined' ) {
+    //         if( config.systemConsole ) console.log( "systemConsole: " + config.systemConsole ) ;
+    //         result = new NodeRESIClient( 
+    //             config.address, 
+    //             config.port ? config.port : 502, 
+    //             config.operationsTimeout ? config.operationsTimeout : 60000,
+    //             config.lockWaitTimeout ? config.lockWaitTimeout : 200,
+    //             config.systemConsole,
+    //             config.logEnabled
+    //             ) ;
+    //         if( config.systemConsole ) console.log( "RESIConnectionPool:getConnection => NodeRESIClient created." ) ;
+    //         this.connectionMap[ name ] = result ;
+    //         if( config.systemConsole ) console.log( "RESIConnectionPool:getConnection => NodeRESIClient cached." ) ;
+    //     }
+
+    //     return( result ) ;
+    // }
+
     public getConnection( name: string, node?: nodered.Node, config?: any ) : NodeRESIClientInterface {
-        let result: NodeRESIClientInterface = this.connectionMap[ name ] ;
+        let result: RESIClient = this.connectionMap[ name ] ;
         
         if( typeof config !== 'undefined' && typeof node !== 'undefined' && typeof result === 'undefined' ) {
-            if( config.systemConsole ) console.log( "systemConsole: " + config.systemConsole ) ;
-            result = new NodeRESIClient( 
-                config.address, 
-                config.port ? config.port : 502, 
+            result = new RESIClient(
+                config.address,
+                config.port ? config.port : 502,
                 config.operationsTimeout ? config.operationsTimeout : 60000,
                 config.lockWaitTimeout ? config.lockWaitTimeout : 200,
-                config.systemConsole,
-                config.logEnabled
-                ) ;
-            if( config.systemConsole ) console.log( "RESIConnectionPool:getConnection => NodeRESIClient created." ) ;
-            this.connectionMap[ name ] = result ;
-            if( config.systemConsole ) console.log( "RESIConnectionPool:getConnection => NodeRESIClient cached." ) ;
+                config.systemConsole
+            ) ;
         }
 
-        return( result ) ;
+        return( new NodeRESIClient( result ) ) ;
     }
 }
 

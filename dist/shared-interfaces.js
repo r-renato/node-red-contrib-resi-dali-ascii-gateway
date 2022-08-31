@@ -133,6 +133,9 @@ exports.RESICMD = {
     LAMP: {
         name: '#LAMP '
     },
+    LAMP_COMMAND: {
+        name: '#LAMP COMMAND:'
+    },
     LAMP_COMMAND_ANSWER: {
         name: '#LAMP COMMAND ANSWER:'
     },

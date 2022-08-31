@@ -168,6 +168,9 @@ export const RESICMD:any = {
     LAMP : {
         name : <string> '#LAMP '
     },
+    LAMP_COMMAND : {
+        name : <string> '#LAMP COMMAND:'
+    },
     LAMP_COMMAND_ANSWER : {
         name : <string> '#LAMP COMMAND ANSWER:'
     },
