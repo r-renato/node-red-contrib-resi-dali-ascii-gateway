@@ -287,6 +287,7 @@ class NodeRESIClient {
     constructor(resiClient) {
         this.resiClient = resiClient;
         this.nodeStatusBroadcaster = new openpromiseLib.Cycle();
+        console.log("NodeRESIClient::constructor");
     }
     changeStateToConnecting() {
         if (this.nodeStatusBroadcaster)

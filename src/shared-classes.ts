@@ -319,6 +319,8 @@ export class NodeRESIClient implements NodeRESIClientInterface {
         this.resiClient = resiClient ;
 
         this.nodeStatusBroadcaster = new openpromiseLib.Cycle() ;
+
+        console.log( "NodeRESIClient::constructor" ) ;
     }
     changeStateToConnecting(): void {
         if( this.nodeStatusBroadcaster ) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "Connecting" } ) ; 
