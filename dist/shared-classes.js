@@ -281,14 +281,17 @@ class NodeRESIClient {
         this.resiClient = resiClient;
         this.nodeStatusBroadcaster = new openpromiseLib.Cycle();
     }
-    changeStateToConnect() {
-        this.nodeStatusBroadcaster.repeat({ fill: "green", text: "Connect" });
+    changeStateToConnecting() {
+        if (this.nodeStatusBroadcaster)
+            this.nodeStatusBroadcaster.repeat({ fill: "green", text: "Connecting" });
     }
     changeStateToIdle() {
-        this.nodeStatusBroadcaster.repeat({ fill: "grey", text: "Idle" });
+        if (this.nodeStatusBroadcaster)
+            this.nodeStatusBroadcaster.repeat({ fill: "grey", text: "Idle" });
     }
     changeStateToError() {
-        this.nodeStatusBroadcaster.repeat({ fill: "red", text: "Error" });
+        if (this.nodeStatusBroadcaster)
+            this.nodeStatusBroadcaster.repeat({ fill: "red", text: "Error" });
     }
     isSystemConsole() {
         return (this.resiClient.isSystemConsole());
@@ -298,16 +301,13 @@ class NodeRESIClient {
     }
     send(command) {
         return new Promise((resolve, reject) => {
-            if (this.nodeStatusBroadcaster)
-                this.nodeStatusBroadcaster.repeat({ fill: "green", text: "Connected" });
+            this.changeStateToConnecting();
             this.resiClient.send(command)
                 .then((result) => {
-                if (this.nodeStatusBroadcaster)
-                    this.nodeStatusBroadcaster.repeat({ fill: "grey", text: "Idle" });
+                this.changeStateToIdle();
                 resolve(result);
             }).catch((error) => {
-                if (this.nodeStatusBroadcaster)
-                    this.nodeStatusBroadcaster.repeat({ fill: "red", text: "Error" });
+                this.changeStateToError();
                 reject(error);
             });
         });

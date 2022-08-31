@@ -276,7 +276,7 @@ export interface NodeRESIClientInterface {
     getNodeStatusBroadcaster() : any ;
     send( command : string ) : Promise<any> ;
 
-    changeStateToConnect() : void ;
+    changeStateToConnecting() : void ;
     changeStateToIdle() : void ;
     changeStateToError() : void ;
 }
@@ -315,14 +315,14 @@ export class NodeRESIClient implements NodeRESIClientInterface {
 
         this.nodeStatusBroadcaster = new openpromiseLib.Cycle() ;
     }
-    changeStateToConnect(): void {
-        this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "Connect" } ) ; 
+    changeStateToConnecting(): void {
+        if( this.nodeStatusBroadcaster ) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "Connecting" } ) ; 
     }
     changeStateToIdle(): void {
-        this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "Idle" } ) ; 
+        if( this.nodeStatusBroadcaster ) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "Idle" } ) ; 
     }
     changeStateToError(): void {
-        this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "Error" } ) ; 
+        if( this.nodeStatusBroadcaster ) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "Error" } ) ; 
     }
     isSystemConsole(): boolean {
         return( this.resiClient.isSystemConsole() ) ;
@@ -332,16 +332,14 @@ export class NodeRESIClient implements NodeRESIClientInterface {
     }
     send(command: string): Promise<any> {
         return new Promise<any>(( resolve, reject ) => {
-            if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "green", text: "Connected" } ) ;
+            this.changeStateToConnecting() ;
 
             this.resiClient.send( command )
                 .then( ( result ) => {
-                    if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "grey", text: "Idle" } ) ; 
-
+                    this.changeStateToIdle() ; 
                     resolve( result ) ;
                 }).catch( ( error ) => {
-                    if( this.nodeStatusBroadcaster) this.nodeStatusBroadcaster.repeat( <nodered.NodeStatus> { fill: "red", text: "Error" } ) ;
-
+                    this.changeStateToError() ;
                     reject( error ) 
                 });
         }) ;

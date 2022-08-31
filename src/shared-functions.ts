@@ -245,7 +245,7 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
   return new Promise( ( resolve, reject ) => {
       if( nodeClient.connection.isSystemConsole() ) nodeClient.log( "Try to sending command: " + textCommand ) ;
 
-      nodeClient.connection.changeStateToConnect() ;
+      //nodeClient.connection.changeStateToConnect() ;
       nodeClient.connection.send( textCommand ).then( ( response ) => {
           //console.log( ">>> " + JSON.stringify( response ) ) ;
           
@@ -255,10 +255,10 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
           result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
           //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
           
-          nodeClient.connection.changeStateToIdle() ;
+          //nodeClient.connection.changeStateToIdle() ;
           resolve( <nodered.NodeMessage> result ) ;
       }).catch( ( error ) => {
-          nodeClient.connection.changeStateToError() ;
+          //nodeClient.connection.changeStateToError() ;
           reject( error ) ;
       }) ;
   }) ;
