@@ -50,6 +50,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                     console.log( "lampLevelResponse: " + JSON.stringify( lampLevelResponse ) 
                     + (typeof (<any> lampLevelResponse).payload.timeout === 'undefined') ) ;
                     if( typeof (<any> lampLevelResponse).payload.timeout === 'undefined' ) {
+                        console.log( "in" ) ;
                         executeDALICommand( nodeServer, 
                             RESICMD.LAMP_RGBWAF.name
                             + msg.payload.lamp + ',' 
@@ -59,10 +60,11 @@ module.exports = function (RED: nodered.NodeAPI) {
                         .then( ( response ) => {
                             console.log( "response: " + JSON.stringify( lampLevelResponse ) ) ;
                         }).catch( ( error ) => {
-
+                            console.log( "in: " + error ) ;
                         }) ;                       
                     } else {
                         // Error
+                        console.log( "ou: " ) ;
                     }
                 }).catch( ( error ) => {
 

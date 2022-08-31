@@ -48,6 +48,7 @@ module.exports = function (RED) {
                     console.log("lampLevelResponse: " + JSON.stringify(lampLevelResponse)
                         + (typeof lampLevelResponse.payload.timeout === 'undefined'));
                     if (typeof lampLevelResponse.payload.timeout === 'undefined') {
+                        console.log("in");
                         (0, shared_functions_1.executeDALICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_RGBWAF.name
                             + msg.payload.lamp + ','
                             + lampLevelResponse.value.payload.actualLampLevel + ','
@@ -55,10 +56,12 @@ module.exports = function (RED) {
                             .then((response) => {
                             console.log("response: " + JSON.stringify(lampLevelResponse));
                         }).catch((error) => {
+                            console.log("in: " + error);
                         });
                     }
                     else {
                         // Error
+                        console.log("ou: ");
                     }
                 }).catch((error) => {
                 });
