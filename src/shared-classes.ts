@@ -65,7 +65,7 @@ export class RESIClient {
 
     private client : any ;
     private paramiters : { host : string, port : number, timeout : number } =  { 
-        host : '', port : -1, timeout : 1000
+        host : '', port : -1, timeout : 2000
     } ;
 
     private operationsTimeout : number = 60000 ;

@@ -53,7 +53,7 @@ exports.Status = Status;
 class RESIClient {
     constructor(address, port, operationsTimeout, lockWaitTimeout, systemConsole) {
         this.paramiters = {
-            host: '', port: -1, timeout: 1000
+            host: '', port: -1, timeout: 2000
         };
         this.operationsTimeout = 60000;
         this.lockWaitTimeout = 200;
