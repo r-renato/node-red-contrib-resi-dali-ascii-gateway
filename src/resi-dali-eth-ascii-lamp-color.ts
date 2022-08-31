@@ -67,7 +67,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                         console.log( "ou: " ) ;
                     }
                 }).catch( ( error ) => {
-
+                    console.log( "no>>> : " + error ) ;
                 }) ;
 
                 // Promise.allSettled([

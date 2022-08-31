@@ -64,6 +64,7 @@ module.exports = function (RED) {
                         console.log("ou: ");
                     }
                 }).catch((error) => {
+                    console.log("no>>> : " + error);
                 });
                 // Promise.allSettled([
                 //     executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_STATUS.opcode, 
