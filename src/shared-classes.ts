@@ -139,7 +139,7 @@ export class RESIClient {
             switch( error ) {
                 case 'Cannot connect':
                     this.connectionState = 'failedconnect' ; this.onClientConnectionError() ;
-                    if( this.systemConsole ) console.error( 'Connection error while try to connect to ' + this.paramiters.host + ":" + this.paramiters.port ) ;
+                    if( this.systemConsole ) console.error( 'Connection error while try to connect to ' + this.paramiters.host + ":" + this.paramiters.port) ;
                     break ;
               }
             //if( this.systemConsole ) this.logger( "Connected to " + this.paramiters.host + ":" + this.paramiters.port ) ;
@@ -173,6 +173,7 @@ export class RESIClient {
             if( this.connectionState == null ) {
                 if( this.systemConsole ) this.logger( "Connecting to " + this.paramiters.host + ":" + this.paramiters.port ) ;
                 this.client.connect( this.paramiters ).catch( (error: Error) => { 
+                    console.log( error ) ;
                     // nothing to do
                  }) ; 
                  lock.then( () => {
