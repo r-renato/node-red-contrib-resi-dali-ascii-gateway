@@ -49,7 +49,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                 .then( ( lampLevelResponse ) => {
                     console.log( "lampLevelResponse: " + JSON.stringify( lampLevelResponse ) ) ;
                     if( typeof (<any> lampLevelResponse).payload.timeout === 'undefined' ) {
-                        if( (<any> lampLevelResponse).payload.actualLampLevel == 0 ) {
+                        if( (<any> lampLevelResponse).payload.actualLampLevel > 0 ) {
                             executeDALICommand( nodeServer, RESICMD.LAMP_RGBWAF.name
                                 + msg.payload.lamp + ',' 
                                 + (<any> lampLevelResponse).payload.actualLampLevel + ',' 

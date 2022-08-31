@@ -47,7 +47,7 @@ module.exports = function (RED) {
                     .then((lampLevelResponse) => {
                     console.log("lampLevelResponse: " + JSON.stringify(lampLevelResponse));
                     if (typeof lampLevelResponse.payload.timeout === 'undefined') {
-                        if (lampLevelResponse.payload.actualLampLevel == 0) {
+                        if (lampLevelResponse.payload.actualLampLevel > 0) {
                             (0, shared_functions_1.executeDALICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_RGBWAF.name
                                 + msg.payload.lamp + ','
                                 + lampLevelResponse.payload.actualLampLevel + ','
