@@ -160,7 +160,7 @@ class RESIClient {
                         this.logger("Connecting to " + this.paramiters.host + ":" + this.paramiters.port);
                     this.client.connect(this.paramiters).catch((error) => {
                         if ("Socket ends" !== error.message)
-                            console.log(error);
+                            this.logger("RESIClient:connect => " + error);
                         // nothing to do
                     });
                     lock.then(() => {
@@ -179,8 +179,11 @@ class RESIClient {
                     }, this.lockWaitTimeout)
                         .then(() => {
                         this.connect(lock).then(resolve).catch(reject);
-                    }).catch(() => {
-                        this.logger('-- connection failed --');
+                    }).catch((error) => {
+                        if (this.systemConsole)
+                            this.logger('RESIClient:connect => Wait for connection ready ('
+                                + this.connectionState
+                                + '). Failed to connect to the DALI gateway.');
                         reject(new Error('Failed to connect to the DALI gateway.'));
                     });
                 }
@@ -192,16 +195,20 @@ class RESIClient {
         var promise = new Promise((resolve, reject) => {
             //this.logger( this.connectionState ) ;
             if (this.connectionState == 'failedconnect') {
-                this.logger('failed');
-                reject();
+                if (this.systemConsole)
+                    this.logger('RESIClient:sendcommand => state (' + this.connectionState + ').');
+                reject('Connection failed.');
             }
             else if (this.connectionState == 'connected') {
                 this.client.send(command, { ors: '\r', negotiationMandatory: false }, (err, response) => {
                     if (this.systemConsole)
-                        this.logger("dali client :: sendcommand - " + command + " => response: " + response);
+                        this.logger("RESIClient::sendcommand => " + command + " => response: " + response);
                     return response;
                 }).then((response) => {
-                    resolve(response);
+                    if (response)
+                        resolve(response);
+                    else
+                        reject('Response undefined');
                 }).catch((err) => {
                     //this.logger( "Send error: " + err.message ) ;
                     //this.client.end().finally() ;
