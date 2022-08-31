@@ -60,10 +60,7 @@ module.exports = function (RED: nodered.NodeAPI) {
 
                                 var result = Object.assign({}, msg) ;
                                 result = objectRename( msg, 'payload', 'daliRequest' ) ;
-                                result.payload = {
-                                    done : true,
-                                    raw : response.payload
-                                }
+                                result.payload = response.payload ;
 
                                 send( <nodered.NodeMessage> result ) ;
                                 done() ;

@@ -56,10 +56,7 @@ module.exports = function (RED) {
                                 console.log("response: " + JSON.stringify(response));
                                 var result = Object.assign({}, msg);
                                 result = (0, shared_functions_1.objectRename)(msg, 'payload', 'daliRequest');
-                                result.payload = {
-                                    done: true,
-                                    raw: response.payload
-                                };
+                                result.payload = response.payload;
                                 send(result);
                                 done();
                             }).catch((error) => {
