@@ -80,6 +80,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                                 + DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.opcode, 
                                 buildRequestNodeMessage( msg, RESICMD.COMMAND.name, DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.name ))
                             .then( () => {
+                                console.log( "[" + msg.payload.command.replace(/ /g,"_") + "]" ) ;
                                 executeRESICommand( nodeServer, RESICMD.COMMAND.name
                                     + msg.payload.lamp + '=' 
                                     + DALICMD[ msg.payload.command.replace(/ /g,"_") ].opcode, 
@@ -93,17 +94,17 @@ module.exports = function (RED: nodered.NodeAPI) {
                                     .then( () => {
 
                                     }).catch( (e) => {
-                                        node.error( "rollback " + e, msg ) ;
+                                        node.error( "rollback1 " + e, msg ) ;
                                     }) ;
                                 }) ;
                             })
                             .catch( (e) => {
                                 // Rollback
-                                node.error( "rollback " + e, msg ) ;
+                                node.error( "rollback2 " + e, msg ) ;
                             }) ;
                         }).catch( (e) => {
                             // Rollback
-                            node.error( "rollback " + e, msg ) ;
+                            node.error( "rollback3 " + e, msg ) ;
                         }) ;
 
                     }).catch( ( message ) => {

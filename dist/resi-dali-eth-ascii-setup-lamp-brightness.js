@@ -73,6 +73,7 @@ module.exports = function (RED) {
                                 + msg.payload.lamp + '='
                                 + shared_interfaces_1.DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.COMMAND.name, shared_interfaces_1.DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.name))
                                 .then(() => {
+                                console.log("[" + msg.payload.command.replace(/ /g, "_") + "]");
                                 (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.COMMAND.name
                                     + msg.payload.lamp + '='
                                     + shared_interfaces_1.DALICMD[msg.payload.command.replace(/ /g, "_")].opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.COMMAND.name, shared_interfaces_1.DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.name))
@@ -84,17 +85,17 @@ module.exports = function (RED) {
                                     rollback(msg.payload.lamp, lampLevelResponse.payload.actualLampLevel, msg)
                                         .then(() => {
                                     }).catch((e) => {
-                                        node.error("rollback " + e, msg);
+                                        node.error("rollback1 " + e, msg);
                                     });
                                 });
                             })
                                 .catch((e) => {
                                 // Rollback
-                                node.error("rollback " + e, msg);
+                                node.error("rollback2 " + e, msg);
                             });
                         }).catch((e) => {
                             // Rollback
-                            node.error("rollback " + e, msg);
+                            node.error("rollback3 " + e, msg);
                         });
                     }).catch((message) => {
                         send(message);
