@@ -96,13 +96,15 @@ module.exports = function (RED: nodered.NodeAPI) {
                                         send( result ) ;
                                         done() ;
                                     });
-                                }).catch( () => {
+                                }).catch( ( e ) => {
                                     // Roll back
+                                    node.error( "rollback1 " + e, msg ) ;
                                     rollback( msg.payload.lamp, lampLevelResponse.payload.actualLampLevel, msg )
                                     .then( () => {
-
+                                        send( buildErrorNodeMessage( msg, e ) ) ;
+                                        done()
                                     }).catch( (e) => {
-                                        node.error( "rollback1 " + e, msg ) ;
+                                        
                                     }) ;
                                 }) ;
                             })
