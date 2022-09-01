@@ -85,9 +85,10 @@ module.exports = function (RED: nodered.NodeAPI) {
                                 executeRESICommand( nodeServer, RESICMD.LAMP_COMMAND.name
                                     + msg.payload.lamp + '=' 
                                     + DALICMD[ msg.payload.command.replace(/ /g,"_") ].opcode, 
-                                    buildRequestNodeMessage( msg, RESICMD.LAMP_COMMAND.name, DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.name ))
-                                .then( () => {
-                                    send( msg ) ;
+                                    buildRequestNodeMessage( msg, RESICMD.LAMP_COMMAND.name, DALICMD.DALICMD[ msg.payload.command.replace(/ /g,"_") ].name ))
+                                .then( ( response ) => {
+
+                                    send( response ) ;
                                     done() ;
                                 }).catch( () => {
                                     // Roll back
