@@ -269,10 +269,14 @@ export function executeRESICommand( nodeClient : NodeExtendedInterface, command 
     if( nodeClient.connection.isSystemConsole() ) nodeClient.log( "Execute RESI command: " + command ) ;
 
     nodeClient.connection.send( command ).then( ( response ) => {
+      console.log( "1" ) ;
       var result = <RESIResponseInterface> Object.assign({}, msg)
       result = objectRename( result, 'payload', 'daliRequest' ) ;
+      console.log( "2" ) ;
       result.payload = prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
+      console.log( "3" ) ;
       result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
+      console.log( "4" ) ;
 
       if( isRESIValidResponse( result.payload ) ) resolve( <nodered.NodeMessage> result ) ;
       else reject( <nodered.NodeMessage> result );
