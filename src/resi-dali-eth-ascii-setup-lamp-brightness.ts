@@ -70,6 +70,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                     executeRESICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_ACTUAL_LEVEL.opcode, 
                         buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) )
                     .then( ( lampLevelResponse : any) => {
+                        console.log( JSON.stringify( msg ) ) ;
                         executeRESICommand( nodeServer, RESICMD.LAMP_LEVEL.name
                             + msg.payload.lamp + '=' 
                             + msg.payload.level, 
