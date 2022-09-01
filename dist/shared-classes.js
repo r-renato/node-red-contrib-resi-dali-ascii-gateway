@@ -74,7 +74,7 @@ class RESIClient {
      * @param ms
      * @returns
      */
-    waitFor(test, ms) {
+    waitFor(test, ms, msg) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
                 let timeout = 3;
@@ -86,7 +86,7 @@ class RESIClient {
                     else {
                         timeout--;
                         if (this.systemConsole)
-                            this.logger("waitFor timeout: " + timeout);
+                            this.logger((typeof msg === 'undefined' ? "waitFor timeout: " : msg + " => waitFor timeout: ") + timeout);
                         if (timeout == 0) {
                             clearInterval(timerId);
                             reject(false);
@@ -181,7 +181,7 @@ class RESIClient {
                     this.waitFor(() => {
                         console.log("RESIClient:connect => " + this.connectionState);
                         return (this.connectionState == null);
-                    }, this.lockWaitTimeout)
+                    }, this.lockWaitTimeout, "RESIClient::sendcommand")
                         .then(() => {
                         this.connect(lock).then(resolve).catch(reject);
                     }).catch((error) => {
@@ -221,7 +221,9 @@ class RESIClient {
                 });
             }
             else {
-                this.waitFor(() => { return (this.connectionState == 'connected'); }, this.lockWaitTimeout)
+                this.waitFor(() => {
+                    return (this.connectionState == 'connected');
+                }, this.lockWaitTimeout, "RESIClient::sendcommand")
                     .then(() => {
                     this.sendcommand(command).then(resolve).catch(reject);
                 }).catch(() => {

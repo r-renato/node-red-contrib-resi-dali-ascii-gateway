@@ -81,7 +81,7 @@ export class RESIClient {
      * @param ms 
      * @returns 
      */
-    protected async waitFor( test : () => boolean, ms : number ) : Promise<any> {
+    protected async waitFor( test : () => boolean, ms : number, msg ?: string ) : Promise<any> {
         return new Promise( ( resolve, reject ) => {
             let timeout = 3 ;
             let timerId = setInterval( () => {
@@ -90,7 +90,9 @@ export class RESIClient {
                     resolve( true ) ;
                   } else {
                     timeout-- ; 
-                    if( this.systemConsole ) this.logger( "waitFor timeout: " + timeout ) ;
+                    if( this.systemConsole ) this.logger( 
+                        (typeof msg === 'undefined' ? "waitFor timeout: " : msg + " => waitFor timeout: " ) + timeout
+                        ) ;
                     if( timeout == 0 ) {
                         clearInterval(timerId);
                         reject( false ) ;
@@ -174,7 +176,8 @@ export class RESIClient {
                 if( this.systemConsole ) this.logger( "Connecting to " + this.paramiters.host + ":" + this.paramiters.port ) ;
                 this.client.connect( this.paramiters ).catch( (error: Error) => { 
                     if( "Socket ends" !== error.message ) {
-                        if( this.systemConsole ) this.logger( "RESIClient:connect => " + error ) ;
+                        if( this.systemConsole ) this.logger( 
+                            "RESIClient:connect => " + error ) ;
                         this.initializeClient() ;
                         this.connectionState = null ;
                         reject( error ) ;
@@ -193,7 +196,7 @@ export class RESIClient {
 
                 this.waitFor( () => { 
                     console.log( "RESIClient:connect => " + this.connectionState ) ; return ( this.connectionState == null ) ;
-                }, this.lockWaitTimeout )
+                }, this.lockWaitTimeout, "RESIClient::sendcommand" )
                 .then( () => { 
                     this.connect( lock ).then( resolve ).catch( reject ) ; 
                 }).catch( ( error ) => {
@@ -229,7 +232,9 @@ export class RESIClient {
                     reject( err );
                 });
             } else {
-                this.waitFor( () => { return ( this.connectionState == 'connected' ) ; }, this.lockWaitTimeout )
+                this.waitFor( () => { 
+                    return ( this.connectionState == 'connected' ) ; 
+                }, this.lockWaitTimeout, "RESIClient::sendcommand" )
                 .then( () => { 
                     this.sendcommand( command ).then( resolve ).catch( reject ) ; 
                 }).catch( () => {
