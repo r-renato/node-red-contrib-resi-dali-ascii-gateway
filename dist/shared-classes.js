@@ -160,7 +160,10 @@ class RESIClient {
                         this.logger("Connecting to " + this.paramiters.host + ":" + this.paramiters.port);
                     this.client.connect(this.paramiters).catch((error) => {
                         if ("Socket ends" !== error.message) {
-                            this.logger("RESIClient:connect => " + error);
+                            if (this.systemConsole)
+                                this.logger("RESIClient:connect => " + error);
+                            this.initializeClient();
+                            this.connectionState = null;
                             reject(error);
                         }
                         // nothing to do
@@ -246,14 +249,13 @@ class RESIClient {
                             lock.resolve();
                             resolve(response);
                         }).catch((error) => {
-                            // try {
-                            //     this.client.end().finally() ;
-                            // } catch( e ) {}
                             lock.resolve();
                             reject(error);
                         });
                     }).catch((error) => {
-                        this.logger('Send cmd: ' + command + " => erro: " + error);
+                        if (this.systemConsole)
+                            this.logger('RESIClient::send(' + command + ") => " + error);
+                        lock.resolve();
                         reject(error);
                     });
                 });
