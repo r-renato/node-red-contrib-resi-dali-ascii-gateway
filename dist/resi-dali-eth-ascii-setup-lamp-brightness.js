@@ -77,7 +77,7 @@ module.exports = function (RED) {
                                 console.log("[" + msg.payload.command.replace(/ /g, "_") + "]");
                                 (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_COMMAND.name
                                     + msg.payload.lamp + '='
-                                    + shared_interfaces_1.DALICMD[msg.payload.command.replace(/ /g, "_")].opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_COMMAND.name, shared_interfaces_1.DALICMD.DALICMD[msg.payload.command.replace(/ /g, "_")].name))
+                                    + shared_interfaces_1.DALICMD[msg.payload.command.replace(/ /g, "_")].opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_COMMAND.name, shared_interfaces_1.DALICMD[msg.payload.command.replace(/ /g, "_")].name))
                                     .then((response) => {
                                     send(response);
                                     done();

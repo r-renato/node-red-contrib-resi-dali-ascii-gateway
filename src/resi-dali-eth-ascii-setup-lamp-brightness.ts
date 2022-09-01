@@ -85,7 +85,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                                 executeRESICommand( nodeServer, RESICMD.LAMP_COMMAND.name
                                     + msg.payload.lamp + '=' 
                                     + DALICMD[ msg.payload.command.replace(/ /g,"_") ].opcode, 
-                                    buildRequestNodeMessage( msg, RESICMD.LAMP_COMMAND.name, DALICMD.DALICMD[ msg.payload.command.replace(/ /g,"_") ].name ))
+                                    buildRequestNodeMessage( msg, RESICMD.LAMP_COMMAND.name, DALICMD[ msg.payload.command.replace(/ /g,"_") ].name ))
                                 .then( ( response ) => {
 
                                     send( response ) ;
