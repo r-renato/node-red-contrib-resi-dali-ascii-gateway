@@ -64,7 +64,7 @@ export class RESIClient {
     private logEnabled : boolean ;
 
     private client : any ;
-    private paramiters : { host : string, port : number, timeout : number } =  { 
+    private parameters : { host : string, port : number, timeout : number } =  { 
         host : '', port : -1, timeout : 2000
     } ;
 
@@ -123,7 +123,7 @@ export class RESIClient {
             this.connectionState = 'connected' ; this.onClientConnected() ;
             //this.logger( "sockw: " + (<Socket> this.client.getSocket()).readyState ) ;
             if( this.systemConsole ) this.logger(
-                 "Connected to " + this.paramiters.host + ":" + this.paramiters.port
+                 "Connected to " + this.parameters.host + ":" + this.parameters.port
                  ) ;
         }) ;
         
@@ -131,7 +131,7 @@ export class RESIClient {
             //this.logger( "sockw: " + (<Socket> this.client.getSocket()).readyState ) ;
             this.connectionState = 'closed' ; this.onClientConnectionEnd() ;
             if( this.systemConsole ) this.logger( 
-                "End connection to " + this.paramiters.host + ":" + this.paramiters.port
+                "End connection to " + this.parameters.host + ":" + this.parameters.port
                 ) ;
             this.client.destroy().finally() ;
             this.initializeClient( null ) ;
@@ -141,7 +141,7 @@ export class RESIClient {
             switch( error ) {
                 case 'Cannot connect':
                     this.connectionState = 'failedconnect' ; this.onClientConnectionError() ;
-                    if( this.systemConsole ) console.error( 'Connection error while try to connect to ' + this.paramiters.host + ":" + this.paramiters.port) ;
+                    if( this.systemConsole ) console.error( 'Connection error while try to connect to ' + this.parameters.host + ":" + this.parameters.port) ;
                     break ;
               }
             //if( this.systemConsole ) this.logger( "Connected to " + this.paramiters.host + ":" + this.paramiters.port ) ;
@@ -161,8 +161,8 @@ export class RESIClient {
 
         this.requestQueue = new openpromiseLib.Queue() ;
 
-        this.paramiters.host = address ;
-        this.paramiters.port = port ;
+        this.parameters.host = address ;
+        this.parameters.port = port ;
 
         this.initializeClient( null ) ;
     }
@@ -173,9 +173,9 @@ export class RESIClient {
     public async connect( lock : Promise<any> ) : Promise<any> {
         var promise = new Promise<void>( (resolve, reject) => {
             if( this.connectionState == null ) {
-                if( this.systemConsole ) this.logger( "Connecting to " + this.paramiters.host + ":" + this.paramiters.port ) ;
+                if( this.systemConsole ) this.logger( "Connecting to " + this.parameters.host + ":" + this.parameters.port ) ;
                 this.connectionState = 'connecting' ;
-                this.client.connect( this.paramiters ).catch( (error: Error) => { 
+                this.client.connect( this.parameters ).catch( (error: Error) => { 
                     if( "Socket ends" !== error.message ) {
                         if( this.systemConsole ) this.logger( 
                             "RESIClient:connect => " + error ) ;
@@ -241,7 +241,7 @@ export class RESIClient {
                     console.log( "RESIClient::sendcommand => connectionState : " +  this.connectionState ) ;
                     this.waitFor( () => { 
                         return ( this.connectionState == null ) ; 
-                    }, this.lockWaitTimeout * 2, "RESIClient::sendcommand" )
+                    }, this.parameters.timeout, "RESIClient::sendcommand" )
                     .then( () => {
                         reject( new Error( 'Connection timeout' ) ) ;
                     }).catch( () => {
