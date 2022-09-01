@@ -69,18 +69,25 @@ module.exports = function (RED) {
                             + msg.payload.lamp + '='
                             + msg.payload.level, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_LEVEL.name, ''))
                             .then((setLampLevelResponse) => {
-                            console.log("=>>>1");
                             (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_COMMAND.name
                                 + msg.payload.lamp + '='
                                 + shared_interfaces_1.DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_COMMAND.name, shared_interfaces_1.DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.name))
                                 .then(() => {
-                                console.log("[" + msg.payload.command.replace(/ /g, "_") + "]");
                                 (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_COMMAND.name
                                     + msg.payload.lamp + '='
                                     + shared_interfaces_1.DALICMD[msg.payload.command.replace(/ /g, "_")].opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_COMMAND.name, shared_interfaces_1.DALICMD[msg.payload.command.replace(/ /g, "_")].name))
                                     .then((response) => {
-                                    send(response);
-                                    done();
+                                    var result = Object.assign({}, msg);
+                                    result = (0, shared_functions_1.objectRename)(msg, 'payload', 'daliRequest');
+                                    result.payload = response.payload;
+                                    rollback(msg.payload.lamp, lampLevelResponse.payload.actualLampLevel, msg)
+                                        .then(() => {
+                                        send(result);
+                                        done();
+                                    }).catch(() => {
+                                        send(result);
+                                        done();
+                                    });
                                 }).catch(() => {
                                     // Roll back
                                     rollback(msg.payload.lamp, lampLevelResponse.payload.actualLampLevel, msg)

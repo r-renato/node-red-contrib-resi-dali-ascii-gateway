@@ -75,21 +75,27 @@ module.exports = function (RED: nodered.NodeAPI) {
                             + msg.payload.level, 
                             buildRequestNodeMessage( msg, RESICMD.LAMP_LEVEL.name, '' ))
                         .then( ( setLampLevelResponse : any ) => {
-                            console.log( "=>>>1" ) ;
                             executeRESICommand( nodeServer, RESICMD.LAMP_COMMAND.name
                                 + msg.payload.lamp + '=' 
                                 + DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.opcode, 
                                 buildRequestNodeMessage( msg, RESICMD.LAMP_COMMAND.name, DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.name ))
                             .then( () => {
-                                console.log( "[" + msg.payload.command.replace(/ /g,"_") + "]" ) ;
                                 executeRESICommand( nodeServer, RESICMD.LAMP_COMMAND.name
                                     + msg.payload.lamp + '=' 
                                     + DALICMD[ msg.payload.command.replace(/ /g,"_") ].opcode, 
                                     buildRequestNodeMessage( msg, RESICMD.LAMP_COMMAND.name, DALICMD[ msg.payload.command.replace(/ /g,"_") ].name ))
                                 .then( ( response ) => {
-
-                                    send( response ) ;
-                                    done() ;
+                                    var result = Object.assign({}, msg) ;
+                                    result = objectRename( msg, 'payload', 'daliRequest' ) ;
+                                    result.payload = response.payload ;
+                                    rollback( msg.payload.lamp, lampLevelResponse.payload.actualLampLevel, msg )
+                                    .then( () => {
+                                        send( result ) ;
+                                        done() ;
+                                    }).catch( () => {
+                                        send( result ) ;
+                                        done() ;
+                                    });
                                 }).catch( () => {
                                     // Roll back
                                     rollback( msg.payload.lamp, lampLevelResponse.payload.actualLampLevel, msg )
