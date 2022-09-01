@@ -83,14 +83,18 @@ module.exports = function (RED) {
                                     // Roll back
                                     rollback(msg.payload.lamp, lampLevelResponse.payload.actualLampLevel, msg)
                                         .then(() => {
-                                    }).catch(() => { });
+                                    }).catch((e) => {
+                                        node.error("rollback " + e, msg);
+                                    });
                                 });
                             })
-                                .catch(() => {
+                                .catch((e) => {
                                 // Rollback
+                                node.error("rollback " + e, msg);
                             });
-                        }).catch(() => {
+                        }).catch((e) => {
                             // Rollback
+                            node.error("rollback " + e, msg);
                         });
                     }).catch((message) => {
                         send(message);
