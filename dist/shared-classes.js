@@ -159,8 +159,10 @@ class RESIClient {
                     if (this.systemConsole)
                         this.logger("Connecting to " + this.paramiters.host + ":" + this.paramiters.port);
                     this.client.connect(this.paramiters).catch((error) => {
-                        if ("Socket ends" !== error.message)
+                        if ("Socket ends" !== error.message) {
                             this.logger("RESIClient:connect => " + error);
+                            reject(error);
+                        }
                         // nothing to do
                     });
                     lock.then(() => {
