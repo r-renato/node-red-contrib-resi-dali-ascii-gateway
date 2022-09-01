@@ -34,11 +34,11 @@ module.exports = function (RED) {
                 message = '\'lamp\' attribute Not Found';
                 isValid = false;
             }
-            if (!(isValid && Object.prototype.hasOwnProperty.call(msg.payload, 'daliCommand'))) {
+            else if (!(isValid && Object.prototype.hasOwnProperty.call(msg.payload, 'command'))) {
                 message = '\'daliCommand\' attribute Not Found';
                 isValid = false;
             }
-            if (!(isValid && Object.prototype.hasOwnProperty.call(msg.payload, 'level'))) {
+            else if (!(isValid && Object.prototype.hasOwnProperty.call(msg.payload, 'level'))) {
                 message = '\'level\' attribute Not Found';
                 isValid = false;
             }
