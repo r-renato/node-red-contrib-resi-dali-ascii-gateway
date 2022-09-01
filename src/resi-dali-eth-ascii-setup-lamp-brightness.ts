@@ -85,9 +85,8 @@ module.exports = function (RED: nodered.NodeAPI) {
                                     + DALICMD[ msg.payload.command.replace(/ /g,"_") ].opcode, 
                                     buildRequestNodeMessage( msg, RESICMD.LAMP_COMMAND.name, DALICMD[ msg.payload.command.replace(/ /g,"_") ].name ))
                                 .then( ( response ) => {
-                                    console.log( JSON.stringify( msg ) ) ;
                                     var result = Object.assign({}, msg) ;
-                                    result = objectRename( msg, 'payload', 'daliRequest' ) ;
+                                    result = objectRename( result, 'payload', 'daliRequest' ) ;
                                     result.payload = response.payload ;
                                     rollback( msg.payload.lamp, lampLevelResponse.payload.actualLampLevel, msg )
                                     .then( () => {

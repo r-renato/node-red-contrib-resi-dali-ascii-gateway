@@ -77,9 +77,8 @@ module.exports = function (RED) {
                                     + msg.payload.lamp + '='
                                     + shared_interfaces_1.DALICMD[msg.payload.command.replace(/ /g, "_")].opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_COMMAND.name, shared_interfaces_1.DALICMD[msg.payload.command.replace(/ /g, "_")].name))
                                     .then((response) => {
-                                    console.log(JSON.stringify(msg));
                                     var result = Object.assign({}, msg);
-                                    result = (0, shared_functions_1.objectRename)(msg, 'payload', 'daliRequest');
+                                    result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
                                     result.payload = response.payload;
                                     rollback(msg.payload.lamp, lampLevelResponse.payload.actualLampLevel, msg)
                                         .then(() => {
