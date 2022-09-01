@@ -75,16 +75,17 @@ module.exports = function (RED: nodered.NodeAPI) {
                             + msg.payload.level, 
                             buildRequestNodeMessage( msg, RESICMD.LAMP_LEVEL.name, '' ))
                         .then( ( setLampLevelResponse : any ) => {
-                            executeRESICommand( nodeServer, RESICMD.COMMAND.name
+                            console.log( "=>>>1" ) ;
+                            executeRESICommand( nodeServer, RESICMD.LAMP_COMMAND.name
                                 + msg.payload.lamp + '=' 
                                 + DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.opcode, 
-                                buildRequestNodeMessage( msg, RESICMD.COMMAND.name, DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.name ))
+                                buildRequestNodeMessage( msg, RESICMD.LAMP_COMMAND.name, DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.name ))
                             .then( () => {
                                 console.log( "[" + msg.payload.command.replace(/ /g,"_") + "]" ) ;
-                                executeRESICommand( nodeServer, RESICMD.COMMAND.name
+                                executeRESICommand( nodeServer, RESICMD.LAMP_COMMAND.name
                                     + msg.payload.lamp + '=' 
                                     + DALICMD[ msg.payload.command.replace(/ /g,"_") ].opcode, 
-                                    buildRequestNodeMessage( msg, RESICMD.COMMAND.name, DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.name ))
+                                    buildRequestNodeMessage( msg, RESICMD.LAMP_COMMAND.name, DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.name ))
                                 .then( () => {
                                     send( msg ) ;
                                     done() ;

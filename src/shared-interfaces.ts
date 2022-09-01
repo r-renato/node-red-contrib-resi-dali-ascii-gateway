@@ -211,7 +211,7 @@ export const DALICMD:any = {
 
 }
 
-export const RESICMD:any = {
+export const RESICMD: any = {
     LAMP : {
         name : <string> '#LAMP '
     },
