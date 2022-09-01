@@ -238,6 +238,7 @@ export class RESIClient {
                 .then( () => { 
                     this.sendcommand( command ).then( resolve ).catch( reject ) ; 
                 }).catch( () => {
+                    console.log( "RESIClient::sendcommand => " +  this.connectionState ) ;
                     this.waitFor( () => { 
                         return ( this.connectionState == null ) ; 
                     }, this.lockWaitTimeout, "RESIClient::sendcommand" )
@@ -251,6 +252,11 @@ export class RESIClient {
         return( promise ) ;
     }
 
+    /**
+     * 
+     * @param command 
+     * @returns 
+     */
     public async send( command : string ) : Promise<any> {
         var promise = new Promise<void>( (resolve, reject) => {
             var lock = new openpromiseLib.Delay( this.operationsTimeout ) ;
@@ -262,7 +268,7 @@ export class RESIClient {
             
             sema.then( () => {
                 //this.logger( '-----> ' + this.uid + " / " + this.connectionState ) ;
-                this.connect( lock ).then(() => {
+                this.connect( lock ).then( () => {
                     this.sendcommand( command ).then(( response ) => {
                         //this.logger( 'Send cmd: ' + command + " => response: " + response ) ;
                         this.client.end().finally() ;

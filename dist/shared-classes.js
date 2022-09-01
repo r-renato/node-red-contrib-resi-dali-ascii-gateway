@@ -227,6 +227,7 @@ class RESIClient {
                     .then(() => {
                     this.sendcommand(command).then(resolve).catch(reject);
                 }).catch(() => {
+                    console.log("RESIClient::sendcommand => " + this.connectionState);
                     this.waitFor(() => {
                         return (this.connectionState == null);
                     }, this.lockWaitTimeout, "RESIClient::sendcommand")
@@ -238,6 +239,11 @@ class RESIClient {
         });
         return (promise);
     }
+    /**
+     *
+     * @param command
+     * @returns
+     */
     send(command) {
         return __awaiter(this, void 0, void 0, function* () {
             var promise = new Promise((resolve, reject) => {
