@@ -115,7 +115,7 @@ export class RESIClient {
     protected onClientConnectionEnd() { /* nothing to do */ } ;
     protected onClientConnectionError() { /* nothing to do */ } ;
 
-    private initializeClient() {
+    private initializeClient( state : ConnectionState ) {
         if( this.client ) this.client.destroy().finally() ;
         this.client = new Telnet() ;
         
@@ -134,7 +134,7 @@ export class RESIClient {
                 "End connection to " + this.paramiters.host + ":" + this.paramiters.port
                 ) ;
             this.client.destroy().finally() ;
-            this.initializeClient() ;
+            this.initializeClient( null ) ;
         }) ;
         
         this.client.on( 'error', ( error: string ) => {
@@ -147,7 +147,7 @@ export class RESIClient {
             //if( this.systemConsole ) this.logger( "Connected to " + this.paramiters.host + ":" + this.paramiters.port ) ;
         }) ;
 
-        this.connectionState = null ; this.onClientIdle() ;
+        this.connectionState = state ; this.onClientIdle() ;
         if( this.systemConsole ) this.logger( "Client initialized..." ) ;
     } ;
 
@@ -164,7 +164,7 @@ export class RESIClient {
         this.paramiters.host = address ;
         this.paramiters.port = port ;
 
-        this.initializeClient() ;
+        this.initializeClient( null ) ;
     }
 
     /**
@@ -174,13 +174,12 @@ export class RESIClient {
         var promise = new Promise<void>( (resolve, reject) => {
             if( this.connectionState == null ) {
                 if( this.systemConsole ) this.logger( "Connecting to " + this.paramiters.host + ":" + this.paramiters.port ) ;
-                this.connectionState == 'connecting' ;
+                this.connectionState = 'connecting' ;
                 this.client.connect( this.paramiters ).catch( (error: Error) => { 
                     if( "Socket ends" !== error.message ) {
                         if( this.systemConsole ) this.logger( 
                             "RESIClient:connect => " + error ) ;
-                        this.initializeClient() ;
-                        this.connectionState = null ;
+                        this.initializeClient( null ) ;
                         reject( error ) ;
                     }
                     // nothing to do
@@ -191,8 +190,7 @@ export class RESIClient {
                  resolve() ;
             } else {
                 if( this.connectionState == 'closed' ) {
-                    this.initializeClient() ;
-                    this.connectionState = null ;
+                    this.initializeClient( null ) ;
                 }
 
                 this.waitFor( () => { 
@@ -233,6 +231,7 @@ export class RESIClient {
                     reject( err );
                 });
             } else {
+                console.log( "RESIClient::sendcommand => connectionState : " +  this.connectionState ) ;
                 this.waitFor( () => { 
                     return ( this.connectionState == 'connected' ) ; 
                 }, this.lockWaitTimeout, "RESIClient::sendcommand" )
