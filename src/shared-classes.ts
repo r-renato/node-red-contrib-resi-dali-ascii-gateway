@@ -5,7 +5,7 @@ const uuid = require( 'uuid' ) ;
 const openpromiseLib = require( 'openpromise' ) ;
 const { Telnet } = require('telnet-client') ;
 
-type ConnectionState = null | 'closed' | 'connected' | 'failedconnect'  ;
+type ConnectionState = null | 'closed' | 'connecting' | 'connected' | 'failedconnect'  ;
 
 export interface StatusInterface {
     setStatus( state: boolean ) : void ;
@@ -174,6 +174,7 @@ export class RESIClient {
         var promise = new Promise<void>( (resolve, reject) => {
             if( this.connectionState == null ) {
                 if( this.systemConsole ) this.logger( "Connecting to " + this.paramiters.host + ":" + this.paramiters.port ) ;
+                this.connectionState == 'connecting' ;
                 this.client.connect( this.paramiters ).catch( (error: Error) => { 
                     if( "Socket ends" !== error.message ) {
                         if( this.systemConsole ) this.logger( 
@@ -238,7 +239,7 @@ export class RESIClient {
                 .then( () => { 
                     this.sendcommand( command ).then( resolve ).catch( reject ) ; 
                 }).catch( () => {
-                    console.log( "RESIClient::sendcommand => " +  this.connectionState ) ;
+                    console.log( "RESIClient::sendcommand => connectionState : " +  this.connectionState ) ;
                     this.waitFor( () => { 
                         return ( this.connectionState == null ) ; 
                     }, this.lockWaitTimeout, "RESIClient::sendcommand" )

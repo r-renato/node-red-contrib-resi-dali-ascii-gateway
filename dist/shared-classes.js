@@ -158,6 +158,7 @@ class RESIClient {
                 if (this.connectionState == null) {
                     if (this.systemConsole)
                         this.logger("Connecting to " + this.paramiters.host + ":" + this.paramiters.port);
+                    this.connectionState == 'connecting';
                     this.client.connect(this.paramiters).catch((error) => {
                         if ("Socket ends" !== error.message) {
                             if (this.systemConsole)
@@ -227,7 +228,7 @@ class RESIClient {
                     .then(() => {
                     this.sendcommand(command).then(resolve).catch(reject);
                 }).catch(() => {
-                    console.log("RESIClient::sendcommand => " + this.connectionState);
+                    console.log("RESIClient::sendcommand => connectionState : " + this.connectionState);
                     this.waitFor(() => {
                         return (this.connectionState == null);
                     }, this.lockWaitTimeout, "RESIClient::sendcommand")
