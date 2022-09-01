@@ -264,6 +264,31 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
   }) ;
 }
 
+export function executeRESICommand( nodeClient : NodeExtendedInterface, command : string, msg : any ) : Promise<nodered.NodeMessage> {
+  return new Promise( ( resolve, reject ) => {
+    if( nodeClient.connection.isSystemConsole() ) nodeClient.log( "Execute RESI command: " + command ) ;
+
+    nodeClient.connection.send( command ).then( ( response ) => {
+      var result = <RESIResponseInterface> Object.assign({}, msg)
+      result = objectRename( result, 'payload', 'daliRequest' ) ;
+      result.payload = prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
+      result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
+
+      if( isRESIValidResponse( result.payload ) ) resolve( <nodered.NodeMessage> result ) ;
+      else reject( <nodered.NodeMessage> result );
+    }).catch( ( error : any ) => {
+      let message = '' ; let e ;
+      if( typeof error === 'string' ) message = error ;
+      else if( error instanceof Error ) {
+        message = error.message ;
+        e = error ;
+      }
+      
+      reject( <nodered.NodeMessage> buildErrorNodeMessage( msg, message, e ) ) ;
+    }) ;
+  });
+}
+
 /**
  * 
  * @param msg 
@@ -287,4 +312,13 @@ export function buildErrorNodeMessage( msg : any, message : string, error ?: Err
     result.error.message = error ;
     
   return( result ) ;
+}
+
+/**
+ * 
+ * @param payload 
+ * @returns 
+ */
+export function isRESIValidResponse( payload : { done : boolean, timeout ?: boolean }) : boolean {
+  return( payload.done && (typeof payload.timeout === 'undefined') ) ;
 }

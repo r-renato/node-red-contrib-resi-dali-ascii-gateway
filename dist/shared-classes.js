@@ -220,14 +220,14 @@ class RESIClient {
                 });
             }
             else {
-                console.log("RESIClient::sendcommand => connectionState : " + this.connectionState);
+                //console.log( "RESIClient::sendcommand => connectionState : " +  this.connectionState ) ;
                 this.waitFor(() => {
                     return (this.connectionState == 'connected');
                 }, this.lockWaitTimeout, "RESIClient::sendcommand")
                     .then(() => {
                     this.sendcommand(command).then(resolve).catch(reject);
                 }).catch(() => {
-                    console.log("RESIClient::sendcommand => connectionState : " + this.connectionState);
+                    //console.log( "RESIClient::sendcommand => connectionState : " +  this.connectionState ) ;
                     this.waitFor(() => {
                         return (this.connectionState == null);
                     }, this.parameters.timeout, "RESIClient::sendcommand")

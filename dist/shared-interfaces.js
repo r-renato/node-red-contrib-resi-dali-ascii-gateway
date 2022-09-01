@@ -48,6 +48,52 @@ exports.DALICMD = {
         opcode: '0x06',
         description: 'Changes the current light output to the minimum level'
     },
+    STORE_ACTUAL_LEVEL_IN_DTR: {
+        name: 'STORE ACTUAL LEVEL IN DTR',
+        opcode: '0x21',
+        description: 'Determines the control gear\'s status based on a combination of gear properties'
+    },
+    STORE_THE_DTR_AS_MAX_LEVEL: {
+        name: 'STORE THE DTR AS MAX LEVEL',
+        opcode: '0x2A',
+        description: 'Stores the actual register value DTR as maximum level for lamp'
+    },
+    STORE_THE_DTR_AS_MIN_LEVEL: {
+        name: 'STORE THE DTR AS MIN LEVEL',
+        opcode: '0x2B',
+        description: 'Stores the actual register value DTR as minimum level for lamp'
+    },
+    STORE_DTR_AS_SYSTEM_FAILURE_LEVEL: {
+        name: 'STORE DTR AS SYSTEM FAILURE LEVEL',
+        opcode: '0x2C',
+        description: 'Stores the actual register value DTR as system failure level for lamp'
+    },
+    STORE_DTR_AS_POWER_ON_LEVEL: {
+        name: 'STORE DTR AS POWER ON LEVEL',
+        opcode: '0x2D',
+        description: 'Stores the actual register value DTR as power on level for lamp'
+    },
+    STORE_DTR_AS_FADETIME: {
+        name: 'STORE DTR AS FADETIME',
+        opcode: '0x2E',
+        description: 'Stores the actual register value DTR as fade time for lamp'
+    },
+    STORE_DTR_AS_FADERATE: {
+        name: 'STORE DTR AS FADERATE',
+        opcode: '0x2F',
+        description: 'Stores the actual register value DTR as fade rate for lamp'
+    },
+    STORE_THE_DTR_AS_SCENE_0: {
+        name: 'STORE THE DTR AS SCENE 0',
+        opcode: '0x40',
+        description: 'Stores the actual register value DTR as new brightness level forscene x (0 to 15)'
+    },
+    //TO-DO
+    STORE_THE_DTR_AS_SCENE_15: {
+        name: 'STORE THE DTR AS SCENE 15',
+        opcode: '0x40F',
+        description: 'Stores the actual register value DTR as new brightness level forscene x (0 to 15)'
+    },
     QUERY_STATUS: {
         name: 'QUERY STATUS',
         opcode: '0x90',
@@ -132,6 +178,9 @@ exports.DALICMD = {
 exports.RESICMD = {
     LAMP: {
         name: '#LAMP '
+    },
+    LAMP_LEVEL: {
+        name: '#LAMP LEVEL:'
     },
     LAMP_COMMAND: {
         name: '#LAMP COMMAND:'

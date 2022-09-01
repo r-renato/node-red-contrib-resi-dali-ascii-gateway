@@ -40,7 +40,8 @@
       "resi-dali-eth-ascii-generic" : "dist/resi-dali-eth-ascii-generic.js",
       "resi-dali-eth-ascii-query-lamp-power-on" : "dist/resi-dali-eth-ascii-query-lamp-power-on.js",
       "resi-dali-eth-ascii-retrieve-lamp-data" : "dist/resi-dali-eth-ascii-retrieve-lamp-data.js",
-      "resi-dali-eth-ascii-lamp-color" : "dist/resi-dali-eth-ascii-lamp-color.js"
+      "resi-dali-eth-ascii-lamp-color" : "dist/resi-dali-eth-ascii-lamp-color.js",
+      "dali-setup-lamp-brightness" : "dist/dali-setup-lamp-brightness.js"
     }
   },
   "scripts": {

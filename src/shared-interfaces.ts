@@ -81,6 +81,53 @@ export const DALICMD:any = {
         opcode : <string> '0x06',
         description : <string> 'Changes the current light output to the minimum level'
     },
+    STORE_ACTUAL_LEVEL_IN_DTR : {
+        name : <string> 'STORE ACTUAL LEVEL IN DTR',
+        opcode : <string> '0x21',
+        description : <string> 'Determines the control gear\'s status based on a combination of gear properties'
+    },
+    STORE_THE_DTR_AS_MAX_LEVEL : {
+        name : <string> 'STORE THE DTR AS MAX LEVEL',
+        opcode : <string> '0x2A',
+        description : <string> 'Stores the actual register value DTR as maximum level for lamp'
+    },
+    STORE_THE_DTR_AS_MIN_LEVEL : {
+        name : <string> 'STORE THE DTR AS MIN LEVEL',
+        opcode : <string> '0x2B',
+        description : <string> 'Stores the actual register value DTR as minimum level for lamp'
+    },
+    STORE_DTR_AS_SYSTEM_FAILURE_LEVEL : {
+        name : <string> 'STORE DTR AS SYSTEM FAILURE LEVEL',
+        opcode : <string> '0x2C',
+        description : <string> 'Stores the actual register value DTR as system failure level for lamp'
+    },
+    STORE_DTR_AS_POWER_ON_LEVEL : {
+        name : <string> 'STORE DTR AS POWER ON LEVEL',
+        opcode : <string> '0x2D',
+        description : <string> 'Stores the actual register value DTR as power on level for lamp'
+    },
+    STORE_DTR_AS_FADETIME : {
+        name : <string> 'STORE DTR AS FADETIME',
+        opcode : <string> '0x2E',
+        description : <string> 'Stores the actual register value DTR as fade time for lamp'
+    },
+    STORE_DTR_AS_FADERATE : {
+        name : <string> 'STORE DTR AS FADERATE',
+        opcode : <string> '0x2F',
+        description : <string> 'Stores the actual register value DTR as fade rate for lamp'
+    },
+    STORE_THE_DTR_AS_SCENE_0: {
+        name : <string> 'STORE THE DTR AS SCENE 0',
+        opcode : <string> '0x40',
+        description : <string> 'Stores the actual register value DTR as new brightness level forscene x (0 to 15)'
+    },
+    //TO-DO
+    STORE_THE_DTR_AS_SCENE_15: {
+        name : <string> 'STORE THE DTR AS SCENE 15',
+        opcode : <string> '0x40F',
+        description : <string> 'Stores the actual register value DTR as new brightness level forscene x (0 to 15)'
+    },
+
     QUERY_STATUS : { 
         name : <string> 'QUERY STATUS',
         opcode : <string> '0x90',
@@ -167,6 +214,9 @@ export const DALICMD:any = {
 export const RESICMD:any = {
     LAMP : {
         name : <string> '#LAMP '
+    },
+    LAMP_LEVEL : {
+        name : <string> '#LAMP LEVEL:'
     },
     LAMP_COMMAND : {
         name : <string> '#LAMP COMMAND:'

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buildErrorNodeMessage = exports.buildRequestNodeMessage = exports.executeDALICommand = exports.prepareDALIResponse = exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
+exports.isRESIValidResponse = exports.buildErrorNodeMessage = exports.buildRequestNodeMessage = exports.executeRESICommand = exports.executeDALICommand = exports.prepareDALIResponse = exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
 const shared_interfaces_1 = require("./shared-interfaces");
 /**
  *
@@ -261,6 +261,33 @@ function executeDALICommand(nodeClient, textCommand, msg) {
     });
 }
 exports.executeDALICommand = executeDALICommand;
+function executeRESICommand(nodeClient, command, msg) {
+    return new Promise((resolve, reject) => {
+        if (nodeClient.connection.isSystemConsole())
+            nodeClient.log("Execute RESI command: " + command);
+        nodeClient.connection.send(command).then((response) => {
+            var result = Object.assign({}, msg);
+            result = objectRename(result, 'payload', 'daliRequest');
+            result.payload = prepareDALIResponse(msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, ''));
+            result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '');
+            if (isRESIValidResponse(result.payload))
+                resolve(result);
+            else
+                reject(result);
+        }).catch((error) => {
+            let message = '';
+            let e;
+            if (typeof error === 'string')
+                message = error;
+            else if (error instanceof Error) {
+                message = error.message;
+                e = error;
+            }
+            reject(buildErrorNodeMessage(msg, message, e));
+        });
+    });
+}
+exports.executeRESICommand = executeRESICommand;
 /**
  *
  * @param msg
@@ -287,4 +314,13 @@ function buildErrorNodeMessage(msg, message, error) {
     return (result);
 }
 exports.buildErrorNodeMessage = buildErrorNodeMessage;
+/**
+ *
+ * @param payload
+ * @returns
+ */
+function isRESIValidResponse(payload) {
+    return (payload.done && (typeof payload.timeout === 'undefined'));
+}
+exports.isRESIValidResponse = isRESIValidResponse;
 //# sourceMappingURL=shared-functions.js.map
