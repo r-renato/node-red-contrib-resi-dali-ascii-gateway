@@ -43,7 +43,7 @@ module.exports = function (RED) {
                 isValid = false;
             }
             if (message)
-                node.error(message, msg);
+                node.error(message + " " + JSON.stringify(msg.payload), msg);
             return (message);
         };
         const rollback = function (lamp, level, msg) {

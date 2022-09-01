@@ -41,7 +41,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                 isValid = false ;
             }
 
-            if( message ) node.error( message, msg ) ;
+            if( message ) node.error( message + " " + JSON.stringify( msg.payload ), msg ) ;
             return( message ) ;
         }
 
