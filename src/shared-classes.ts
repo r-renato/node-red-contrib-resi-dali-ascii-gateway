@@ -238,7 +238,12 @@ export class RESIClient {
                 .then( () => { 
                     this.sendcommand( command ).then( resolve ).catch( reject ) ; 
                 }).catch( () => {
-                    reject( new Error( 'Connection timeout' ) ) ;
+                    this.waitFor( () => { 
+                        return ( this.connectionState == null ) ; 
+                    }, this.lockWaitTimeout, "RESIClient::sendcommand" )
+                    .finally( () => {
+                        reject( new Error( 'Connection timeout' ) ) ;
+                    })
                 }) ;
             }
         });
