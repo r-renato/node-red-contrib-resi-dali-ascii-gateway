@@ -65,7 +65,6 @@ module.exports = function (RED) {
                     // OK Command is valid
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + shared_interfaces_1.DALICMD.QUERY_ACTUAL_LEVEL.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP.name, shared_interfaces_1.DALICMD.QUERY_ACTUAL_LEVEL.name))
                         .then((lampLevelResponse) => {
-                        console.log(JSON.stringify(msg));
                         (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_LEVEL.name
                             + msg.payload.lamp + '='
                             + msg.payload.level, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_LEVEL.name, ''))
@@ -78,6 +77,7 @@ module.exports = function (RED) {
                                     + msg.payload.lamp + '='
                                     + shared_interfaces_1.DALICMD[msg.payload.command.replace(/ /g, "_")].opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_COMMAND.name, shared_interfaces_1.DALICMD[msg.payload.command.replace(/ /g, "_")].name))
                                     .then((response) => {
+                                    console.log(JSON.stringify(lampLevelResponse));
                                     var result = Object.assign({}, msg);
                                     result = (0, shared_functions_1.objectRename)(msg, 'payload', 'daliRequest');
                                     result.payload = response.payload;
