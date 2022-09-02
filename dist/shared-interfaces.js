@@ -179,6 +179,9 @@ exports.RESICMD = {
     LAMP: {
         name: '#LAMP '
     },
+    LAMP_OFF: {
+        name: '#LAMP OFF:'
+    },
     LAMP_LEVEL: {
         name: '#LAMP LEVEL:'
     },

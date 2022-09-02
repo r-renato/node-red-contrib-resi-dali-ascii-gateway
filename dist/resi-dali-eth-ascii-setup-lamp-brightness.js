@@ -47,7 +47,12 @@ module.exports = function (RED) {
             return (message);
         };
         const rollback = function (lamp, level, msg) {
-            return (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_LEVEL.name + lamp + '=' + level, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_LEVEL.name, ''));
+            if (level == 0) {
+                return (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_OFF.name + lamp, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_LEVEL.name, ''));
+            }
+            else {
+                return (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_LEVEL.name + lamp + '=' + level, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_LEVEL.name, ''));
+            }
         };
         /**
          *

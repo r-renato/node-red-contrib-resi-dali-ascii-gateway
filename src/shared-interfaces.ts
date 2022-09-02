@@ -215,6 +215,9 @@ export const RESICMD: any = {
     LAMP : {
         name : <string> '#LAMP '
     },
+    LAMP_OFF : {
+        name : <string> '#LAMP OFF:'
+    },
     LAMP_LEVEL : {
         name : <string> '#LAMP LEVEL:'
     },

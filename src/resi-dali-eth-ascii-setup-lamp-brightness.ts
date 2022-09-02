@@ -46,8 +46,13 @@ module.exports = function (RED: nodered.NodeAPI) {
         }
 
         const rollback = function( lamp : number, level : number, msg : any ) {
-            return executeRESICommand( nodeServer, RESICMD.LAMP_LEVEL.name + lamp + '=' + level, 
-                buildRequestNodeMessage( msg, RESICMD.LAMP_LEVEL.name, '' ) )
+            if( level == 0) {
+                return executeRESICommand( nodeServer, RESICMD.LAMP_OFF.name + lamp, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP_LEVEL.name, '' ) )
+            } else {
+                return executeRESICommand( nodeServer, RESICMD.LAMP_LEVEL.name + lamp + '=' + level, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP_LEVEL.name, '' ) )
+            }
         }
 
         /**
