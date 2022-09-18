@@ -41,7 +41,8 @@
       "resi-dali-eth-ascii-query-lamp-power-on" : "dist/resi-dali-eth-ascii-query-lamp-power-on.js",
       "resi-dali-eth-ascii-retrieve-lamp-data" : "dist/resi-dali-eth-ascii-retrieve-lamp-data.js",
       "resi-dali-eth-ascii-lamp-color" : "dist/resi-dali-eth-ascii-lamp-color.js",
-      "resi-dali-eth-ascii-setup-lamp-brightness" : "dist/resi-dali-eth-ascii-setup-lamp-brightness.js"
+      "resi-dali-eth-ascii-setup-lamp-brightness" : "dist/resi-dali-eth-ascii-setup-lamp-brightness.js",
+      "resi-dali-eth-ascii-setup-lamp-scene" : "dist/resi-dali-eth-ascii-setup-lamp-scene.js"
     }
   },
   "scripts": {
