@@ -73,7 +73,7 @@ module.exports = function (RED) {
                     if (typeof payloadDTR.timeout === 'undefined' && typeof payloadDTR1.timeout === 'undefined'
                         && typeof payloadEnableDT.timeout === 'undefined' && typeof payloadTmpStore.timeout === 'undefined') {
                         //console.log( 'resolve setXYCoordinate: ' + JSON.stringify( responses ) ) ;
-                        reject(payloadDTR);
+                        resolve(payloadDTR);
                     }
                     else {
                         console.log('reject setXYCoordinate: ' + JSON.stringify(responses));
