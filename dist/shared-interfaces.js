@@ -174,6 +174,59 @@ exports.DALICMD = {
         opcode: '0xC1',
         description: 'Returns a byte in which each bit represents a member of a group. A \'1\' represents a member of the group'
     },
+    //
+    // 16 BIT command
+    //
+    DT8_SET_TEMPORARY_X_COORDINATE: {
+        name: 'DT8:SET TEMPORARY X-COORDINATE',
+        opcode: '0x01E0',
+        description: ''
+    },
+    DT8_SET_TEMPORARY_Y_COORDINATE: {
+        name: 'DT8:SET TEMPORARY Y-COORDINATE',
+        opcode: '0x01E1',
+        description: ''
+    },
+    DT8_SET_COLOUR_TEMPERATURE_TC: {
+        name: 'DT8:SET COLOUR TEMPERATURE Tc',
+        opcode: '0x01E7',
+        description: ''
+    },
+    DT8_SET_PRIMARY_N_DIMLEVEL: {
+        name: 'DT8:SET PRIMARY N DIMLEVEL',
+        opcode: '0x01EA',
+        description: ''
+    },
+    DT8_SET_RGB_DIMLEVEL: {
+        name: 'DT8:SET RGB DIMLEVEL',
+        opcode: '0x01EB',
+        description: ''
+    },
+    DT8_SET_WAF_DIMLEVEL: {
+        name: 'DT8:SET WAF DIMLEVEL',
+        opcode: '0x01EC',
+        description: ''
+    },
+    SET_DTR: {
+        name: 'DTR=',
+        opcode: '0xA3',
+        description: 'This command loads the hex value HH into the DTR register'
+    },
+    ENABLE_DEVICE_TYPE: {
+        name: 'ENABLE DEVICE TYPE',
+        opcode: '0xC1',
+        description: 'If you want to use special device type depended commands youhave to precede this commands with this enable command. HHis the selected device type e.g. 8)'
+    },
+    SET_DTR1: {
+        name: 'DTR1=',
+        opcode: '0xC3',
+        description: 'This command loads the hex value HH into the DTR1 register'
+    },
+    SET_DTR2: {
+        name: 'DTR2=',
+        opcode: '0xC5',
+        description: 'This command loads the hex value HH into the DTR2 register'
+    },
 };
 exports.RESICMD = {
     LAMP: {
@@ -205,6 +258,9 @@ exports.RESICMD = {
     },
     LAMP_QUERY_XY: {
         name: '#LAMP QUERY XY:'
+    },
+    DALI_CMD16: {
+        name: '#DALI CMD16:'
     }
 };
 exports.RESIRESP = {

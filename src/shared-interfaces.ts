@@ -207,8 +207,60 @@ export const DALICMD:any = {
         name : <string> 'QUERY GROUPS 8-15',
         opcode : <string> '0xC1',
         description : <string> 'Returns a byte in which each bit represents a member of a group. A \'1\' represents a member of the group'
+    },
+//
+// 16 BIT command
+//
+    DT8_SET_TEMPORARY_X_COORDINATE : { 
+        name : <string> 'DT8:SET TEMPORARY X-COORDINATE',
+        opcode : <string> '0x01E0',
+        description : <string> ''
+    },
+    DT8_SET_TEMPORARY_Y_COORDINATE : { 
+        name : <string> 'DT8:SET TEMPORARY Y-COORDINATE',
+        opcode : <string> '0x01E1',
+        description : <string> ''
+    },  
+    DT8_SET_COLOUR_TEMPERATURE_TC : { 
+        name : <string> 'DT8:SET COLOUR TEMPERATURE Tc',
+        opcode : <string> '0x01E7',
+        description : <string> ''
+    },  
+    DT8_SET_PRIMARY_N_DIMLEVEL : { 
+        name : <string> 'DT8:SET PRIMARY N DIMLEVEL',
+        opcode : <string> '0x01EA',
+        description : <string> ''
+    },  
+    DT8_SET_RGB_DIMLEVEL : { 
+        name : <string> 'DT8:SET RGB DIMLEVEL',
+        opcode : <string> '0x01EB',
+        description : <string> ''
+    },  
+    DT8_SET_WAF_DIMLEVEL : { 
+        name : <string> 'DT8:SET WAF DIMLEVEL',
+        opcode : <string> '0x01EC',
+        description : <string> ''
     },      
-
+    SET_DTR : { 
+        name : <string> 'DTR=',
+        opcode : <string> '0xA3',
+        description : <string> 'This command loads the hex value HH into the DTR register'
+    },    
+    ENABLE_DEVICE_TYPE : { 
+        name : <string> 'ENABLE DEVICE TYPE',
+        opcode : <string> '0xC1',
+        description : <string> 'If you want to use special device type depended commands youhave to precede this commands with this enable command. HHis the selected device type e.g. 8)'
+    },    
+    SET_DTR1 : { 
+        name : <string> 'DTR1=',
+        opcode : <string> '0xC3',
+        description : <string> 'This command loads the hex value HH into the DTR1 register'
+    },  
+    SET_DTR2: { 
+        name : <string> 'DTR2=',
+        opcode : <string> '0xC5',
+        description : <string> 'This command loads the hex value HH into the DTR2 register'
+    },    
 }
 
 export const RESICMD: any = {
@@ -241,6 +293,9 @@ export const RESICMD: any = {
     },
     LAMP_QUERY_XY : {
         name : <string> '#LAMP QUERY XY:'
+    },
+    DALI_CMD16 : {
+        name : <string> '#DALI CMD16:'
     }
 }
 
