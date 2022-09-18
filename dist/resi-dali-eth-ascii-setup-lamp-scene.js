@@ -64,17 +64,18 @@ module.exports = function (RED) {
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.opcode + deviceType.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + xy_dalicmd.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, xy_dalicmd.name))
                 ]).then((responses) => {
+                    console.log('setXYCoordinate: ' + JSON.stringify(responses));
                     let payloadDTR = responses[0].payload;
                     let payloadDTR1 = responses[1].payload;
                     let payloadEnableDT = responses[2].payload;
                     let payloadTmpStore = responses[3].payload;
                     if (typeof payloadDTR.timeout === 'undefined' && typeof payloadDTR1.timeout === 'undefined'
                         && typeof payloadEnableDT.timeout === 'undefined' && typeof payloadTmpStore.timeout === 'undefined') {
-                        console.log('setXYCoordinate: ' + JSON.stringify(responses));
+                        console.log('resolve setXYCoordinate: ' + JSON.stringify(responses));
                         resolve(payloadDTR);
                     }
                     else {
-                        console.log('setXYCoordinate: ' + JSON.stringify(responses));
+                        console.log('reject setXYCoordinate: ' + JSON.stringify(responses));
                         reject(payloadDTR);
                     }
                 }).catch((error) => {

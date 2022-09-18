@@ -68,6 +68,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + xy_dalicmd.opcode, 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, xy_dalicmd.name ) )    
                 ]).then( ( responses : any[] ) => {
+                    console.log( 'setXYCoordinate: ' + JSON.stringify( responses ) ) ;
                     let payloadDTR = responses[ 0 ].payload ;
                     let payloadDTR1 = responses[ 1 ].payload ;
                     let payloadEnableDT = responses[ 2 ].payload ;
@@ -76,10 +77,10 @@ module.exports = function (RED: nodered.NodeAPI) {
                     if( typeof payloadDTR.timeout === 'undefined' && typeof payloadDTR1.timeout === 'undefined' 
                             && typeof payloadEnableDT.timeout === 'undefined' && typeof payloadTmpStore.timeout === 'undefined' ) {
                         
-                        console.log( 'setXYCoordinate: ' + JSON.stringify( responses ) ) ;
+                        console.log( 'resolve setXYCoordinate: ' + JSON.stringify( responses ) ) ;
                         resolve( payloadDTR ) ;
                     } else {
-                        console.log( 'setXYCoordinate: ' + JSON.stringify( responses ) ) ;
+                        console.log( 'reject setXYCoordinate: ' + JSON.stringify( responses ) ) ;
                         reject( payloadDTR ) ;  
                     }
                 }).catch( ( error ) => {
