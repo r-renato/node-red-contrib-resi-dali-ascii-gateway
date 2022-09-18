@@ -68,17 +68,17 @@ module.exports = function (RED: nodered.NodeAPI) {
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + xy_dalicmd.opcode, 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, xy_dalicmd.name ) )    
                 ]).then( ( responses : any[] ) => {
-                    console.log( 'setXYCoordinate: ' + JSON.stringify( responses ) ) ;
+                    //console.log( 'setXYCoordinate: ' + JSON.stringify( responses ) ) ;
                     let payloadDTR = responses[ 0 ].value.payload ;
                     let payloadDTR1 = responses[ 1 ].value.payload ;
                     let payloadEnableDT = responses[ 2 ].value.payload ;
                     let payloadTmpStore = responses[ 3 ].value.payload ;
-                    console.log( 'setXYCoordinate: ' + JSON.stringify( payloadDTR ) ) ;
+                    //console.log( 'setXYCoordinate: ' + JSON.stringify( payloadDTR ) ) ;
                     if( typeof payloadDTR.timeout === 'undefined' && typeof payloadDTR1.timeout === 'undefined' 
                             && typeof payloadEnableDT.timeout === 'undefined' && typeof payloadTmpStore.timeout === 'undefined' ) {
                         
-                        console.log( 'resolve setXYCoordinate: ' + JSON.stringify( responses ) ) ;
-                        resolve( payloadDTR ) ;
+                        //console.log( 'resolve setXYCoordinate: ' + JSON.stringify( responses ) ) ;
+                        reject( payloadDTR ) ;
                     } else {
                         console.log( 'reject setXYCoordinate: ' + JSON.stringify( responses ) ) ;
                         reject( payloadDTR ) ;  
@@ -168,6 +168,13 @@ module.exports = function (RED: nodered.NodeAPI) {
                 }) ;
             }) ;
         }
+        const isResponsesValid = function( responses : any ) : any { 
+            return new Promise<void>( (resolve, reject) => {
+                let isValid = true ;
+
+                if( typeof responses [ 0 ].value != 'undefined' && responses [ 0 ].value.payload.timeout ) {}
+            }) ;
+        } ;
 
         /**
          * 
@@ -194,7 +201,13 @@ module.exports = function (RED: nodered.NodeAPI) {
                     undefined, undefined
                 ]).then( ( responses : any[] ) => {
                     console.log( 'onInput' + JSON.stringify( responses ) ) ;
-                    done() ;
+
+                    if( true ) {
+                        done() ;
+                    } else {
+                        send( buildErrorNodeMessage( msg, 'Error occurred' ) ) ;
+                        done() ;
+                    }
                 })
 
             } else {

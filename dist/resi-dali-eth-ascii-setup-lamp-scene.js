@@ -64,16 +64,16 @@ module.exports = function (RED) {
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.opcode + deviceType.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + xy_dalicmd.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, xy_dalicmd.name))
                 ]).then((responses) => {
-                    console.log('setXYCoordinate: ' + JSON.stringify(responses));
+                    //console.log( 'setXYCoordinate: ' + JSON.stringify( responses ) ) ;
                     let payloadDTR = responses[0].value.payload;
                     let payloadDTR1 = responses[1].value.payload;
                     let payloadEnableDT = responses[2].value.payload;
                     let payloadTmpStore = responses[3].value.payload;
-                    console.log('setXYCoordinate: ' + JSON.stringify(payloadDTR));
+                    //console.log( 'setXYCoordinate: ' + JSON.stringify( payloadDTR ) ) ;
                     if (typeof payloadDTR.timeout === 'undefined' && typeof payloadDTR1.timeout === 'undefined'
                         && typeof payloadEnableDT.timeout === 'undefined' && typeof payloadTmpStore.timeout === 'undefined') {
-                        console.log('resolve setXYCoordinate: ' + JSON.stringify(responses));
-                        resolve(payloadDTR);
+                        //console.log( 'resolve setXYCoordinate: ' + JSON.stringify( responses ) ) ;
+                        reject(payloadDTR);
                     }
                     else {
                         console.log('reject setXYCoordinate: ' + JSON.stringify(responses));
@@ -141,6 +141,12 @@ module.exports = function (RED) {
                 });
             });
         };
+        const isResponsesValid = function (responses) {
+            return new Promise((resolve, reject) => {
+                let isValid = true;
+                if (typeof responses[0].value != 'undefined' && responses[0].value.payload.timeout) { }
+            });
+        };
         /**
          *
          */
@@ -163,7 +169,13 @@ module.exports = function (RED) {
                     undefined, undefined
                 ]).then((responses) => {
                     console.log('onInput' + JSON.stringify(responses));
-                    done();
+                    if (true) {
+                        done();
+                    }
+                    else {
+                        send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred'));
+                        done();
+                    }
                 });
             }
             else {
