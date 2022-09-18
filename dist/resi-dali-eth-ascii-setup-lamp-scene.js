@@ -159,7 +159,8 @@ module.exports = function (RED) {
                     (typeof msg.payload.xCoordinate != 'undefined'
                         ? setXYCoordinate(msg, deviceType, msg.payload.xCoordinate, shared_interfaces_1.DALICMD.DT8_SET_TEMPORARY_X_COORDINATE) : undefined),
                     (typeof msg.payload.yCoordinate != 'undefined'
-                        ? setXYCoordinate(msg, deviceType, msg.payload.yCoordinate, shared_interfaces_1.DALICMD.DT8_SET_TEMPORARY_Y_COORDINATE) : undefined)
+                        ? setXYCoordinate(msg, deviceType, msg.payload.yCoordinate, shared_interfaces_1.DALICMD.DT8_SET_TEMPORARY_Y_COORDINATE) : undefined),
+                    undefined, undefined
                 ]).then((responses) => {
                     console.log('onInput' + JSON.stringify(responses));
                     done();
