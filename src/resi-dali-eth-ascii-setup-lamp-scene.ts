@@ -73,7 +73,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                     let payloadDTR1 = responses[ 1 ].payload ;
                     let payloadEnableDT = responses[ 2 ].payload ;
                     let payloadTmpStore = responses[ 3 ].payload ;
-
+                    console.log( 'setXYCoordinate: ' + JSON.stringify( payloadDTR ) ) ;
                     if( typeof payloadDTR.timeout === 'undefined' && typeof payloadDTR1.timeout === 'undefined' 
                             && typeof payloadEnableDT.timeout === 'undefined' && typeof payloadTmpStore.timeout === 'undefined' ) {
                         
@@ -83,9 +83,6 @@ module.exports = function (RED: nodered.NodeAPI) {
                         console.log( 'reject setXYCoordinate: ' + JSON.stringify( responses ) ) ;
                         reject( payloadDTR ) ;  
                     }
-                }).catch( ( error ) => {
-                    console.log( 'setXYCoordinate: ' + JSON.stringify( error ) ) ;
-                    reject( error ) ;
                 }) ;
             }) ;
         }
