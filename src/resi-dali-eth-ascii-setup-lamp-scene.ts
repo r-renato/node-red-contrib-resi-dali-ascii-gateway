@@ -68,27 +68,18 @@ module.exports = function (RED: nodered.NodeAPI) {
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + xy_dalicmd.opcode, 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, xy_dalicmd.name ) )    
                 ]).then( ( responses : any[] ) => {
-                    //console.log( 'setXYCoordinate: ' + JSON.stringify( responses ) ) ;
-                    let payloadDTR = responses[ 0 ].value.payload ;
-                    let payloadDTR1 = responses[ 1 ].value.payload ;
-                    let payloadEnableDT = responses[ 2 ].value.payload ;
-                    let payloadTmpStore = responses[ 3 ].value.payload ;
-                    //console.log( 'setXYCoordinate: ' + JSON.stringify( payloadDTR ) ) ;
-                    if( typeof payloadDTR.timeout === 'undefined' && typeof payloadDTR1.timeout === 'undefined' 
-                            && typeof payloadEnableDT.timeout === 'undefined' && typeof payloadTmpStore.timeout === 'undefined' ) {
-                        
-                        //console.log( 'resolve setXYCoordinate: ' + JSON.stringify( responses ) ) ;
-                        resolve( payloadDTR ) ;
-                    } else {
-                        console.log( 'reject setXYCoordinate: ' + JSON.stringify( responses ) ) ;
-                        reject( payloadDTR ) ;  
-                    }
+                    isResponsesValid( responses )
+                    .then( () => {
+                        resolve( responses[ 0 ].value.payload ) ;
+                    }).catch( () => {
+                        reject( responses[ 0 ].value.payload ) ;  
+                    }) ;
                 }) ;
             }) ;
         }
 
         const setColourTemperature = function( msg : any, deviceType : number, value : number ) : any { 
-            var promise = new Promise<void>( (resolve, reject) => {
+            return new Promise<void>( (resolve, reject) => {
                 Promise.all([
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR.opcode + "0".toString().padStart( 2,"0" ), 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.SET_DTR.name ) ),
@@ -98,16 +89,19 @@ module.exports = function (RED: nodered.NodeAPI) {
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.ENABLE_DEVICE_TYPE.name ) ),
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.DT8_SET_COLOUR_TEMPERATURE_TC.opcode, 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.DT8_SET_COLOUR_TEMPERATURE_TC.name ) )    
-                ]).then( () => {
-                    resolve() ;
-                }).catch( () => {
-                    reject() ;
+                ]).then( ( responses : any[] ) => {
+                    isResponsesValid( responses )
+                    .then( () => {
+                        resolve( responses[ 0 ].value.payload ) ;
+                    }).catch( () => {
+                        reject( responses[ 0 ].value.payload ) ;  
+                    }) ;
                 }) ;
             }) ;
         }
 
         const setPrimaryNDimLevel = function( msg : any, deviceType : number, value : number, channel : number ) : any { 
-            var promise = new Promise<void>( (resolve, reject) => {
+            return new Promise<void>( (resolve, reject) => {
                 Promise.all([
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR.opcode + "0".toString().padStart( 2,"0" ), 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.SET_DTR.name ) ),
@@ -119,16 +113,19 @@ module.exports = function (RED: nodered.NodeAPI) {
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.ENABLE_DEVICE_TYPE.name ) ),
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.DT8_SET_PRIMARY_N_DIMLEVEL.opcode, 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.DT8_SET_PRIMARY_N_DIMLEVEL.name ) )    
-                ]).then( () => {
-                    resolve() ;
-                }).catch( () => {
-                    reject() ;
+                ]).then( ( responses : any[] ) => {
+                    isResponsesValid( responses )
+                    .then( () => {
+                        resolve( responses[ 0 ].value.payload ) ;
+                    }).catch( () => {
+                        reject( responses[ 0 ].value.payload ) ;  
+                    }) ;
                 }) ;
             }) ;
         }
 
         const setRGBDimLevel = function( msg : any, deviceType : number, r : number, g : number, b : number ) : any { 
-            var promise = new Promise<void>( (resolve, reject) => {
+            return new Promise<void>( (resolve, reject) => {
                 Promise.all([
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR.opcode + r.toString().padStart( 2,"0" ), 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.SET_DTR.name ) ),
@@ -140,16 +137,19 @@ module.exports = function (RED: nodered.NodeAPI) {
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.ENABLE_DEVICE_TYPE.name ) ),
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.DT8_SET_RGB_DIMLEVEL.opcode, 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.DT8_SET_RGB_DIMLEVEL.name ) )    
-                ]).then( () => {
-                    resolve() ;
-                }).catch( () => {
-                    reject() ;
+                ]).then( ( responses : any[] ) => {
+                    isResponsesValid( responses )
+                    .then( () => {
+                        resolve( responses[ 0 ].value.payload ) ;
+                    }).catch( () => {
+                        reject( responses[ 0 ].value.payload ) ;  
+                    }) ;
                 }) ;
             }) ;
         }
 
         const setWAFDimLevel = function( msg : any, deviceType : number, w : number, a : number ) : any { 
-            var promise = new Promise<void>( (resolve, reject) => {
+            return new Promise<void>( (resolve, reject) => {
                 Promise.allSettled([
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR.opcode + w.toString().padStart( 2,"0" ), 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.SET_DTR.name ) ),
@@ -162,9 +162,12 @@ module.exports = function (RED: nodered.NodeAPI) {
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.DT8_SET_WAF_DIMLEVEL.opcode, 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.DT8_SET_WAF_DIMLEVEL.name ) )    
                 ]).then( ( responses : any[] ) => {
-                    resolve() ;
-                }).catch( () => {
-                    reject() ;
+                    isResponsesValid( responses )
+                    .then( () => {
+                        resolve( responses[ 0 ].value.payload ) ;
+                    }).catch( () => {
+                        reject( responses[ 0 ].value.payload ) ;  
+                    }) ;
                 }) ;
             }) ;
         }
@@ -205,7 +208,11 @@ module.exports = function (RED: nodered.NodeAPI) {
                         ? setXYCoordinate( msg, deviceType, msg.payload.xCoordinate, DALICMD.DT8_SET_TEMPORARY_X_COORDINATE) : undefined),
                     ( typeof msg.payload.yCoordinate != 'undefined' 
                         ? setXYCoordinate( msg, deviceType, msg.payload.yCoordinate, DALICMD.DT8_SET_TEMPORARY_Y_COORDINATE) : undefined),
-                    undefined, undefined
+                    ( typeof msg.payload.tc != 'undefined' 
+                        ? setColourTemperature( msg, deviceType, msg.payload.tc ) : undefined),
+                    undefined,
+                    ( typeof msg.payload.red != 'undefined' && typeof msg.payload.green != 'undefined' && typeof msg.payload.blue != 'undefined'
+                        ? setRGBDimLevel( msg, deviceType, msg.payload.red, msg.payload.green, msg.payload.blue ) : undefined),
                 ]).then( ( responses : any[] ) => {
                     console.log( 'onInput' + JSON.stringify( responses ) ) ;
 

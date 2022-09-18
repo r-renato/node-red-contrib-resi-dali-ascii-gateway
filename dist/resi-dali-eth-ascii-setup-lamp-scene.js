@@ -64,70 +64,70 @@ module.exports = function (RED) {
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.opcode + deviceType.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + xy_dalicmd.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, xy_dalicmd.name))
                 ]).then((responses) => {
-                    //console.log( 'setXYCoordinate: ' + JSON.stringify( responses ) ) ;
-                    let payloadDTR = responses[0].value.payload;
-                    let payloadDTR1 = responses[1].value.payload;
-                    let payloadEnableDT = responses[2].value.payload;
-                    let payloadTmpStore = responses[3].value.payload;
-                    //console.log( 'setXYCoordinate: ' + JSON.stringify( payloadDTR ) ) ;
-                    if (typeof payloadDTR.timeout === 'undefined' && typeof payloadDTR1.timeout === 'undefined'
-                        && typeof payloadEnableDT.timeout === 'undefined' && typeof payloadTmpStore.timeout === 'undefined') {
-                        //console.log( 'resolve setXYCoordinate: ' + JSON.stringify( responses ) ) ;
-                        resolve(payloadDTR);
-                    }
-                    else {
-                        console.log('reject setXYCoordinate: ' + JSON.stringify(responses));
-                        reject(payloadDTR);
-                    }
+                    isResponsesValid(responses)
+                        .then(() => {
+                        resolve(responses[0].value.payload);
+                    }).catch(() => {
+                        reject(responses[0].value.payload);
+                    });
                 });
             });
         };
         const setColourTemperature = function (msg, deviceType, value) {
-            var promise = new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 Promise.all([
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR.opcode + "0".toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR1.opcode + value.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR1.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.opcode + deviceType.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.DT8_SET_COLOUR_TEMPERATURE_TC.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.DT8_SET_COLOUR_TEMPERATURE_TC.name))
-                ]).then(() => {
-                    resolve();
-                }).catch(() => {
-                    reject();
+                ]).then((responses) => {
+                    isResponsesValid(responses)
+                        .then(() => {
+                        resolve(responses[0].value.payload);
+                    }).catch(() => {
+                        reject(responses[0].value.payload);
+                    });
                 });
             });
         };
         const setPrimaryNDimLevel = function (msg, deviceType, value, channel) {
-            var promise = new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 Promise.all([
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR.opcode + "0".toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR1.opcode + value.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR1.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR2.opcode + channel.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR2.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.opcode + deviceType.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.DT8_SET_PRIMARY_N_DIMLEVEL.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.DT8_SET_PRIMARY_N_DIMLEVEL.name))
-                ]).then(() => {
-                    resolve();
-                }).catch(() => {
-                    reject();
+                ]).then((responses) => {
+                    isResponsesValid(responses)
+                        .then(() => {
+                        resolve(responses[0].value.payload);
+                    }).catch(() => {
+                        reject(responses[0].value.payload);
+                    });
                 });
             });
         };
         const setRGBDimLevel = function (msg, deviceType, r, g, b) {
-            var promise = new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 Promise.all([
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR.opcode + r.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR1.opcode + g.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR1.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR2.opcode + b.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR2.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.opcode + deviceType.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.DT8_SET_RGB_DIMLEVEL.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.DT8_SET_RGB_DIMLEVEL.name))
-                ]).then(() => {
-                    resolve();
-                }).catch(() => {
-                    reject();
+                ]).then((responses) => {
+                    isResponsesValid(responses)
+                        .then(() => {
+                        resolve(responses[0].value.payload);
+                    }).catch(() => {
+                        reject(responses[0].value.payload);
+                    });
                 });
             });
         };
         const setWAFDimLevel = function (msg, deviceType, w, a) {
-            var promise = new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 Promise.allSettled([
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR.opcode + w.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR1.opcode + a.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR1.name)),
@@ -135,9 +135,12 @@ module.exports = function (RED) {
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.opcode + deviceType.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.DT8_SET_WAF_DIMLEVEL.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.DT8_SET_WAF_DIMLEVEL.name))
                 ]).then((responses) => {
-                    resolve();
-                }).catch(() => {
-                    reject();
+                    isResponsesValid(responses)
+                        .then(() => {
+                        resolve(responses[0].value.payload);
+                    }).catch(() => {
+                        reject(responses[0].value.payload);
+                    });
                 });
             });
         };
@@ -175,7 +178,11 @@ module.exports = function (RED) {
                         ? setXYCoordinate(msg, deviceType, msg.payload.xCoordinate, shared_interfaces_1.DALICMD.DT8_SET_TEMPORARY_X_COORDINATE) : undefined),
                     (typeof msg.payload.yCoordinate != 'undefined'
                         ? setXYCoordinate(msg, deviceType, msg.payload.yCoordinate, shared_interfaces_1.DALICMD.DT8_SET_TEMPORARY_Y_COORDINATE) : undefined),
-                    undefined, undefined
+                    (typeof msg.payload.tc != 'undefined'
+                        ? setColourTemperature(msg, deviceType, msg.payload.tc) : undefined),
+                    undefined,
+                    (typeof msg.payload.red != 'undefined' && typeof msg.payload.green != 'undefined' && typeof msg.payload.blue != 'undefined'
+                        ? setRGBDimLevel(msg, deviceType, msg.payload.red, msg.payload.green, msg.payload.blue) : undefined),
                 ]).then((responses) => {
                     console.log('onInput' + JSON.stringify(responses));
                     isResponsesValid(responses)
