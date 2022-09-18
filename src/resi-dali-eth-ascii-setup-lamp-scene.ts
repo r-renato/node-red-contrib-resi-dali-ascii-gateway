@@ -80,7 +80,7 @@ module.exports = function (RED: nodered.NodeAPI) {
 
         const setColourTemperature = function( msg : any, deviceType : number, value : number ) : any { 
             return new Promise<void>( (resolve, reject) => {
-                Promise.all([
+                Promise.allSettled([
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR.opcode + "0".toString().padStart( 2,"0" ), 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.SET_DTR.name ) ),
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR1.opcode + value.toString().padStart( 2,"0" ), 
@@ -102,7 +102,7 @@ module.exports = function (RED: nodered.NodeAPI) {
 
         const setPrimaryNDimLevel = function( msg : any, deviceType : number, value : number, channel : number ) : any { 
             return new Promise<void>( (resolve, reject) => {
-                Promise.all([
+                Promise.allSettled([
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR.opcode + "0".toString().padStart( 2,"0" ), 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.SET_DTR.name ) ),
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR1.opcode + value.toString().padStart( 2,"0" ), 
@@ -126,7 +126,7 @@ module.exports = function (RED: nodered.NodeAPI) {
 
         const setRGBDimLevel = function( msg : any, deviceType : number, r : number, g : number, b : number ) : any { 
             return new Promise<void>( (resolve, reject) => {
-                Promise.all([
+                Promise.allSettled([
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR.opcode + r.toString().padStart( 2,"0" ), 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.SET_DTR.name ) ),
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR1.opcode + g.toString().padStart( 2,"0" ), 

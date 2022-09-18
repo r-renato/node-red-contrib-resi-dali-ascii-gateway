@@ -75,7 +75,7 @@ module.exports = function (RED) {
         };
         const setColourTemperature = function (msg, deviceType, value) {
             return new Promise((resolve, reject) => {
-                Promise.all([
+                Promise.allSettled([
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR.opcode + "0".toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR1.opcode + value.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR1.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.opcode + deviceType.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.name)),
@@ -92,7 +92,7 @@ module.exports = function (RED) {
         };
         const setPrimaryNDimLevel = function (msg, deviceType, value, channel) {
             return new Promise((resolve, reject) => {
-                Promise.all([
+                Promise.allSettled([
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR.opcode + "0".toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR1.opcode + value.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR1.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR2.opcode + channel.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR2.name)),
@@ -110,7 +110,7 @@ module.exports = function (RED) {
         };
         const setRGBDimLevel = function (msg, deviceType, r, g, b) {
             return new Promise((resolve, reject) => {
-                Promise.all([
+                Promise.allSettled([
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR.opcode + r.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR1.opcode + g.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR1.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR2.opcode + b.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR2.name)),
