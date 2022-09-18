@@ -121,7 +121,8 @@ module.exports = function (RED) {
                         .then(() => {
                         resolve(responses[0].value.payload);
                     }).catch(() => {
-                        reject(responses[0].value.payload);
+                        console.log('error: ' + JSON.stringify(responses));
+                        reject(responses[0]);
                     });
                 });
             });
