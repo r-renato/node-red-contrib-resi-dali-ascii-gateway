@@ -57,7 +57,7 @@ module.exports = function (RED: nodered.NodeAPI) {
         }
 
         const setXYCoordinate = function( msg : any, deviceType : number, value : number, xy_dalicmd : any ) : any { 
-            var promise = new Promise<any>( (resolve, reject) => {
+            return new Promise<any>( (resolve, reject) => {
                 Promise.allSettled([
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR.opcode + "0".toString().padStart( 2,"0" ), 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.SET_DTR.name ) ),
@@ -68,8 +68,20 @@ module.exports = function (RED: nodered.NodeAPI) {
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + xy_dalicmd.opcode, 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, xy_dalicmd.name ) )    
                 ]).then( ( responses : any[] ) => {
-                    console.log( 'setXYCoordinate: ' + JSON.stringify( responses ) ) ;
-                    resolve( responses ) ;
+                    let payloadDTR = responses[ 0 ].payload ;
+                    let payloadDTR1 = responses[ 1 ].payload ;
+                    let payloadEnableDT = responses[ 2 ].payload ;
+                    let payloadTmpStore = responses[ 3 ].payload ;
+
+                    if( typeof payloadDTR.timeout === 'undefined' && typeof payloadDTR1.timeout === 'undefined' 
+                            && typeof payloadEnableDT.timeout === 'undefined' && typeof payloadTmpStore.timeout === 'undefined' ) {
+                        
+                        console.log( 'setXYCoordinate: ' + JSON.stringify( responses ) ) ;
+                        resolve( payloadDTR ) ;
+                    } else {
+                        console.log( 'setXYCoordinate: ' + JSON.stringify( responses ) ) ;
+                        reject( payloadDTR ) ;  
+                    }
                 }).catch( ( error ) => {
                     console.log( 'setXYCoordinate: ' + JSON.stringify( error ) ) ;
                     reject( error ) ;
@@ -183,7 +195,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                         ? setXYCoordinate( msg, deviceType, msg.payload.yCoordinate, DALICMD.DT8_SET_TEMPORARY_Y_COORDINATE) : undefined)
                 ]).then( ( responses : any[] ) => {
                     console.log( 'onInput' + JSON.stringify( responses ) ) ;
-
+                    done() ;
                 })
 
             } else {

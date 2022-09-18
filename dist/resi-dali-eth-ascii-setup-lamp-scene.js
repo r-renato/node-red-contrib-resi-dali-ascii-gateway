@@ -57,15 +57,26 @@ module.exports = function (RED) {
             return (message);
         };
         const setXYCoordinate = function (msg, deviceType, value, xy_dalicmd) {
-            var promise = new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 Promise.allSettled([
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR.opcode + "0".toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR1.opcode + value.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR1.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.opcode + deviceType.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + xy_dalicmd.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, xy_dalicmd.name))
                 ]).then((responses) => {
-                    console.log('setXYCoordinate: ' + JSON.stringify(responses));
-                    resolve(responses);
+                    let payloadDTR = responses[0].payload;
+                    let payloadDTR1 = responses[1].payload;
+                    let payloadEnableDT = responses[2].payload;
+                    let payloadTmpStore = responses[3].payload;
+                    if (typeof payloadDTR.timeout === 'undefined' && typeof payloadDTR1.timeout === 'undefined'
+                        && typeof payloadEnableDT.timeout === 'undefined' && typeof payloadTmpStore.timeout === 'undefined') {
+                        console.log('setXYCoordinate: ' + JSON.stringify(responses));
+                        resolve(payloadDTR);
+                    }
+                    else {
+                        console.log('setXYCoordinate: ' + JSON.stringify(responses));
+                        reject(payloadDTR);
+                    }
                 }).catch((error) => {
                     console.log('setXYCoordinate: ' + JSON.stringify(error));
                     reject(error);
@@ -152,6 +163,7 @@ module.exports = function (RED) {
                         ? setXYCoordinate(msg, deviceType, msg.payload.yCoordinate, shared_interfaces_1.DALICMD.DT8_SET_TEMPORARY_Y_COORDINATE) : undefined)
                 ]).then((responses) => {
                     console.log('onInput' + JSON.stringify(responses));
+                    done();
                 });
             }
             else {
