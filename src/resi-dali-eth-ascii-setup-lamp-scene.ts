@@ -69,10 +69,10 @@ module.exports = function (RED: nodered.NodeAPI) {
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, xy_dalicmd.name ) )    
                 ]).then( ( responses : any[] ) => {
                     console.log( 'setXYCoordinate: ' + JSON.stringify( responses ) ) ;
-                    let payloadDTR = responses[ 0 ].payload ;
-                    let payloadDTR1 = responses[ 1 ].payload ;
-                    let payloadEnableDT = responses[ 2 ].payload ;
-                    let payloadTmpStore = responses[ 3 ].payload ;
+                    let payloadDTR = responses[ 0 ].value.payload ;
+                    let payloadDTR1 = responses[ 1 ].value.payload ;
+                    let payloadEnableDT = responses[ 2 ].value.payload ;
+                    let payloadTmpStore = responses[ 3 ].value.payload ;
                     console.log( 'setXYCoordinate: ' + JSON.stringify( payloadDTR ) ) ;
                     if( typeof payloadDTR.timeout === 'undefined' && typeof payloadDTR1.timeout === 'undefined' 
                             && typeof payloadEnableDT.timeout === 'undefined' && typeof payloadTmpStore.timeout === 'undefined' ) {
