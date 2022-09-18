@@ -219,7 +219,7 @@ module.exports = function (RED: nodered.NodeAPI) {
 
                     isResponsesValid( responses )
                     .then( () => {
-                        executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + '0x01' + (40 + scene).toString(), 
+                        executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + '0x01' + (64 + scene).toString(16), 
                             buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.STORE_THE_DTR_AS_SCENE.name ) )
                         .then( ( response ) => {
                             var result = <RESIResponseInterface> Object.assign({}, msg) ;

@@ -188,7 +188,7 @@ module.exports = function (RED) {
                     console.log('onInput' + JSON.stringify(responses));
                     isResponsesValid(responses)
                         .then(() => {
-                        (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + '0x01' + (40 + scene).toString(), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.STORE_THE_DTR_AS_SCENE.name))
+                        (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + '0x01' + (64 + scene).toString(16), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.STORE_THE_DTR_AS_SCENE.name))
                             .then((response) => {
                             var result = Object.assign({}, msg);
                             result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
