@@ -64,10 +64,11 @@ module.exports = function (RED) {
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.opcode + deviceType.toString().padStart(2, "0"), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.ENABLE_DEVICE_TYPE.name)),
                     (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + xy_dalicmd.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, xy_dalicmd.name))
                 ]).then((responses) => {
-                    console.log(responses);
-                    resolve();
-                }).catch(() => {
-                    reject();
+                    console.log('setXYCoordinate: ' + JSON.stringify(responses));
+                    resolve(responses);
+                }).catch((error) => {
+                    console.log('setXYCoordinate: ' + JSON.stringify(error));
+                    reject(error);
                 });
             });
         };

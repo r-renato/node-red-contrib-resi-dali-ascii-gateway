@@ -57,7 +57,7 @@ module.exports = function (RED: nodered.NodeAPI) {
         }
 
         const setXYCoordinate = function( msg : any, deviceType : number, value : number, xy_dalicmd : any ) : any { 
-            var promise = new Promise<void>( (resolve, reject) => {
+            var promise = new Promise<any>( (resolve, reject) => {
                 Promise.allSettled([
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR.opcode + "0".toString().padStart( 2,"0" ), 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.SET_DTR.name ) ),
@@ -68,10 +68,11 @@ module.exports = function (RED: nodered.NodeAPI) {
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + xy_dalicmd.opcode, 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, xy_dalicmd.name ) )    
                 ]).then( ( responses : any[] ) => {
-                    console.log( responses ) ;
-                    resolve() ;
-                }).catch( () => {
-                    reject() ;
+                    console.log( 'setXYCoordinate: ' + JSON.stringify( responses ) ) ;
+                    resolve( responses ) ;
+                }).catch( ( error ) => {
+                    console.log( 'setXYCoordinate: ' + JSON.stringify( error ) ) ;
+                    reject( error ) ;
                 }) ;
             }) ;
         }
