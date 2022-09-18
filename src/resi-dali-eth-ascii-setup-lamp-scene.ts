@@ -127,13 +127,13 @@ module.exports = function (RED: nodered.NodeAPI) {
         const setRGBDimLevel = function( msg : any, deviceType : number, r : number, g : number, b : number ) : any { 
             return new Promise<void>( (resolve, reject) => {
                 Promise.allSettled([
-                    executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR.opcode + r.toString().padStart( 2,"0" ), 
+                    executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR.opcode + r.toString(16).padStart( 2,"0" ), 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.SET_DTR.name ) ),
-                    executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR1.opcode + g.toString().padStart( 2,"0" ), 
+                    executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR1.opcode + g.toString(16).padStart( 2,"0" ), 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.SET_DTR1.name ) ),
-                    executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR2.opcode + b.toString().padStart( 2,"0" ), 
+                    executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.SET_DTR2.opcode + b.toString(16).padStart( 2,"0" ), 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.SET_DTR2.name ) ),
-                    executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.ENABLE_DEVICE_TYPE.opcode + deviceType.toString().padStart( 2,"0" ), 
+                    executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.ENABLE_DEVICE_TYPE.opcode + deviceType.toString(16).padStart( 2,"0" ), 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.ENABLE_DEVICE_TYPE.name ) ),
                     executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + DALICMD.DT8_SET_RGB_DIMLEVEL.opcode, 
                         buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.DT8_SET_RGB_DIMLEVEL.name ) )    
