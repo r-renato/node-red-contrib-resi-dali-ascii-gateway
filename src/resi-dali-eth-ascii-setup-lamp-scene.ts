@@ -172,7 +172,14 @@ module.exports = function (RED: nodered.NodeAPI) {
             return new Promise<void>( (resolve, reject) => {
                 let isValid = true ;
 
-                if( typeof responses [ 0 ].value != 'undefined' && responses [ 0 ].value.payload.timeout ) {}
+                responses.some(( row : any ) => {
+                    if( row.status === 'rejected' ) {
+                        isValid = false ;
+                        return true ;
+                    }
+                });
+
+                if( isValid ) resolve() ; else reject() ;
             }) ;
         } ;
 
@@ -202,12 +209,26 @@ module.exports = function (RED: nodered.NodeAPI) {
                 ]).then( ( responses : any[] ) => {
                     console.log( 'onInput' + JSON.stringify( responses ) ) ;
 
-                    if( true ) {
-                        done() ;
-                    } else {
+                    isResponsesValid( responses )
+                    .then( () => {
+                        executeRESICommand( nodeServer, RESICMD.DALI_CMD16.name + '0x01' + (40 + scene).toString(), 
+                            buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.STORE_THE_DTR_AS_SCENE.name ) )
+                        .then( ( response ) => {
+                            var result = <RESIResponseInterface> Object.assign({}, msg) ;
+                            result = objectRename( result, 'payload', 'daliRequest' ) ;
+                            result.payload = response.payload ;
+
+                            send( result ) ;
+                            done() ; 
+                        })
+                        .catch( () => {
+                            send( buildErrorNodeMessage( msg, 'Error occurred' ) ) ;
+                            done() ; 
+                        }) ;
+                    }).catch( () => {
                         send( buildErrorNodeMessage( msg, 'Error occurred' ) ) ;
                         done() ;
-                    }
+                    })
                 })
 
             } else {

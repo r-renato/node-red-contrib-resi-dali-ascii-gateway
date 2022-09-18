@@ -211,6 +211,11 @@ export const DALICMD:any = {
 //
 // 16 BIT command
 //
+    STORE_THE_DTR_AS_SCENE: {
+        name : <string> 'STORE THE DTR AS SCENE',
+        opcode : <string> '0x0140',
+        description : <string> 'Stores the actual register value DTR as new brightness level forscene x (0 to 15)'
+    },
     DT8_SET_TEMPORARY_X_COORDINATE : { 
         name : <string> 'DT8:SET TEMPORARY X-COORDINATE',
         opcode : <string> '0x01E0',

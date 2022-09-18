@@ -144,7 +144,16 @@ module.exports = function (RED) {
         const isResponsesValid = function (responses) {
             return new Promise((resolve, reject) => {
                 let isValid = true;
-                if (typeof responses[0].value != 'undefined' && responses[0].value.payload.timeout) { }
+                responses.some((row) => {
+                    if (row.status === 'rejected') {
+                        isValid = false;
+                        return true;
+                    }
+                });
+                if (isValid)
+                    resolve();
+                else
+                    reject();
             });
         };
         /**
@@ -169,13 +178,24 @@ module.exports = function (RED) {
                     undefined, undefined
                 ]).then((responses) => {
                     console.log('onInput' + JSON.stringify(responses));
-                    if (true) {
-                        done();
-                    }
-                    else {
+                    isResponsesValid(responses)
+                        .then(() => {
+                        (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + '0x01' + (40 + scene).toString(), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.STORE_THE_DTR_AS_SCENE.name))
+                            .then((response) => {
+                            var result = Object.assign({}, msg);
+                            result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
+                            result.payload = response.payload;
+                            send(result);
+                            done();
+                        })
+                            .catch(() => {
+                            send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred'));
+                            done();
+                        });
+                    }).catch(() => {
                         send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred'));
                         done();
-                    }
+                    });
                 });
             }
             else {

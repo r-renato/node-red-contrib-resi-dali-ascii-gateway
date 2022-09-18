@@ -177,6 +177,11 @@ exports.DALICMD = {
     //
     // 16 BIT command
     //
+    STORE_THE_DTR_AS_SCENE: {
+        name: 'STORE THE DTR AS SCENE',
+        opcode: '0x0140',
+        description: 'Stores the actual register value DTR as new brightness level forscene x (0 to 15)'
+    },
     DT8_SET_TEMPORARY_X_COORDINATE: {
         name: 'DT8:SET TEMPORARY X-COORDINATE',
         opcode: '0x01E0',
