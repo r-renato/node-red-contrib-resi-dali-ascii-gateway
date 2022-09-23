@@ -286,6 +286,7 @@ function executeRESICommand(nodeClient, command, msg) {
             result = objectRename(result, 'payload', 'daliRequest');
             result.payload = prepareDALIResponse(msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, ''));
             result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '');
+            console.log('executeRESICommand: ' + command + ' :: ' + JSON.stringify(result));
             if (isRESIValidResponse(result.payload))
                 resolve(result);
             else

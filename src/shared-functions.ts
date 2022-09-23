@@ -290,7 +290,7 @@ export function executeRESICommand( nodeClient : NodeExtendedInterface, command 
       result = objectRename( result, 'payload', 'daliRequest' ) ;
       result.payload = prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
       result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
-
+      console.log( 'executeRESICommand: ' + command + ' :: ' + JSON.stringify(result) ) ;
       if( isRESIValidResponse( result.payload ) ) resolve( <nodered.NodeMessage> result ) ;
       else reject( <nodered.NodeMessage> result );
     }).catch( ( error : any ) => {
