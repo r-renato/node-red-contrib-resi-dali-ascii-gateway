@@ -225,6 +225,14 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
         }
       }
       break ;
+    case RESICMD.DALI_BUS_ERROR.name:
+      if( '#DBERR' == repTokenized[ 0 ] && '0,0x0' == repTokenized[ 1 ] ) {
+        result.done = true ;
+      } else {
+        result.timeout = true ;
+      }
+
+      break ;
     default:
       // console.log( '>>default<<') ;
       result.done = ( RESIRESP.OK.name == repTokenized[ 0 ])
@@ -293,7 +301,7 @@ export function testBusAvailability( nodeClient : NodeExtendedInterface,  msg : 
   return new Promise( ( resolve, reject ) => {
     let rt = typeof retry == 'undefined' ? 0 : retry;
 
-      executeRESICommand( nodeClient, '', msg ).then( () => {
+      executeRESICommand( nodeClient, RESICMD.DALI_BUS_ERROR, msg ).then( () => {
         resolve() ;
       }).catch( () => {
         if( rt < 3 ) {

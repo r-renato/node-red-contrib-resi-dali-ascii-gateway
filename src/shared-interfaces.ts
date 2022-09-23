@@ -301,6 +301,9 @@ export const RESICMD: any = {
     },
     DALI_CMD16 : {
         name : <string> '#DALI CMD16:'
+    },
+    DALI_BUS_ERROR : {
+        name : <string> '#DALI BUS ERROR'
     }
 }
 

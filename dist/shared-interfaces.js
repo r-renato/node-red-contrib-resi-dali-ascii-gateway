@@ -266,6 +266,9 @@ exports.RESICMD = {
     },
     DALI_CMD16: {
         name: '#DALI CMD16:'
+    },
+    DALI_BUS_ERROR: {
+        name: '#DALI BUS ERROR'
     }
 };
 exports.RESIRESP = {

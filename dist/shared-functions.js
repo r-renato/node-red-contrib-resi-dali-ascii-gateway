@@ -224,6 +224,14 @@ function prepareDALIResponse(msg, response) {
                 }
             }
             break;
+        case shared_interfaces_1.RESICMD.DALI_BUS_ERROR.name:
+            if ('#DBERR' == repTokenized[0] && '0,0x0' == repTokenized[1]) {
+                result.done = true;
+            }
+            else {
+                result.timeout = true;
+            }
+            break;
         default:
             // console.log( '>>default<<') ;
             result.done = (shared_interfaces_1.RESIRESP.OK.name == repTokenized[0]);
@@ -291,7 +299,7 @@ exports.executeRESICommand = executeRESICommand;
 function testBusAvailability(nodeClient, msg, retry) {
     return new Promise((resolve, reject) => {
         let rt = typeof retry == 'undefined' ? 0 : retry;
-        executeRESICommand(nodeClient, '', msg).then(() => {
+        executeRESICommand(nodeClient, shared_interfaces_1.RESICMD.DALI_BUS_ERROR, msg).then(() => {
             resolve();
         }).catch(() => {
             if (rt < 3) {
