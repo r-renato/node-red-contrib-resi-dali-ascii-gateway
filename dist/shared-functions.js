@@ -300,6 +300,7 @@ function executeRESICommand(nodeClient, command, msg) {
                 message = error.message;
                 e = error;
             }
+            nodeClient.log('executeRESICommand: ' + e);
             reject(buildErrorNodeMessage(msg, message, e));
         });
     });

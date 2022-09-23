@@ -299,7 +299,7 @@ export function executeRESICommand( nodeClient : NodeExtendedInterface, command 
         message = error.message ;
         e = error ;
       }
-      
+      nodeClient.log( 'executeRESICommand: ' + e ) ;
       reject( <nodered.NodeMessage> buildErrorNodeMessage( msg, message, e ) ) ;
     }) ;
   });
