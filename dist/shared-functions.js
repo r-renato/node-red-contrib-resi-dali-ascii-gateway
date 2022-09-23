@@ -160,9 +160,9 @@ function prepareDALIResponse(msg, response) {
      */
     let result = {};
     let repTokenized = response.split(':');
-    // console.log( "prepareDALIResponse: " + JSON.stringify( msg ) + " / " + repTokenized
-    //   + "[" + msg.payload.command + "]" 
-    //   + "[" + msg.payload.action.replace(':', '') + "]" ) ;
+    console.log("prepareDALIResponse: " + JSON.stringify(msg) + " / " + repTokenized
+        + "[" + msg.payload.command + "]"
+        + "[" + msg.payload.action.replace(':', '') + "]");
     switch (msg.payload.command) {
         case shared_interfaces_1.RESICMD.LAMP.name:
             // console.log( '>>LAMP<<') ;

@@ -162,9 +162,9 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
    */
   let result : any = {} ;
   let repTokenized = response.split( ':' ) ;
-  // console.log( "prepareDALIResponse: " + JSON.stringify( msg ) + " / " + repTokenized
-  //   + "[" + msg.payload.command + "]" 
-  //   + "[" + msg.payload.action.replace(':', '') + "]" ) ;
+  console.log( "prepareDALIResponse: " + JSON.stringify( msg ) + " / " + repTokenized
+   + "[" + msg.payload.command + "]" 
+   + "[" + msg.payload.action.replace(':', '') + "]" ) ;
 
   switch( <string> msg.payload.command ) {
     case RESICMD.LAMP.name:
@@ -240,7 +240,6 @@ export function prepareDALIResponse( msg:any, response: string ) : any {
       } else {
         result.timeout = true ;
       }
-
       break ;
     default:
       // console.log( '>>default<<') ;
