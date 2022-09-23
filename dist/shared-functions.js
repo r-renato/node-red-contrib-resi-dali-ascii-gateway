@@ -4,6 +4,14 @@ exports.isRESIValidResponse = exports.buildErrorNodeMessage = exports.buildReque
 const shared_interfaces_1 = require("./shared-interfaces");
 /**
  *
+ * @param time
+ * @returns
+ */
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
+/**
+ *
  * @param obj
  * @param currentKey
  * @param newKey
@@ -299,17 +307,20 @@ exports.executeRESICommand = executeRESICommand;
 function testBusAvailability(nodeClient, msg, retry) {
     return new Promise((resolve, reject) => {
         let rt = typeof retry == 'undefined' ? 0 : retry;
-        executeRESICommand(nodeClient, shared_interfaces_1.RESICMD.DALI_BUS_ERROR.name, msg).then(() => {
+        executeRESICommand(nodeClient, shared_interfaces_1.RESICMD.DALI_BUS_ERROR.name, msg)
+            .then(() => {
             resolve();
         }).catch(() => {
             if (rt < 3) {
-                testBusAvailability(nodeClient, msg, rt + 1)
-                    .then(() => {
-                    resolve();
-                }).catch(() => {
-                    if (nodeClient.connection.isSystemConsole())
-                        nodeClient.log("Test DALI Bus Availability - retry: " + rt);
-                    reject();
+                delay(1000).then(() => {
+                    testBusAvailability(nodeClient, msg, rt + 1)
+                        .then(() => {
+                        resolve();
+                    }).catch(() => {
+                        if (nodeClient.connection.isSystemConsole())
+                            nodeClient.log("Test DALI Bus Availability - retry: " + rt);
+                        reject();
+                    });
                 });
             }
             else {

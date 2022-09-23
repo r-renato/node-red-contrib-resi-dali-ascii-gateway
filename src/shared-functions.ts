@@ -3,6 +3,15 @@ import { NodeExtendedInterface, RESIResponseInterface, DALICMD, RESICMD, RESIRES
 
 /**
  * 
+ * @param time 
+ * @returns 
+ */
+function delay( time : number ) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
+
+/**
+ * 
  * @param obj 
  * @param currentKey 
  * @param newKey 
@@ -301,17 +310,20 @@ export function testBusAvailability( nodeClient : NodeExtendedInterface,  msg : 
   return new Promise( ( resolve, reject ) => {
     let rt = typeof retry == 'undefined' ? 0 : retry;
 
-      executeRESICommand( nodeClient, RESICMD.DALI_BUS_ERROR.name, msg ).then( () => {
+      executeRESICommand( nodeClient, RESICMD.DALI_BUS_ERROR.name, msg )
+      .then( () => {
         resolve() ;
       }).catch( () => {
         if( rt < 3 ) {
-          testBusAvailability( nodeClient, msg, rt + 1 )
+          delay( 1000 ).then( () => {
+            testBusAvailability( nodeClient, msg, rt + 1 )
             .then( () => {
               resolve() ;
             }).catch( () => {
               if( nodeClient.connection.isSystemConsole() ) nodeClient.log( "Test DALI Bus Availability - retry: "  + rt ) ;
               reject() ;
             }) ;
+          }) ;
         } else {
           reject() ;
         }
