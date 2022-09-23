@@ -160,9 +160,9 @@ function prepareDALIResponse(msg, response) {
      */
     let result = {};
     let repTokenized = response.split(':');
-    console.log("prepareDALIResponse: " + JSON.stringify(msg) + " / " + repTokenized
-        + "[" + msg.payload.command + "]"
-        + "[" + msg.payload.action.replace(':', '') + "]");
+    // console.log( "prepareDALIResponse: " + JSON.stringify( msg ) + " / " + repTokenized
+    //  + "[" + msg.payload.command + "]" 
+    //  + "[" + msg.payload.action.replace(':', '') + "]" ) ;
     switch (msg.payload.command) {
         case shared_interfaces_1.RESICMD.LAMP.name:
             // console.log( '>>LAMP<<') ;
@@ -309,8 +309,11 @@ exports.executeRESICommand = executeRESICommand;
 function testBusAvailability(nodeClient, msg, retry) {
     return new Promise((resolve, reject) => {
         let rt = typeof retry == 'undefined' ? 0 : retry;
-        executeRESICommand(nodeClient, shared_interfaces_1.RESICMD.DALI_BUS_ERROR.name, msg)
-            .then(() => {
+        executeRESICommand(nodeClient, shared_interfaces_1.RESICMD.DALI_BUS_ERROR.name, {
+            "payload": {
+                "command": shared_interfaces_1.RESICMD.DALI_BUS_ERROR.name
+            }
+        }).then(() => {
             resolve();
         }).catch(() => {
             if (rt < 3) {
