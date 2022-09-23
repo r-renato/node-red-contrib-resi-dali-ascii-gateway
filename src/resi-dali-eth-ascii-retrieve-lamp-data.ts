@@ -1,7 +1,7 @@
 import * as nodered from "node-red" ;
 import { NodeExtendedInterface, RESIResponseInterface, DALICMD, RESICMD } from './shared-interfaces' ;
 import { Status, StatusInterface, NodeRESIClientInterface } from './shared-classes' ;
-import { objectRename, invalidPayloadIn, executeDALICommand, buildRequestNodeMessage } from './shared-functions' ;
+import { objectRename, invalidPayloadIn, executeDALICommand, buildRequestNodeMessage, buildErrorNodeMessage, testBusAvailability } from './shared-functions' ;
 import { doesNotMatch } from "assert";
 
 const daliLampLevelNodeName:string = "dali-retrieve-lamp-data" ;
@@ -36,27 +36,72 @@ module.exports = function (RED: nodered.NodeAPI) {
             status.setStatus( false ) ;
         }
 
-        // const executeDALICommand = function( textCommand : string, msg : any ) : Promise<nodered.NodeMessage> {
-        //     return new Promise( ( resolve, reject ) => {
-        //         if( resiClient.isSystemConsole() ) node.log( "Try to sending command: " + textCommand ) ;
+        const retrieveDaliData = function( msg : any ) : Promise<RESIResponseInterface> {
+            return new Promise( ( resolve, reject ) => {
+                Promise.allSettled([
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_STATUS.opcode, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_STATUS.name ) ),
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_ACTUAL_LEVEL.opcode, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) ),
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_DEVICE_TYPE.opcode, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_DEVICE_TYPE.name ) ),
+                    
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_PHYSICAL_MINIMUM.opcode, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_PHYSICAL_MINIMUM.name ) ),
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_MIN_LEVEL.opcode, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_MIN_LEVEL.name ) ),
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_MAX_LEVEL.opcode, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_MAX_LEVEL.name ) ),
+                    
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_POWER_ON_LEVEL.opcode, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_POWER_ON_LEVEL.name ) ),
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_SYSTEM_FAILURE_LEVEL.opcode, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_SYSTEM_FAILURE_LEVEL.name ) ),
 
-        //         nodeServer.connection.send( textCommand ).then( ( response ) => {
-        //             //console.log( ">>> " + JSON.stringify( response ) ) ;
-        //             var result = <RESIResponseInterface> Object.assign({}, msg)
-        //             result = objectRename( result, 'payload', 'daliRequest' ) ;
-        //             result.payload = prepareDALIResponse( msg, response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ) ;
-        //             result.payload.raw = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
-        //             //result.payload = response.replace(/\s/g, '').replace(/[\r\n]/gm, '') ;
-        //             resolve(<nodered.NodeMessage> result) ;
-        //         })
-        //     }) ;
-        // }
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_FADE_TIME_FADE_RATE.opcode, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_FADE_TIME_FADE_RATE.name ) ),      
+                        
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_GROUPS_0_7.opcode, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_GROUPS_0_7.name ) ),      
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_GROUPS_8_15.opcode, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_GROUPS_8_15.name ) ),  
+                    executeDALICommand( nodeServer, RESICMD.LAMP_QUERY_RGBWAF.name + msg.payload.lamp + ',6', 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP_QUERY_RGBWAF.name, '' ) ),  
+                ]).then( ( responses : any[] ) => {
+                    var result = <RESIResponseInterface> Object.assign({}, msg) ;
+                     result = objectRename( result, 'payload', 'daliRequest' ) ;
+                    let payload : any = {
+                        status : responses[ 0 ].value.payload,
+                        actualLampLevel : responses[ 1 ].value.payload.actualLampLevel,
+                        deviceType : responses[ 2 ].value.payload,
+                        physicalMinimumLevel : responses[ 3 ].value.payload.physicalMinimumLevel,
+                        minLevel : responses[ 4 ].value.payload.minLevel,
+                        maxLevel : responses[ 5 ].value.payload.maxLevel,
+                        
+                        powerOnLevel : responses[ 6 ].value.payload.powerOnLevel,
+                        systemFailureLevel : responses[ 7 ].value.payload.systemFailureLevel,
+                        fadeTimeFadeRate : responses[ 8 ].value.payload.fadeTimeFadeRate,
+                        groups : { ...responses[ 9 ].value.payload.groups, ...responses[ 10 ].value.payload.groups },
+                    } ;
+                    
+                    if( typeof responses[ 11 ].value.payload.timeout === 'undefined' ) {
+                        payload.arcPowerLevel = responses[ 11 ].value.payload.arcPowerLevel ;
+                        payload.color = responses[ 11 ].value.payload.color ;
+                    }
 
-        // const prepareNodeMessage = function( srcmsg : any, command : string, action: string ) : any {
-        //     let msg =  Object.assign({}, srcmsg) ; msg.payload = {} ;
-        //     msg.payload.command = command ; msg.payload.action = action ; msg.payload.params = ':' + srcmsg.payload.lamp ;
-        //     return( msg ) ;
-        // }
+                    delete payload.status[ 'done' ] ; delete payload.status[ 'raw' ] ;
+                    delete payload.deviceType[ 'done' ] ; delete payload.deviceType[ 'raw' ] ;
+
+                    result.payload = payload ;
+
+                    if( nodeServer.connection.isSystemConsole() ) console.log( "responses: " + JSON.stringify( responses ) ) ;
+                    resolve( result ) ;
+                }).catch( ( error ) => {
+                    if( nodeServer.connection.isSystemConsole() ) console.log( error ) ;
+                    reject( buildErrorNodeMessage( msg, 'Error occurred' ) ) ;
+                });   
+            }) ;
+        }
 
         /**
          * 
@@ -64,8 +109,7 @@ module.exports = function (RED: nodered.NodeAPI) {
         this.on("input", async (msg: any, send, done) => {
             if( invalidPayloadIn(msg) || !nodeServer) {
                 node.error( 'payload Not Found', msg ) ;
-                //TODO
-                // Va restituito un errore
+                send( buildErrorNodeMessage( msg, 'payload Not Found' ) ) ;
                 done() ;
                 return ;
             }
@@ -75,90 +119,38 @@ module.exports = function (RED: nodered.NodeAPI) {
                 var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0xA0' ;
                 var queryActualLevel = '#LAMP COMMAND ANSWER:' + msg.payload.lamp + '=0x99' ;
 
-                executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, 
-                    buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_CONTROL_GEAR_PRESENT.name ) )
-                .then( ( response : any ) => {
-                    //console.log( "response: " + JSON.stringify( response ) ) ;
-                    if( response.payload.done && typeof response.payload.timeout == 'undefined' ) {
-                        // ok
-                        Promise.allSettled([
-                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_STATUS.opcode, 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_STATUS.name ) ),
-                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_ACTUAL_LEVEL.opcode, 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) ),
-                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_DEVICE_TYPE.opcode, 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_DEVICE_TYPE.name ) ),
+                testBusAvailability( nodeServer, msg )
+                .then( () => {
+                    executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_CONTROL_GEAR_PRESENT.opcode, 
+                        buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_CONTROL_GEAR_PRESENT.name ) )
+                    .then( ( response : any ) => {
+                        //console.log( "response: " + JSON.stringify( response ) ) ;
+                        if( response.payload.done && typeof response.payload.timeout == 'undefined' ) {
+                            retrieveDaliData( msg ).then( ( result ) => {
+                                send( result ) ;
+                                done() ;
+                            }).catch( ( error ) => {
+                                send( error ) ;
+                                done() ;
+                            }) ;
                             
-                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_PHYSICAL_MINIMUM.opcode, 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_PHYSICAL_MINIMUM.name ) ),
-                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_MIN_LEVEL.opcode, 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_MIN_LEVEL.name ) ),
-                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_MAX_LEVEL.opcode, 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_MAX_LEVEL.name ) ),
-                            
-                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_POWER_ON_LEVEL.opcode, 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_POWER_ON_LEVEL.name ) ),
-                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_SYSTEM_FAILURE_LEVEL.opcode, 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_SYSTEM_FAILURE_LEVEL.name ) ),
-
-                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_FADE_TIME_FADE_RATE.opcode, 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_FADE_TIME_FADE_RATE.name ) ),      
-                                
-                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_GROUPS_0_7.opcode, 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_GROUPS_0_7.name ) ),      
-                            executeDALICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_GROUPS_8_15.opcode, 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_GROUPS_8_15.name ) ),  
-                            executeDALICommand( nodeServer, RESICMD.LAMP_QUERY_RGBWAF.name + msg.payload.lamp + ',6', 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP_QUERY_RGBWAF.name, '' ) ),  
-                        ]).then( ( responses : any[] ) => {
-                            var result = <RESIResponseInterface> Object.assign({}, msg) ;
-                             result = objectRename( result, 'payload', 'daliRequest' ) ;
-                            let payload : any = {
-                                status : responses[ 0 ].value.payload,
-                                actualLampLevel : responses[ 1 ].value.payload.actualLampLevel,
-                                deviceType : responses[ 2 ].value.payload,
-                                physicalMinimumLevel : responses[ 3 ].value.payload.physicalMinimumLevel,
-                                minLevel : responses[ 4 ].value.payload.minLevel,
-                                maxLevel : responses[ 5 ].value.payload.maxLevel,
-                                
-                                powerOnLevel : responses[ 6 ].value.payload.powerOnLevel,
-                                systemFailureLevel : responses[ 7 ].value.payload.systemFailureLevel,
-                                fadeTimeFadeRate : responses[ 8 ].value.payload.fadeTimeFadeRate,
-                                groups : { ...responses[ 9 ].value.payload.groups, ...responses[ 10 ].value.payload.groups },
-                            } ;
-                            
-                            if( typeof responses[ 11 ].value.payload.timeout === 'undefined' ) {
-                                payload.arcPowerLevel = responses[ 11 ].value.payload.arcPowerLevel ;
-                                payload.color = responses[ 11 ].value.payload.color ;
-                            }
-
-                            delete payload.status[ 'done' ] ; delete payload.status[ 'raw' ] ;
-                            delete payload.deviceType[ 'done' ] ; delete payload.deviceType[ 'raw' ] ;
-
-                            result.payload = payload ;
-
-                            console.log( "responses: " + JSON.stringify( responses ) ) ;
-                            send( result ) ;
+                        } else {
+                            // Timeout
+                            send(<nodered.NodeMessage> response) ;
                             done() ;
-                        }).catch( ( error ) => {
-                            console.log( error ) ;
-                            done() ;
-                        });
-                        
-                    } else {
-                        // Timeout
-                        send(<nodered.NodeMessage> response) ;
+                        }
+                    }).catch( () => {
+                        send( buildErrorNodeMessage( msg, 'Error occurred' ) ) ;
                         done() ;
-                    }
+                    }) ;
                 }).catch( () => {
+                    send( buildErrorNodeMessage( msg, 'Error occurred' ) ) ;
                     done() ;
                 }) ;
+ 
             } else {
-                node.error( 'payload Not Found', msg ) ;
-                //TODO
-                // Va restituito un errore
+                send( buildErrorNodeMessage( msg, 'Invalid dali message' ) ) ;
                 done() ;
-                return ;
             }
         });
 

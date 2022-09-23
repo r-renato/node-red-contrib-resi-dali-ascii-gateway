@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isRESIValidResponse = exports.buildErrorNodeMessage = exports.buildRequestNodeMessage = exports.executeRESICommand = exports.executeDALICommand = exports.prepareDALIResponse = exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
+exports.isRESIValidResponse = exports.buildErrorNodeMessage = exports.buildRequestNodeMessage = exports.testBusAvailability = exports.executeRESICommand = exports.executeDALICommand = exports.prepareDALIResponse = exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
 const shared_interfaces_1 = require("./shared-interfaces");
 /**
  *
@@ -288,6 +288,29 @@ function executeRESICommand(nodeClient, command, msg) {
     });
 }
 exports.executeRESICommand = executeRESICommand;
+function testBusAvailability(nodeClient, msg, retry) {
+    return new Promise((resolve, reject) => {
+        let rt = typeof retry == 'undefined' ? 0 : retry;
+        executeRESICommand(nodeClient, '', msg).then(() => {
+            resolve();
+        }).catch(() => {
+            if (rt < 3) {
+                testBusAvailability(nodeClient, msg, rt + 1)
+                    .then(() => {
+                    resolve();
+                }).catch(() => {
+                    if (nodeClient.connection.isSystemConsole())
+                        nodeClient.log("Test DALI Bus Availability - retry: " + rt);
+                    reject();
+                });
+            }
+            else {
+                reject();
+            }
+        });
+    });
+}
+exports.testBusAvailability = testBusAvailability;
 /**
  *
  * @param msg
