@@ -117,11 +117,11 @@ module.exports = function (RED) {
                             done();
                         }
                     }).catch(() => {
-                        send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred'));
+                        send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred : Query control gear present.'));
                         done();
                     });
                 }).catch(() => {
-                    send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred'));
+                    send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred :  DALI Bus unavailable.'));
                     done();
                 });
             }

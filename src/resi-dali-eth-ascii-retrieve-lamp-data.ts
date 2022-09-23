@@ -140,11 +140,11 @@ module.exports = function (RED: nodered.NodeAPI) {
                             done() ;
                         }
                     }).catch( () => {
-                        send( buildErrorNodeMessage( msg, 'Error occurred' ) ) ;
+                        send( buildErrorNodeMessage( msg, 'Error occurred : Query control gear present.' ) ) ;
                         done() ;
                     }) ;
                 }).catch( () => {
-                    send( buildErrorNodeMessage( msg, 'Error occurred' ) ) ;
+                    send( buildErrorNodeMessage( msg, 'Error occurred :  DALI Bus unavailable.' ) ) ;
                     done() ;
                 }) ;
  
