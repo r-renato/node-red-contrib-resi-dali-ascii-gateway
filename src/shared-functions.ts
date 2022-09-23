@@ -301,7 +301,7 @@ export function testBusAvailability( nodeClient : NodeExtendedInterface,  msg : 
   return new Promise( ( resolve, reject ) => {
     let rt = typeof retry == 'undefined' ? 0 : retry;
 
-      executeRESICommand( nodeClient, RESICMD.DALI_BUS_ERROR, msg ).then( () => {
+      executeRESICommand( nodeClient, RESICMD.DALI_BUS_ERROR.name, msg ).then( () => {
         resolve() ;
       }).catch( () => {
         if( rt < 3 ) {
