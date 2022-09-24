@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isRESIValidResponse = exports.buildErrorNodeMessage = exports.buildRequestNodeMessage = exports.testBusAvailability = exports.executeRESICommand = exports.executeDALICommand = exports.prepareDALIResponse = exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = void 0;
+exports.isRESIValidResponse = exports.buildErrorNodeMessage = exports.buildRequestNodeMessage = exports.testBusAvailability = exports.executeRESICommand = exports.executeDALICommand = exports.prepareDALIResponse = exports.invalidPayloadIn = exports.promiseState = exports.requestTimeout = exports.objectRename = exports.toHexString = void 0;
 const shared_interfaces_1 = require("./shared-interfaces");
 /**
  *
@@ -10,6 +10,18 @@ const shared_interfaces_1 = require("./shared-interfaces");
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
 }
+/**
+ *
+ * @param number
+ * @returns
+ */
+function toHexString(number) {
+    if (number < 0) {
+        number = 0xFFFFFFFF + number + 1;
+    }
+    return number.toString(16).padStart(2, '0').toUpperCase();
+}
+exports.toHexString = toHexString;
 /**
  *
  * @param obj

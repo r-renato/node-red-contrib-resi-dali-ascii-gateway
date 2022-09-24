@@ -281,6 +281,9 @@ export const RESICMD: any = {
     LAMP_COMMAND : {
         name : <string> '#LAMP COMMAND:'
     },
+    LAMP_COMMAND_REPEAT : {
+        name : <string> '#LAMP COMMAND REPEAT:'
+    },
     LAMP_COMMAND_ANSWER : {
         name : <string> '#LAMP COMMAND ANSWER:'
     },

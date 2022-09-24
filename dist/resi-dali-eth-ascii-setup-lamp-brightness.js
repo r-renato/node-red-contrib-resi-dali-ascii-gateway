@@ -54,6 +54,62 @@ module.exports = function (RED) {
                 return (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_LEVEL.name + lamp + '=' + level, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_LEVEL.name, ''));
             }
         };
+        // const retrieveDaliData = function( msg : any ) : Promise<RESIResponseInterface> {
+        //     return new Promise( ( resolve, reject ) => {
+        //             // OK Command is valid
+        //             executeRESICommand( nodeServer, RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + DALICMD.QUERY_ACTUAL_LEVEL.opcode, 
+        //                 buildRequestNodeMessage( msg, RESICMD.LAMP.name, DALICMD.QUERY_ACTUAL_LEVEL.name ) )
+        //             .then( ( lampLevelResponse : any) => {
+        //                 executeRESICommand( nodeServer, RESICMD.LAMP_LEVEL.name
+        //                     + msg.payload.lamp + '=' 
+        //                     + msg.payload.level, 
+        //                     buildRequestNodeMessage( msg, RESICMD.LAMP_LEVEL.name, '' ))
+        //                 .then( ( setLampLevelResponse : any ) => {
+        //                     executeRESICommand( nodeServer, RESICMD.LAMP_COMMAND.name
+        //                         + msg.payload.lamp + '=' 
+        //                         + DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.opcode, 
+        //                         buildRequestNodeMessage( msg, RESICMD.LAMP_COMMAND.name, DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.name ))
+        //                     .then( () => {
+        //                         executeRESICommand( nodeServer, RESICMD.LAMP_COMMAND.name
+        //                             + msg.payload.lamp + '=' 
+        //                             + DALICMD[ msg.payload.command.replace(/ /g,"_") ].opcode, 
+        //                             buildRequestNodeMessage( msg, RESICMD.LAMP_COMMAND.name, DALICMD[ msg.payload.command.replace(/ /g,"_") ].name ))
+        //                         .then( ( response ) => {
+        //                             var result = Object.assign({}, msg) ;
+        //                             result = objectRename( result, 'payload', 'daliRequest' ) ;
+        //                             result.payload = response.payload ;
+        //                             rollback( msg.payload.lamp, lampLevelResponse.payload.actualLampLevel, msg )
+        //                             .then( () => {
+        //                                 send( result ) ;
+        //                                 done() ;
+        //                             }).catch( () => {
+        //                                 send( result ) ;
+        //                                 done() ;
+        //                             });
+        //                         }).catch( ( e ) => {
+        //                             // Roll back
+        //                             node.error( "rollback1 " + e, msg ) ;
+        //                             rollback( msg.payload.lamp, lampLevelResponse.payload.actualLampLevel, msg )
+        //                             .then( () => {
+        //                                 send( buildErrorNodeMessage( msg, e ) ) ;
+        //                                 done()
+        //                             }).catch( (e) => {
+        //                             }) ;
+        //                         }) ;
+        //                     })
+        //                     .catch( (e) => {
+        //                         // Rollback
+        //                         node.error( "rollback2 " + e, msg ) ;
+        //                     }) ;
+        //                 }).catch( (e) => {
+        //                     // Rollback
+        //                     node.error( "rollback3 " + e, msg ) ;
+        //                 }) ;
+        //             }).catch( ( message ) => {
+        //                 send( message ) ; done() ;
+        //             }) ;
+        //     });
+        // } ;
         /**
          *
          */
@@ -67,53 +123,34 @@ module.exports = function (RED) {
             let isInvalidMessageIn = invalidMessageIn(msg);
             if (!isInvalidMessageIn) {
                 if (validDALICmd.indexOf(msg.payload.command) > -1) {
-                    // OK Command is valid
-                    (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_COMMAND_ANSWER.name + msg.payload.lamp + '=' + shared_interfaces_1.DALICMD.QUERY_ACTUAL_LEVEL.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP.name, shared_interfaces_1.DALICMD.QUERY_ACTUAL_LEVEL.name))
-                        .then((lampLevelResponse) => {
-                        (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_LEVEL.name
-                            + msg.payload.lamp + '='
-                            + msg.payload.level, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_LEVEL.name, ''))
-                            .then((setLampLevelResponse) => {
-                            (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_COMMAND.name
-                                + msg.payload.lamp + '='
-                                + shared_interfaces_1.DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_COMMAND.name, shared_interfaces_1.DALICMD.STORE_ACTUAL_LEVEL_IN_DTR.name))
-                                .then(() => {
-                                (0, shared_functions_1.executeRESICommand)(nodeServer, shared_interfaces_1.RESICMD.LAMP_COMMAND.name
-                                    + msg.payload.lamp + '='
-                                    + shared_interfaces_1.DALICMD[msg.payload.command.replace(/ /g, "_")].opcode, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_COMMAND.name, shared_interfaces_1.DALICMD[msg.payload.command.replace(/ /g, "_")].name))
-                                    .then((response) => {
-                                    var result = Object.assign({}, msg);
-                                    result = (0, shared_functions_1.objectRename)(result, 'payload', 'daliRequest');
-                                    result.payload = response.payload;
-                                    rollback(msg.payload.lamp, lampLevelResponse.payload.actualLampLevel, msg)
-                                        .then(() => {
-                                        send(result);
-                                        done();
-                                    }).catch(() => {
-                                        send(result);
-                                        done();
-                                    });
-                                }).catch((e) => {
-                                    // Roll back
-                                    node.error("rollback1 " + e, msg);
-                                    rollback(msg.payload.lamp, lampLevelResponse.payload.actualLampLevel, msg)
-                                        .then(() => {
-                                        send((0, shared_functions_1.buildErrorNodeMessage)(msg, e));
-                                        done();
-                                    }).catch((e) => {
-                                    });
-                                });
-                            })
-                                .catch((e) => {
-                                // Rollback
-                                node.error("rollback2 " + e, msg);
+                    (0, shared_functions_1.testBusAvailability)(nodeServer, msg)
+                        .then(() => {
+                        // Load value in DTR
+                        (0, shared_functions_1.executeDALICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR.opcode + (0, shared_functions_1.toHexString)(msg.payload.level), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR.name))
+                            .then((response) => {
+                            // Store data
+                            let storeCmd = shared_interfaces_1.RESICMD.LAMP_COMMAND_REPEAT.name + msg.payload.lamp + "=" + shared_interfaces_1.DALICMD[msg.payload.command].opcode;
+                            (0, shared_functions_1.executeDALICommand)(nodeServer, storeCmd, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_COMMAND_REPEAT.name, shared_interfaces_1.DALICMD[msg.payload.command].name))
+                                .then((response) => {
+                                if (response.payload.done && typeof response.payload.timeout == 'undefined') {
+                                    send(response);
+                                    done();
+                                }
+                                else {
+                                    // Timeout
+                                    send(response);
+                                    done();
+                                }
+                            }).catch(() => {
+                                send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred : Executing ' + shared_interfaces_1.DALICMD[msg.payload.command].name));
+                                done();
                             });
-                        }).catch((e) => {
-                            // Rollback
-                            node.error("rollback3 " + e, msg);
+                        }).catch(() => {
+                            send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred : Setting DTR.'));
+                            done();
                         });
-                    }).catch((message) => {
-                        send(message);
+                    }).catch(() => {
+                        send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred :  DALI Bus unavailable.'));
                         done();
                     });
                 }

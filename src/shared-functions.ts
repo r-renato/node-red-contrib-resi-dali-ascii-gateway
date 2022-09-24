@@ -12,6 +12,19 @@ function delay( time : number ) {
 
 /**
  * 
+ * @param number 
+ * @returns 
+ */
+export function toHexString(number : number) {
+  if (number < 0) {
+    number = 0xFFFFFFFF + number + 1;
+  }
+
+  return number.toString(16).padStart(2, '0').toUpperCase();
+}
+
+/**
+ * 
  * @param obj 
  * @param currentKey 
  * @param newKey 
