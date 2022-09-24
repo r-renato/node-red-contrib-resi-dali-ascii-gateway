@@ -126,15 +126,16 @@ module.exports = function (RED) {
                     if (nodeServer.connection.isSystemConsole())
                         nodeServer.log('LAMP ' + msg.payload.lamp
                             + ' value ' + msg.payload.level
-                            + ' command ' + msg.payload.command);
+                            + ' command ' + msg.payload.command.split(' ').join('_'));
                     (0, shared_functions_1.testBusAvailability)(nodeServer, msg)
                         .then(() => {
                         // Load value in DTR
                         (0, shared_functions_1.executeDALICommand)(nodeServer, shared_interfaces_1.RESICMD.DALI_CMD16.name + shared_interfaces_1.DALICMD.SET_DTR.opcode + (0, shared_functions_1.toHexString)(msg.payload.level), (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.DALI_CMD16.name, shared_interfaces_1.DALICMD.SET_DTR.name))
                             .then((response) => {
                             // Store data
-                            let storeCmd = shared_interfaces_1.RESICMD.LAMP_COMMAND_REPEAT.name + msg.payload.lamp + "=" + shared_interfaces_1.DALICMD[msg.payload.command].opcode;
-                            (0, shared_functions_1.executeDALICommand)(nodeServer, storeCmd, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_COMMAND_REPEAT.name, shared_interfaces_1.DALICMD[msg.payload.command].name))
+                            let cmd = msg.payload.command.split(' ').join('_');
+                            let storeCmd = shared_interfaces_1.RESICMD.LAMP_COMMAND_REPEAT.name + msg.payload.lamp + "=" + shared_interfaces_1.DALICMD[cmd].opcode;
+                            (0, shared_functions_1.executeDALICommand)(nodeServer, storeCmd, (0, shared_functions_1.buildRequestNodeMessage)(msg, shared_interfaces_1.RESICMD.LAMP_COMMAND_REPEAT.name, shared_interfaces_1.DALICMD[cmd].name))
                                 .then((response) => {
                                 if (response.payload.done && typeof response.payload.timeout == 'undefined') {
                                     send(response);
@@ -146,7 +147,7 @@ module.exports = function (RED) {
                                     done();
                                 }
                             }).catch(() => {
-                                send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred : Executing ' + shared_interfaces_1.DALICMD[msg.payload.command].name));
+                                send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred : Executing ' + shared_interfaces_1.DALICMD[cmd].name));
                                 done();
                             });
                         }).catch((error) => {

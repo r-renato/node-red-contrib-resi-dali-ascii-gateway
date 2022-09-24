@@ -133,7 +133,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                     if( nodeServer.connection.isSystemConsole() ) nodeServer.log( 
                         'LAMP ' + msg.payload.lamp
                         + ' value ' + msg.payload.level
-                        + ' command ' + msg.payload.command
+                        + ' command ' + msg.payload.command.split(' ').join('_')
                     ) ;
                     testBusAvailability( nodeServer, msg )
                     .then( () => {
@@ -142,9 +142,10 @@ module.exports = function (RED: nodered.NodeAPI) {
                             buildRequestNodeMessage( msg, RESICMD.DALI_CMD16.name, DALICMD.SET_DTR.name ) )
                         .then( ( response : any ) => {
                             // Store data
-                            let storeCmd = RESICMD.LAMP_COMMAND_REPEAT.name + msg.payload.lamp + "=" + DALICMD[ msg.payload.command ].opcode
+                            let cmd = msg.payload.command.split(' ').join('_') ;
+                            let storeCmd = RESICMD.LAMP_COMMAND_REPEAT.name + msg.payload.lamp + "=" + DALICMD[ cmd ].opcode
                             executeDALICommand( nodeServer, storeCmd, 
-                                buildRequestNodeMessage( msg, RESICMD.LAMP_COMMAND_REPEAT.name, DALICMD[ msg.payload.command ].name ) )
+                                buildRequestNodeMessage( msg, RESICMD.LAMP_COMMAND_REPEAT.name, DALICMD[ cmd ].name ) )
                             .then( ( response : any ) => {
                                 if( response.payload.done && typeof response.payload.timeout == 'undefined' ) {
                                     send( response ) ;
@@ -155,7 +156,7 @@ module.exports = function (RED: nodered.NodeAPI) {
                                     done() ;
                                 }
                             }).catch( () => {
-                                send( buildErrorNodeMessage( msg, 'Error occurred : Executing ' + DALICMD[ msg.payload.command ].name) ) ;
+                                send( buildErrorNodeMessage( msg, 'Error occurred : Executing ' + DALICMD[ cmd ].name) ) ;
                                 done() ;
                             }) ;
                         }).catch( ( error ) => {
