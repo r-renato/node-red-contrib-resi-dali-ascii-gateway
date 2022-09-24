@@ -123,6 +123,10 @@ module.exports = function (RED) {
             let isInvalidMessageIn = invalidMessageIn(msg);
             if (!isInvalidMessageIn) {
                 if (validDALICmd.indexOf(msg.payload.command) > -1) {
+                    if (resiClient.isSystemConsole())
+                        nodeServer.log('LAMP ' + msg.payload.lamp
+                            + ' value ' + msg.payload.level
+                            + ' command ' + msg.payload.command);
                     (0, shared_functions_1.testBusAvailability)(nodeServer, msg)
                         .then(() => {
                         // Load value in DTR
