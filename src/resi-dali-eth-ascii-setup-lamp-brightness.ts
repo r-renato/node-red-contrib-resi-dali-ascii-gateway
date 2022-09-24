@@ -130,7 +130,7 @@ module.exports = function (RED: nodered.NodeAPI) {
 
             if( ! isInvalidMessageIn ) {
                 if( validDALICmd.indexOf( msg.payload.command ) > -1 ) {
-                    if( resiClient.isSystemConsole() ) nodeServer.log( 
+                    if( nodeServer.connection.isSystemConsole() ) nodeServer.log( 
                         'LAMP ' + msg.payload.lamp
                         + ' value ' + msg.payload.level
                         + ' command ' + msg.payload.command

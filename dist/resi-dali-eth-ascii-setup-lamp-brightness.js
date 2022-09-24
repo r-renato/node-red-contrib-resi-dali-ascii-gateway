@@ -123,7 +123,7 @@ module.exports = function (RED) {
             let isInvalidMessageIn = invalidMessageIn(msg);
             if (!isInvalidMessageIn) {
                 if (validDALICmd.indexOf(msg.payload.command) > -1) {
-                    if (resiClient.isSystemConsole())
+                    if (nodeServer.connection.isSystemConsole())
                         nodeServer.log('LAMP ' + msg.payload.lamp
                             + ' value ' + msg.payload.level
                             + ' command ' + msg.payload.command);
