@@ -158,7 +158,8 @@ module.exports = function (RED: nodered.NodeAPI) {
                                 send( buildErrorNodeMessage( msg, 'Error occurred : Executing ' + DALICMD[ msg.payload.command ].name) ) ;
                                 done() ;
                             }) ;
-                        }).catch( () => {
+                        }).catch( ( error ) => {
+                            console.log( error ) ;
                             send( buildErrorNodeMessage( msg, 'Error occurred : Setting DTR.' ) ) ;
                             done() ;
                         }) ;

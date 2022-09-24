@@ -149,7 +149,8 @@ module.exports = function (RED) {
                                 send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred : Executing ' + shared_interfaces_1.DALICMD[msg.payload.command].name));
                                 done();
                             });
-                        }).catch(() => {
+                        }).catch((error) => {
+                            console.log(error);
                             send((0, shared_functions_1.buildErrorNodeMessage)(msg, 'Error occurred : Setting DTR.'));
                             done();
                         });
